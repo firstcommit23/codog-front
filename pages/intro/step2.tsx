@@ -16,36 +16,20 @@ const IntroStep2 = () => {
   console.log(user);
   return (
     <DefaultLayout>
-      <IntroWrapper>
-        <GoDogImage />
-        <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
-        <InputText
-          type="text"
-          name="nickname"
-          onChange={handleChange}
-          placeholder="오늘도달린다개"
-        />
-        <ButtonSubmit onClick={() => router.push('/intro/step3')}>등록하기</ButtonSubmit>
-        <StepNavigation>
-          <span></span>
-          <span className="active"></span>
-          <span></span>
-        </StepNavigation>
-      </IntroWrapper>
+      <CoDogImage />
+      <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
+      <InputText type="text" name="nickname" onChange={handleChange} placeholder="오늘도달린다개" />
+      <ButtonSubmit onClick={() => router.push('/intro/step3')}>등록하기</ButtonSubmit>
+      <StepNavigation>
+        <span></span>
+        <span className="active"></span>
+        <span></span>
+      </StepNavigation>
     </DefaultLayout>
   );
 };
 
-const IntroWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 60px;
-  max-width: 640px;
-`;
-
-const GoDogImage = styled.div`
+const CoDogImage = styled.div`
   background: url('/images/codog.png');
   width: 174px;
   height: 174px;

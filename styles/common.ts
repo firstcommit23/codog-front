@@ -1,0 +1,19 @@
+export const Common = {
+  colors: {
+    black: '#282828',
+    white: '#ffffff',
+    blue: '',
+    blue01: '',
+    gray: '',
+  },
+  fontSize: {
+    logo: '',
+    title: '',
+    fs22: '2.2rem',
+    fs20: '2rem',
+    fs18: '1.8rem',
+    fs16: '1.6rem',
+    fs14: '1.4rem',
+  },
+  maxWidth: '560px',
+};

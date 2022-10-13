@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
-import DefaultLayout from '@/components/Layout/DefaultLayout';
+import Header from '@/components/Header';
+import { Common } from '@/styles/common';
 
 const LoginPage = () => {
   const router = useRouter();
   return (
-    <DefaultLayout>
+    <Wrapper>
+      <Header />
       <Container>
         <DogHouse>
           <DogHouseRoofLeft />
@@ -21,10 +23,17 @@ const LoginPage = () => {
           카카오로 3초만에 시작하기
         </KaKaoLoginButton>
       </Container>
-    </DefaultLayout>
+    </Wrapper>
   );
 };
 
+const Wrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background: ${Common.colors.black};
+`;
 const Container = styled.div`
   display: flex;
   justify-content: center;
@@ -32,10 +41,10 @@ const Container = styled.div`
 `;
 const DogHouse = styled.div`
   position: relative;
-  margin-top: 80px;
-  width: 264px;
-  height: 240px;
   align-self: center;
+  margin-top: 80px;
+  width: 26.4rem;
+  height: 24rem;
 `;
 const DogHouseRoofLeft = styled.div`
   position: absolute;
@@ -43,8 +52,8 @@ const DogHouseRoofLeft = styled.div`
   left: 0;
   width: 0px;
   height: 0px;
-  border-top: 58px solid transparent;
-  border-right: 132px solid #ffffff;
+  border-top: 5.8rem solid transparent;
+  border-right: 13.2rem solid #ffffff;
 `;
 const DogHouseRoofRight = styled.div`
   position: absolute;
@@ -52,64 +61,61 @@ const DogHouseRoofRight = styled.div`
   right: 0;
   width: 0px;
   height: 0px;
-  border-top: 58px solid transparent;
-  border-left: 132px solid #ffffff;
+  border-top: 5.8rem solid transparent;
+  border-left: 13.2rem solid #ffffff;
 `;
-
 const DogHouseRoom = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
-  top: 58px;
-  width: 264px;
-  height: 182px;
+  top: 5.8rem;
+  width: 26.4rem;
+  height: 18.2rem;
   background: #ffffff;
   background: url('/images/codog_nobg.png') #ffffff;
   background-position: center bottom;
   background-repeat: no-repeat;
 `;
-
 const Ballon = styled.div`
-  width: 134px;
-  height: 27px;
-  padding-top: 8px;
   position: relative;
+  width: 13.4rem;
+  height: 2.7rem;
+  padding-top: 0.8rem;
   background: #ffffff;
   border: #000000 solid 1px;
-  border-radius: 60px;
+  border-radius: 6rem;
   text-align: center;
   font-weight: 600;
-  font-size: 16px;
-  line-height: 21px;
+  font-size: 1.6rem;
+  line-height: 2.1rem;
 
   &:after {
+    position: absolute;
+    top: 3.5rem;
+    left: 7.4rem;
+    content: '';
     border-color: #ffffff transparent;
     border-style: solid;
     border-width: 17px 7px 0px 7px;
-    content: '';
-    position: absolute;
-    top: 35px;
-    left: 74px;
     z-index: 1;
   }
   &:before {
+    position: absolute;
+    top: 3.6rem;
+    left: 7.4rem;
+    content: '';
     border-color: #000000 transparent;
     border-style: solid;
     border-width: 19px 8px 0px 8px;
-    content: '';
-    position: absolute;
-    top: 36px;
-    left: 74px;
     z-index: 0;
   }
 `;
-
 const Catchphrase = styled.div`
   align-self: center;
-  padding: 30px 0;
+  padding: 3rem 0;
   font-weight: 600;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 2rem;
+  line-height: 3rem;
   color: #ffffff;
   white-space: nowrap;
   h1 {
@@ -144,16 +150,15 @@ const Catchphrase = styled.div`
     }
   }
 `;
-
 const KaKaoLoginButton = styled.button`
   align-self: center;
-  width: 299px;
-  height: 50px;
+  width: 29.9rem;
+  height: 5rem;
   background: #fee500;
   border-radius: 5px;
   font-weight: 600;
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
   color: #191600;
 `;
 export default LoginPage;

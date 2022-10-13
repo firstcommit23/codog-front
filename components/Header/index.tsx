@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
-import useTestQuery from '@/hooks/query/useTestQuery';
+import { Common } from '@/styles/common';
 
 const Header = () => {
-  const { data } = useTestQuery();
-  console.log(data);
   return (
     <Container>
       <HeaderBox>
-        <span>{`{Codog}`}</span>
+        <HeaderArea>
+          <LogoTitle>{`{Codog}`}</LogoTitle>
+        </HeaderArea>
       </HeaderBox>
     </Container>
   );
@@ -21,21 +21,24 @@ const HeaderBox = styled.div`
   height: 60px;
   left: 0px;
   top: 0px;
-  background: #282828;
-
-  span {
-    position: absolute;
-    width: 108px;
-    height: 32px;
-    left: 20px;
-    top: 13px;
-    font-family: 'Fire Code';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 22px;
-    line-height: 29px;
-    color: #ffffff;
-  }
+  background: ${Common.colors.black};
+`;
+const HeaderArea = styled.div`
+  width: calc(100% - 2rem);
+  max-width: ${Common.maxWidth};
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+`;
+const LogoTitle = styled.div`
+  font-family: 'Fire Code';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 2.2rem;
+  line-height: 2.9rem;
+  color: #ffffff;
 `;
 
 export default Header;

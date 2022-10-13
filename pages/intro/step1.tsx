@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
+import styled from '@emotion/styled';
 import { userState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 
@@ -15,40 +15,22 @@ const IntroStep1 = () => {
     });
   };
 
-  console.log(user);
-
   return (
     <DefaultLayout>
-      <IntroWrapper>
-        <GoDogImage />
-        <ContentMessage>Github 아이디를 입력해주세요.</ContentMessage>
-        <InputText
-          type="text"
-          name="email"
-          onChange={handleChange}
-          placeholder="example@gmail.com"
-        />
-        <ButtonSubmit onClick={() => router.push('/intro/step2')}>등록하기</ButtonSubmit>
-        <StepNavigation>
-          <span className="active"></span>
-          <span></span>
-          <span></span>
-        </StepNavigation>
-      </IntroWrapper>
+      <CoDogImage />
+      <ContentMessage>Github 아이디를 입력해주세요.</ContentMessage>
+      <InputText type="text" name="email" onChange={handleChange} placeholder="example@gmail.com" />
+      <ButtonSubmit onClick={() => router.push('/intro/step2')}>등록하기</ButtonSubmit>
+      <StepNavigation>
+        <span className="active"></span>
+        <span></span>
+        <span></span>
+      </StepNavigation>
     </DefaultLayout>
   );
 };
 
-const IntroWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 60px;
-  max-width: 640px;
-`;
-
-const GoDogImage = styled.div`
+const CoDogImage = styled.div`
   background: url('/images/codog.png');
   width: 174px;
   height: 174px;

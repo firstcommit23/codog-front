@@ -11,39 +11,28 @@ const IntroStep3 = () => {
 
   return (
     <DefaultLayout>
-      <IntroWrapper>
-        <GoDogImage />
-        <ContentMessage>
-          오늘도달린다개님,
-          <br />
-          <strong>개발자국 찍기</strong>를 시작합니다!
-          <ul>
-            <li>Github에 커밋을 하면, 발자국이 찍혀요!</li>
-            <li>알림톡으로 오늘 하루 발자국을 보내드려요.</li>
-            <li>매일 저녁 9시에 체크돼요.</li>
-          </ul>
-        </ContentMessage>
-        <ButtonSubmit onClick={() => router.push('/')}>시작하기</ButtonSubmit>
-        <StepNavigation>
-          <span></span>
-          <span></span>
-          <span className="active"></span>
-        </StepNavigation>
-      </IntroWrapper>
+      <CoDogImage />
+      <ContentMessage>
+        오늘도달린다개님,
+        <br />
+        <strong>개발자국 찍기</strong>를 시작합니다!
+        <ul>
+          <li>Github에 커밋을 하면, 발자국이 찍혀요!</li>
+          <li>알림톡으로 오늘 하루 발자국을 보내드려요.</li>
+          <li>매일 저녁 9시에 체크돼요.</li>
+        </ul>
+      </ContentMessage>
+      <ButtonSubmit onClick={() => router.push('/')}>시작하기</ButtonSubmit>
+      <StepNavigation>
+        <span></span>
+        <span></span>
+        <span className="active"></span>
+      </StepNavigation>
     </DefaultLayout>
   );
 };
 
-const IntroWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding-top: 60px;
-  max-width: 640px;
-`;
-
-const GoDogImage = styled.div`
+const CoDogImage = styled.div`
   background: url('/images/codog.png');
   width: 174px;
   height: 174px;
