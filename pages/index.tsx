@@ -7,7 +7,7 @@ const Home = () => {
       <ProfileContainer>
         <ProfileBox>
           <CoDogImage />
-          <div>
+          <ProfileWrapper>
             <ProfileContent>
               <span className="nickname">오늘도달린다개</span>님, <br />
               <strong>코독</strong>하게 <strong>코딩해봅시다.</strong>
@@ -16,7 +16,7 @@ const Home = () => {
               <DdayBox>D+123</DdayBox>
               <ShareButton>공유하기</ShareButton>
             </ProfileButtonArea>
-          </div>
+          </ProfileWrapper>
         </ProfileBox>
         <AchievementContainer>
           <div className="title">
@@ -25,7 +25,7 @@ const Home = () => {
             <div>연속</div>
           </div>
           <div className="content">
-            <div>20</div>
+            <div className="total">20</div>
             <div>8</div>
             <div>12</div>
           </div>
@@ -104,12 +104,14 @@ const Home = () => {
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding-top: 35px;
+  width: 100%;
 `;
 const ProfileBox = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
-  column-gap: 20px;
+  align-items: center;
+  column-gap: 30px;
 `;
 
 const CoDogImage = styled.div`
@@ -119,11 +121,14 @@ const CoDogImage = styled.div`
   background-size: contain;
 `;
 
+const ProfileWrapper = styled.div``;
+
 const ProfileContent = styled.div`
   font-weight: 400;
-  font-size: 16px;
-  line-height: 30px;
+  font-size: 18px;
+  line-height: 28px;
   color: #323232;
+  margin-bottom: 10px;
 
   .nickname {
     font-size: 18px;
@@ -139,6 +144,9 @@ const ProfileButtonArea = styled.div`
 `;
 
 const DdayBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #efefef;
   border-radius: 5px;
   font-weight: 500;
@@ -150,22 +158,20 @@ const DdayBox = styled.div`
 `;
 
 const ShareButton = styled.button`
-  background-image: url('/images/Share_Android.svg');
   background-color: #282828;
-  background-position: center right;
-  background-repeat: no-repeat;
   border-radius: 5px;
   font-weight: 500;
   font-size: 15px;
   line-height: 18px;
   color: #ffffff;
   text-align: center;
-  padding: 9px 24px 8px 11px;
+  padding: 10px 20px;
+  border: none;
 `;
 
 const AchievementContainer = styled.div`
-  padding: 32px;
   display: flex;
+  margin: 4rem 0 2.5rem 0;
   row-gap: 18px;
   flex-direction: column;
   & > div {
@@ -183,10 +189,15 @@ const AchievementContainer = styled.div`
     }
   }
   .content {
+    font-family: 'Fira Code', monospace;
     font-weight: 600;
     font-size: 32px;
     line-height: 30px;
     color: #323232;
+
+    .total {
+      color: #1480ff;
+    }
     div {
       width: 40px;
       text-align: center;
@@ -198,6 +209,7 @@ const HorizontalRule = styled.hr`
   height: 5px;
   background: #f5f5f5;
   border: none;
+  width: 100%;
 `;
 const MonthControl = styled.div`
   display: flex;

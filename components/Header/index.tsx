@@ -33,10 +33,10 @@ const HeaderArea = styled.div`
   margin: 0 auto;
 `;
 const LogoTitle = styled.div`
-  font-family: 'Fire Code';
+  font-family: 'Fira Code', monospace;
   font-style: normal;
-  font-weight: 600;
-  font-size: 2.2rem;
+  font-weight: 500;
+  font-size: 2.6rem;
   line-height: 2.9rem;
   color: #ffffff;
 `;
