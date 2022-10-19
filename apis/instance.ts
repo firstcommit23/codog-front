@@ -1,15 +1,14 @@
 import axios, { AxiosInstance } from 'axios';
 
 const Instance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/',
+  baseURL: 'http://localhost:8080/',
 });
 
 Instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     config.headers = {
       ...config.headers,
-      'Content-Type': 'application/x-www-form-urlencoded',
       Authorization: token ? `Bearer ${token}` : '',
     };
     return Promise.resolve(config);

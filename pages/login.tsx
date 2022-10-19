@@ -1,10 +1,12 @@
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import Header from '@/components/Header';
 import { Common } from '@/styles/common';
 
 const LoginPage = () => {
-  const router = useRouter();
+  const handleKakaoLogin = () => {
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=8f966f4f2bce0413c66f6a8fbb6a6e0e&redirect_uri=http://localhost:3000/intro/step1&response_type=code`;
+  };
+
   return (
     <Wrapper>
       <Header />
@@ -19,9 +21,7 @@ const LoginPage = () => {
         <Catchphrase>
           <h1>오늘도 코딩하는</h1>
         </Catchphrase>
-        <KaKaoLoginButton onClick={() => router.push('/intro/step1')}>
-          카카오로 3초만에 시작하기
-        </KaKaoLoginButton>
+        <KaKaoLoginButton onClick={handleKakaoLogin}>카카오로 3초만에 시작하기</KaKaoLoginButton>
       </Container>
     </Wrapper>
   );
