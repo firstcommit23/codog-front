@@ -30,7 +30,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: 5rem;
+  padding-top: 4rem;
   max-width: ${Common.maxWidth};
   margin: 0 auto;
   background: #ffffff;

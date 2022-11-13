@@ -1,7 +1,22 @@
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import Calendar from 'react-calendar';
+import { Common } from '@/styles/common';
+import Image from 'next/image';
+import moment from 'moment';
+import React, { useState, useEffect } from 'react';
 
 const Home = () => {
+  const [value, onChange] = useState(new Date());
+  const [render, setRender] = useState(false);
+
+  const formatShortWeekday = (locale: any, date: any) =>
+    ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
+
+  useEffect(() => {
+    setRender(true);
+  }, []);
+
   return (
     <DefaultLayout>
       <ProfileContainer>
@@ -9,31 +24,50 @@ const Home = () => {
           <CoDogImage />
           <ProfileWrapper>
             <ProfileContent>
-              <span className="nickname">오늘도달린다개</span>님, <br />
-              <strong>코독</strong>하게 <strong>코딩해봅시다.</strong>
+              <span className="nickname">멍멍진도</span>님, <br />
+              오늘도 코독하게 코딩해봅시다.
             </ProfileContent>
             <ProfileButtonArea>
               <DdayBox>D+123</DdayBox>
-              <ShareButton>공유하기</ShareButton>
+              <ShareButton>
+                <span>공유하기</span>
+                <Image src="/images/Share_Android.svg" width="18px" height="18px" alt="share" />
+              </ShareButton>
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
         <AchievementContainer>
-          <div className="title">
-            <div>총</div>
-            <div>이번달</div>
-            <div>연속</div>
+          <div className="item">
+            <div className="title">총</div>
+            <div className="content">
+              <div className="total">20</div>
+            </div>
           </div>
-          <div className="content">
-            <div className="total">20</div>
-            <div>8</div>
-            <div>12</div>
+          <div className="vertical"></div>
+          <div className="item">
+            <div className="title">이번달</div>
+            <div className="content">10</div>
+          </div>
+          <div className="vertical"></div>
+          <div className="item">
+            <div className="title">연속</div>
+            <div className="content">8</div>
           </div>
         </AchievementContainer>
       </ProfileContainer>
       {/* 달력 */}
       <HorizontalRule />
-      <div>
+      <CalendarWrapper>
+        {render && (
+          <Calendar
+            onChange={onChange}
+            value={value}
+            formatDay={(locale, date) => moment(date).format('D')}
+            formatShortWeekday={formatShortWeekday}
+          />
+        )}
+      </CalendarWrapper>
+      {/* <div>
         <MonthControl>
           <div>&lt;</div>
           <MonthContent>2022.09</MonthContent>
@@ -96,7 +130,7 @@ const Home = () => {
             <span>1</span>
           </div>
         </CalendarArea>
-      </div>
+      </div> */}
     </DefaultLayout>
   );
 };
@@ -109,15 +143,16 @@ const ProfileContainer = styled.div`
 const ProfileBox = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   column-gap: 30px;
+  padding: 0 50px;
 `;
 
 const CoDogImage = styled.div`
   background: url('/images/codog.png');
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   background-size: contain;
 `;
 
@@ -128,10 +163,10 @@ const ProfileContent = styled.div`
   font-size: 18px;
   line-height: 28px;
   color: #323232;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 
   .nickname {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 600;
   }
   strong {
@@ -154,10 +189,12 @@ const DdayBox = styled.div`
   line-height: 18px;
   color: #282828;
   text-align: center;
-  padding: 9px 10px 8px 11px;
+  padding: 10px 15px;
 `;
 
 const ShareButton = styled.button`
+  display: flex;
+  flex-direction: row;
   background-color: #282828;
   border-radius: 5px;
   font-weight: 500;
@@ -165,24 +202,37 @@ const ShareButton = styled.button`
   line-height: 18px;
   color: #ffffff;
   text-align: center;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border: none;
+  gap: 5px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #666666;
+    transition: all 0.2s ease;
+  }
 `;
 
 const AchievementContainer = styled.div`
   display: flex;
   margin: 4rem 0 2.5rem 0;
   row-gap: 18px;
-  flex-direction: column;
-  & > div {
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 3rem;
+
+  .item {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
   }
   .title {
     font-weight: 400;
     font-size: 15px;
     line-height: 18px;
     color: #8c8c8c;
+    margin-bottom: 1.5rem;
     div {
       width: 40px;
       text-align: center;
@@ -203,6 +253,11 @@ const AchievementContainer = styled.div`
       text-align: center;
     }
   }
+
+  .vertical {
+    height: 4rem;
+    border-right: 1px solid #d4d4d4;
+  }
 `;
 
 const HorizontalRule = styled.hr`
@@ -211,33 +266,71 @@ const HorizontalRule = styled.hr`
   border: none;
   width: 100%;
 `;
-const MonthControl = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  padding: 35px;
+
+const CalendarWrapper = styled.div`
+  padding: 3rem 4rem;
+
+  .react-calendar button {
+    background-color: white;
+    border: none;
+  }
+  .react-calendar abbr[title] {
+    text-decoration: none;
+  }
+  .react-calendar__navigation {
+    display: flex;
+    margin-bottom: 4rem;
+  }
+
+  .react-calendar__navigation__label {
+    font-size: 2.2rem;
+    font-weight: 500;
+    font-family: 'Pretendar Variable', Pretendard !important;
+    color: ${Common.colors.black};
+  }
+
+  .react-calendar__month-view__weekdays {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: ${Common.colors.black};
+  }
+
+  .react-calendar__tile.react-calendar__month-view__days__day {
+    padding: 1.5rem;
+    font-size: 1.4rem;
+    color: ${Common.colors.lightBlack};
+  }
 `;
 
-const MonthContent = styled.div`
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 29px;
-  color: #282828;
-`;
-const CalendarArea = styled.div`
-  & > div {
-    display: flex;
-    justify-content: space-evenly;
-    padding: 8px;
-  }
-  span {
-    width: 15px;
-    text-align: center;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 17px;
-    color: #282828;
-  }
-`;
+// const MonthControl = styled.div`
+//   display: flex;
+//   justify-content: space-evenly;
+//   padding: 35px;
+// `;
+
+// const MonthContent = styled.div`
+//   font-weight: 500;
+//   font-size: 24px;
+//   line-height: 29px;
+//   color: #282828;
+// `;
+// const CalendarArea = styled.div`
+//   & > div {
+//     display: flex;
+//     justify-content: space-evenly;
+//     padding: 8px;
+//   }
+//   span {
+//     width: 15px;
+//     text-align: center;
+//     font-weight: 500;
+//     font-size: 14px;
+//     line-height: 17px;
+//     color: #282828;
+//   }
+// `;
 
 // login 전이면 인트로 이동
 export default Home;
