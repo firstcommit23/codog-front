@@ -15,11 +15,14 @@ export const GlobalStyles = (
         margin: 0 auto;
         width: 100%;
         min-height: 100%;
+        box-sizing: border-box;
       }
       html,
       body {
         height: 100vh;
         width: 100%;
+        box-sizing: border-box;
+        
       }
       #__next {
         height: 100%;

@@ -5,7 +5,7 @@ export const Common = {
     lightBlack: '#404040',
     blue: '',
     blue01: '',
-    gray: '',
+    gray: '#8C8C8C',
   },
   fontSize: {
     logo: '',

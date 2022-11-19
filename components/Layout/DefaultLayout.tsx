@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import Header from '@/components/Header';
+import Menu from '@/components/Menu';
 import React from 'react';
 import { Common } from '@/styles/common';
 
@@ -11,6 +12,7 @@ const DefaultLayout = ({ children }: Props) => {
   return (
     <Wrapper>
       <Header />
+      <Menu />
       <Container>{children}</Container>
     </Wrapper>
   );
@@ -19,7 +21,6 @@ const DefaultLayout = ({ children }: Props) => {
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
   margin: 0 auto;
   background: #f5f5f5;
 `;
