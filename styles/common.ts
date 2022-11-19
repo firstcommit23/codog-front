@@ -2,9 +2,10 @@ export const Common = {
   colors: {
     black: '#282828',
     white: '#ffffff',
+    lightBlack: '#404040',
     blue: '',
     blue01: '',
-    gray: '',
+    gray: '#8C8C8C',
   },
   fontSize: {
     logo: '',
@@ -15,5 +16,5 @@ export const Common = {
     fs16: '1.6rem',
     fs14: '1.4rem',
   },
-  maxWidth: '360px',
+  maxWidth: '48rem',
 };
