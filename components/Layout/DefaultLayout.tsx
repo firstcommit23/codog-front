@@ -11,8 +11,8 @@ interface Props {
 const DefaultLayout = ({ children }: Props) => {
   return (
     <Wrapper>
-      <Header />
       <Menu />
+      <Header />
       <Container>{children}</Container>
     </Wrapper>
   );
