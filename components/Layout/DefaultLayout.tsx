@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import Header from '@/components/Header';
-import Menu from '@/components/Menu';
+// import Menu from '@/components/Menu';
 import React from 'react';
 import { Common } from '@/styles/common';
 
@@ -11,7 +11,7 @@ interface Props {
 const DefaultLayout = ({ children }: Props) => {
   return (
     <Wrapper>
-      <Menu />
+      {/* <Menu /> */}
       <Header />
       <Container>{children}</Container>
     </Wrapper>
@@ -31,9 +31,10 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding-top: 4rem;
+  padding: 4rem 3rem 7rem 3rem;
   max-width: ${Common.maxWidth};
   margin: 0 auto;
+  box-sizing: border-box;
   background: #ffffff;
 `;
 export default DefaultLayout;

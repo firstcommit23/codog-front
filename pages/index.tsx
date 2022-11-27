@@ -82,7 +82,6 @@ const ProfileBox = styled.div`
   justify-content: flex-start;
   align-items: center;
   column-gap: 30px;
-  padding: 0 50px;
 `;
 
 const CoDogImage = styled.div`
@@ -156,7 +155,6 @@ const AchievementContainer = styled.div`
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  padding: 0 3rem;
 
   .item {
     display: flex;
@@ -200,11 +198,12 @@ const HorizontalRule = styled.hr`
   height: 5px;
   background: #f5f5f5;
   border: none;
-  width: 100%;
+  width: 120%;
+  margin-left: -30px;
 `;
 
 const CalendarWrapper = styled.div`
-  padding: 4rem;
+  padding: 4rem 0;
 
   .react-calendar button {
     background-color: white;
