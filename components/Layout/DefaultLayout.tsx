@@ -3,6 +3,7 @@ import Header from '@/components/Header';
 // import Menu from '@/components/Menu';
 import React from 'react';
 import { Common } from '@/styles/common';
+import Modal from '@/components/Modal';
 
 interface Props {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ const DefaultLayout = ({ children }: Props) => {
   return (
     <Wrapper>
       {/* <Menu /> */}
+      <Modal></Modal>
       <Header />
       <Container>{children}</Container>
     </Wrapper>
