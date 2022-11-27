@@ -25,7 +25,7 @@ const Container = styled.div`
 const HeaderBox = styled.div`
   position: fixed;
   z-index: 10;
-  width: 480px;
+  width: 450px;
   height: 60px;
   top: 0px;
   background: ${Common.colors.black};

@@ -16,5 +16,5 @@ export const Common = {
     fs16: '1.6rem',
     fs14: '1.4rem',
   },
-  maxWidth: '48rem',
+  maxWidth: '45rem',
 };
