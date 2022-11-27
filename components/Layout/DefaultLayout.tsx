@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Header from '@/components/Header';
 // import Menu from '@/components/Menu';
+// import Modal from '@/components/Modal';
 import React from 'react';
 import { Common } from '@/styles/common';
 
@@ -12,6 +13,7 @@ const DefaultLayout = ({ children }: Props) => {
   return (
     <Wrapper>
       {/* <Menu /> */}
+      {/* <Modal></Modal> */}
       <Header />
       <Container>{children}</Container>
     </Wrapper>
