@@ -20,15 +20,6 @@ const MyPage = () => {
                     </Info>
                 </Profile>
                 <HorizontalLine></HorizontalLine>
-                <SubTitle>소셜 계정 연동</SubTitle>
-                <Account>
-                    <div>
-                        <GithubImage></GithubImage>
-                        <Email>codog@gmail.com</Email>
-                    </div>
-                    <CancelButton>해지하기</CancelButton>
-                </Account>
-                <HorizontalLine></HorizontalLine>
                 <SubTitle>알람 설정</SubTitle>
                 <Alarm>
                     <SuccessAlarm>
@@ -124,41 +115,6 @@ const HorizontalLine = styled.div`
     width: 100%;
     border-bottom: 1px solid #d6d6d6;
     margin: 30px 0;
-`;
-
-const Account = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    div{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-`;
-
-const GithubImage = styled.div`
-    background: url('/images/github-logo.svg');
-    width: 24px;
-    height: 24px;
-    background-size: contain;
-    margin-right: 15px;
-`;
-
-const Email = styled.div`
-    font-size: 16px;
-`;
-const CancelButton = styled.button`
-    background-color: white;
-    border: 0;
-    color: #585858;
-    font-size: 16px;
-
-    &:hover{
-        cursor: pointer;
-        color: #282828;
-    }
 `;
 
 const Alarm = styled.div`

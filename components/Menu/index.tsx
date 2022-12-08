@@ -14,7 +14,7 @@ const Menu = () => {
                 </Close>
             </Header>
                 <Link href="/">홈</Link>
-                <Link href="/">마이페이지</Link>
+                <Link href="/mypage">마이페이지</Link>
                 <Link href="/">공지사항</Link>
                 <Link href="/">코독에 대하여...🐾</Link>
             </MenuList>     
@@ -40,7 +40,6 @@ const MenuList = styled.div`
     justify-content: flex-start;
     align-items: flex-start;
     box-sizing: border-box;
-    width: 100%;
     height: 100vh;
     padding: 2rem 3rem 0 3rem;
     font-size: 2.2rem;
