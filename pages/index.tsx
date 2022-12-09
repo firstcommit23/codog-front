@@ -7,6 +7,8 @@ import Calendar from 'react-calendar';
 import Image from 'next/image';
 import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import Achievement from '@/components/Main/Achievement';
+// import Popup from '@/components/Popup';
 
 const Home = () => {
   const [value, onChange] = useState(new Date());
@@ -45,26 +47,8 @@ const Home = () => {
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
-        {datas.map((data,key)=>(
-          <AchievementContainer key={key}>
-          <div className="item">
-            <div className="title">총</div>
-            <div className="content">
-              <div className="total">{data.totalCount}</div>
-            </div>
-          </div>
-          <div className="vertical"></div>
-          <div className="item">
-            <div className="title">이번달</div>
-            <div className="content">{data.month}</div>
-          </div>
-          <div className="vertical"></div>
-          <div className="item">
-            <div className="title">연속</div>
-            <div className="content">{data.continuousCount}</div>
-          </div>
-        </AchievementContainer>
-        ))}
+      {datas.map((data,idx)=><Achievement data={data} key={idx}/>)}
+      {/* <Popup>5</Popup> */}
       </ProfileContainer>
       {/* 달력 */}
       <HorizontalRule />
@@ -159,52 +143,6 @@ const ShareButton = styled.button`
   }
 `;
 
-const AchievementContainer = styled.div`
-  display: flex;
-  margin: 4rem 0 2.5rem 0;
-  row-gap: 18px;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-
-  .item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .title {
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 18px;
-    color: #8c8c8c;
-    margin-bottom: 1.5rem;
-    div {
-      width: 40px;
-      text-align: center;
-    }
-  }
-  .content {
-    font-family: 'Fira Code', monospace;
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 30px;
-    color: #323232;
-
-    .total {
-      color: #1480ff;
-    }
-    div {
-      width: 40px;
-      text-align: center;
-    }
-  }
-
-  .vertical {
-    height: 4rem;
-    border-right: 1px solid #d4d4d4;
-  }
-`;
-
 const HorizontalRule = styled.hr`
   height: 5px;
   background: #f5f5f5;
@@ -291,34 +229,5 @@ const CalendarWrapper = styled.div`
     background-size: 12%;
   }
 `;
-
-// const MonthControl = styled.div`
-//   display: flex;
-//   justify-content: space-evenly;
-//   padding: 35px;
-// `;
-
-// const MonthContent = styled.div`
-//   font-weight: 500;
-//   font-size: 24px;
-//   line-height: 29px;
-//   color: #282828;
-// `;
-// const CalendarArea = styled.div`
-//   & > div {
-//     display: flex;
-//     justify-content: space-evenly;
-//     padding: 8px;
-//   }
-//   span {
-//     width: 15px;
-//     text-align: center;
-//     font-weight: 500;
-//     font-size: 14px;
-//     line-height: 17px;
-//     color: #282828;
-//   }
-// `;
-
 // login 전이면 인트로 이동
 export default Home;
