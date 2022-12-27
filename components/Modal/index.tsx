@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 
 interface propsType {
-    open: boolean,
     setOpen : (open:boolean)=>void
 }
 
