@@ -8,15 +8,17 @@ import Image from 'next/image';
 import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import Achievement from '@/components/Main/Achievement';
+import Modal from '@/components/Modal';
 // import Popup from '@/components/Popup';
 
 const Home = () => {
   const [value, onChange] = useState(new Date());
   const [render, setRender] = useState(false);
   const [datas, setDatas] = useState<infoType[]>([]);
+  const [open,setOpen] = useState(false);
 
   const getData = async() => {
-      const res = await axios.get('/data/data.json');
+      const res = await axios.get('http://localhost:8080/footprints?year=2022&month=11');
       setDatas(res.data);
   };
 
@@ -40,7 +42,7 @@ const Home = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <DdayBox>D+123</DdayBox>
-              <ShareButton>
+              <ShareButton onClick={()=>setOpen(true)}>
                 <span>공유하기</span>
                 <Image src="/images/Share_Android.svg" width="18px" height="18px" alt="share" />
               </ShareButton>
@@ -62,6 +64,7 @@ const Home = () => {
           />
         )}
       </CalendarWrapper>
+      {open? <Modal setOpen={setOpen}></Modal> : null}
     </DefaultLayout>
   );
 };

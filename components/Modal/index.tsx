@@ -1,12 +1,17 @@
 import styled from "@emotion/styled";
 
-const Modal = () => {
+interface propsType {
+    open: boolean,
+    setOpen : (open:boolean)=>void
+}
+
+const Modal = (props:propsType) => {
     return (
         <Container>
             <ModalWrapper>
                 <Text>🔗 링크가 복사되었습니다.</Text>
                 <SubText>코독한 개발자들에게 <br/> 공유해보세요!</SubText>
-                <ConfirmButton>확인</ConfirmButton>
+                <ConfirmButton onClick={()=>props.setOpen(false)}>확인</ConfirmButton>
             </ModalWrapper>
         </Container>
     );
@@ -19,6 +24,7 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     position: absolute;
+    top: 0;
     z-index: 100;
     display: flex;
     justify-content: center;
