@@ -5,7 +5,7 @@ import moment from 'moment';
 import styled from '@emotion/styled';
 import Calendar from 'react-calendar';
 import Image from 'next/image';
-import { infoType } from '@/public/types';
+import { infoProps } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import Achievement from '@/components/Main/Achievement';
 import Modal from '@/components/Modal';
@@ -14,21 +14,30 @@ import Modal from '@/components/Modal';
 const Home = () => {
   const [value, onChange] = useState(new Date());
   const [render, setRender] = useState(false);
-  const [datas, setDatas] = useState<infoType[]>([]);
+  const [datas, setDatas] = useState<infoProps>();
   const [open,setOpen] = useState(false);
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  // const [logItems, setLogItems] = useState([] as any);
+  // const [mark, setMark] = useState([]);
 
-  const getData = async() => {
-      const res = await axios.get('http://localhost:8080/footprints?year=2022&month=11');
-      setDatas(res.data);
-  };
+  const handleActiveStartDateChange = ({activeStartDate}:any) =>{
+    setYear(`${activeStartDate.getFullYear()}`);
+    setMonth(`${activeStartDate.getMonth()+1}`);
+  }
 
   const formatShortWeekday = (locale: any, date: any) =>
     ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
 
   useEffect(() => {
-    getData();
+
+    const getData = async(year:string,month:string) => {
+      const res = await axios.get(`http://localhost:8080/footprints?year=${year}&month=${month}`);
+      setDatas(res.data.response);
+  };
+    getData(year,month);
     setRender(true);
-  }, []);
+  }, [month]);
 
   return (
     <DefaultLayout>
@@ -37,7 +46,7 @@ const Home = () => {
           <CoDogImage />
           <ProfileWrapper>
             <ProfileContent>
-              <span className="nickname">멍멍진도</span>님, <br />
+              <span className="nickname">멍멍진도</span>님, <br/>
               오늘도 코독하게 코딩해봅시다.
             </ProfileContent>
             <ProfileButtonArea>
@@ -49,8 +58,7 @@ const Home = () => {
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
-      {datas.map((data,idx)=><Achievement data={data} key={idx}/>)}
-      {/* <Popup>5</Popup> */}
+        <Achievement data={datas}/>
       </ProfileContainer>
       {/* 달력 */}
       <HorizontalRule />
@@ -61,9 +69,11 @@ const Home = () => {
             value={value}
             formatDay={(locale, date) => moment(date).format('D')}
             formatShortWeekday={formatShortWeekday}
+            onActiveStartDateChange={handleActiveStartDateChange}
           />
         )}
       </CalendarWrapper>
+      <div>{year},{month}</div>
       {open? <Modal setOpen={setOpen}></Modal> : null}
     </DefaultLayout>
   );
@@ -87,6 +97,7 @@ const CoDogImage = styled.div`
   width: 120px;
   height: 120px;
   background-size: contain;
+  background-repeat: no-repeat;
 `;
 
 const ProfileWrapper = styled.div``;

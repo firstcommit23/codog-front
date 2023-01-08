@@ -1,29 +1,29 @@
 import styled from "@emotion/styled";
-import { infoType } from '@/public/types';
+import { infoProps } from '@/public/types';
 
-type DataProps = {
-    data : infoType
+interface DataProps {
+    data : infoProps;
 }
 
 const Achievement = ({data}:DataProps) => {
-    const {totalCount,month,continuousCount} = data
+    const {totalCount,thisMonthTotalCount,continuousCount} = data || {};
     return(
         <AchievementContainer>
             <div className="item">
             <div className="title">총</div>
             <div className="content">
-                <div className="total">{totalCount}</div>
+                <div className="total">{totalCount ?? ''}</div>
             </div>
             </div>
             <div className="vertical"></div>
             <div className="item">
             <div className="title">이번달</div>
-                <div className="content">{month}</div>
+                <div className="content">{thisMonthTotalCount ?? ''}</div>
             </div>
             <div className="vertical"></div>
             <div className="item">
             <div className="title">연속</div>
-                <div className="content">{continuousCount}</div>
+                <div className="content">{continuousCount ?? ''}</div>
             </div>
         </AchievementContainer>
     )
