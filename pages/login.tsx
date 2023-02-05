@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import { Common } from '@/styles/common';
 
 const LoginPage = () => {
-  const handleKakaoLogin = () => {
+  const handleGithubLogin = () => {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=81e311c24df827ee5ef0&redirect_uri=http://localhost:3000/intro/step1`;
   };
 
@@ -21,7 +21,10 @@ const LoginPage = () => {
         <Catchphrase>
           <h1>오늘도 코딩하는</h1>
         </Catchphrase>
-        <KaKaoLoginButton onClick={handleKakaoLogin}>Github으로 3초만에 시작하기</KaKaoLoginButton>
+        <GithubLoginButton onClick={handleGithubLogin}>
+          <div></div>
+          <span>github으로 3초만에 시작하기</span>
+        </GithubLoginButton>
       </Container>
     </Wrapper>
   );
@@ -30,7 +33,7 @@ const LoginPage = () => {
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   margin: 0 auto;
   background: ${Common.colors.black};
 `;
@@ -150,15 +153,34 @@ const Catchphrase = styled.div`
     }
   }
 `;
-const KaKaoLoginButton = styled.button`
+const GithubLoginButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   align-self: center;
+  justify-content: center;
   width: 29.9rem;
   height: 5rem;
-  background: #fee500;
+  background: white;
+  color: #282828;
+  border: 0;
   border-radius: 5px;
   font-weight: 600;
   font-size: 1.8rem;
   line-height: 2.2rem;
   color: #191600;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #e0e0e0;
+  }
+
+  div {
+    background-image: url('/images/github-logo.svg');
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 10px;
+  }
 `;
 export default LoginPage;

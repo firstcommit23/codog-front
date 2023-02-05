@@ -67,12 +67,17 @@ const ButtonSubmit = styled.button`
   max-width: 300px;
   background: #56a4ff;
   border-radius: 5px;
-  border: solid 1px #56a4ff;
-  margin-top: 10px;
+  border: 0;
+  margin-top: 15px;
   padding: 16px 0;
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
   line-height: 19px;
+
+  &:hover{
+    background-color: #585858;
+    cursor:pointer;
+  }
 `;
 
 const StepNavigation = styled.div`
