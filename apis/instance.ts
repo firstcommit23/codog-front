@@ -1,17 +1,19 @@
 import axios, { AxiosInstance } from 'axios';
+import { checkToken } from '@/utils/ServiceUtils';
 
 const Instance: AxiosInstance = axios.create({
   baseURL: 'http://localhost:8080/',
 });
 
 Instance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('accessToken');
+  async (config) => {
+    const token = await checkToken(localStorage.getItem('accessToken') || '');
+
     config.headers = {
       ...config.headers,
       Authorization: token ? `Bearer ${token}` : '',
     };
-    return Promise.resolve(config);
+    return await Promise.resolve(config);
   },
   (error) => {
     if (error.response.status === 401) {

@@ -1,8 +1,9 @@
+import axios from 'axios';
 import Instance from './instance';
 import type { User } from './type';
 
 export const getUserProfile = () => {
-  return Instance.get('/users/profile').then((res) => res.data.data || []);
+  return Instance.get('/users/detail').then((res) => res.data.response);
 };
 
 export const postSiginupGithubid = (githubId: string) => {
@@ -20,7 +21,7 @@ export const postSighupNickname = (user: User) => {
 };
 
 export const postSighupUser = (user: User) => {
-  return Instance.post('/users/detail', { nickname: user.nickname }).then(
+  return Instance.post('/users/detail', { email: user.email, nickname: user.nickname }).then(
     (res) => res.data.response
   );
 };
@@ -31,8 +32,22 @@ export const postAuthorizationMail = (email: string) => {
   );
 };
 
+export const getFootprint = (year: string, month: string) => {
+  return Instance.get(`/footprints?year=${year}&month=${month}`).then((res) => res.data.response);
+};
+
 export const getEmailAuthorization = (email: string, token: string) => {
-  return Instance.get(`/users/email/authorization?email=${email}&token=${token}`)
+  return axios
+    .get(`http://localhost:8080/users/email/authorization?email=${email}&token=${token}`)
     .then((res) => res.data.response)
     .catch((error) => error.response);
+};
+
+export const getToken = () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  return axios
+    .get('http://localhost:8080/users/token', {
+      headers: { Authorization: `Bearer ${refreshToken}` },
+    })
+    .then((res) => res.data.response);
 };

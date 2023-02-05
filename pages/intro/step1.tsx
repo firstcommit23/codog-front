@@ -5,16 +5,18 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import { useAuthorizationMailMutation } from '@/hooks/query/useSignupMutation';
-import { userState } from '@/components/states';
+import { userState, modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 
-const IntroStep1: NextPage<{ accessToken: string; githubEmail: string; nickname: string }> = ({
-  accessToken,
-  githubEmail,
-  nickname,
-}) => {
+const IntroStep1: NextPage<{
+  accessToken: string;
+  refreshToken: string;
+  githubEmail: string;
+  nickname: string;
+}> = ({ accessToken, githubEmail, nickname, refreshToken }) => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userState);
+  const [modal, setModal] = useRecoilState(modalState);
   const sendAuthorizationMail = useAuthorizationMailMutation();
   const [email, setEmail] = useState(user.email);
   const [emailAuthorization, setEmailAuthorization] = useState(true);
@@ -26,6 +28,7 @@ const IntroStep1: NextPage<{ accessToken: string; githubEmail: string; nickname:
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
     }
 
     if (!localStorage.getItem('accessToken')) {
@@ -55,9 +58,14 @@ const IntroStep1: NextPage<{ accessToken: string; githubEmail: string; nickname:
       onSuccess: () => {
         setUser({ ...user, email });
         //router.push('/intro/step2');
-        alert(
-          '입력하신 이메일로 인증 메일 전송하였습니다. 메일의 인증완료 버튼 클릭 후 다음으로 진행해주세요! 멍멍!'
-        );
+        setModal({
+          isShow: true,
+          title: '인증 메일 전송하였습니다.',
+          content: '메일의 인증링크를 클릭 후 다음으로 진행해주세요!\r\n멍멍!',
+        });
+        // alert(
+        //   '입력하신 이메일로 인증 메일 전송하였습니다. 메일의 인증완료 버튼 클릭 후 다음으로 진행해주세요! 멍멍!'
+        // );
       },
       onError: (error: any) => {
         const { status, data } = error.response;
@@ -99,7 +107,7 @@ const IntroStep1: NextPage<{ accessToken: string; githubEmail: string; nickname:
 
 export async function getServerSideProps(context: any) {
   const { code } = context.query;
-  let response = { accessToken: '', nickname: '', email: '', iseNewUser: 0 };
+  let response = { accessToken: '', refreshToken: '', nickname: '', email: '', iseNewUser: 0 };
   try {
     if (code) {
       const res = await axios.get(
@@ -107,7 +115,7 @@ export async function getServerSideProps(context: any) {
       );
       console.log(res);
       const { accessToken, nickname, email, refreshToken, isNewUser } = res.data.response;
-      if (isNewUser) {
+      if (!isNewUser) {
         return {
           redirect: {
             parmanent: false,
@@ -126,11 +134,13 @@ export async function getServerSideProps(context: any) {
       response.accessToken = accessToken;
       response.nickname = nickname;
       response.email = email;
+      response.refreshToken = refreshToken;
     }
   } catch (e: any) {}
   return {
     props: {
       accessToken: response.accessToken,
+      refreshToken: response.refreshToken,
       githubEmail: response.email,
       nickname: response.nickname,
     },
@@ -218,9 +228,9 @@ const ButtonSubmit = styled.button`
   color: #ffffff;
   line-height: 19px;
 
-  &:hover{
+  &:hover {
     background-color: #585858;
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 

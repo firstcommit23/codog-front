@@ -9,4 +9,12 @@ const userState = atom({
   },
 });
 
-export { userState };
+const modalState = atom({
+  key: 'MODAL',
+  default: {
+    isShow: false,
+    title: '',
+    content: '',
+  },
+});
+export { userState, modalState };

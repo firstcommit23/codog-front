@@ -1,11 +1,22 @@
+import { useEffect } from 'react';
 import styled from '@emotion/styled';
 import Header from '@/components/Header';
 import { Common } from '@/styles/common';
+import Router from 'next/router';
 
 const LoginPage = () => {
   const handleGithubLogin = () => {
     window.location.href = `https://github.com/login/oauth/authorize?client_id=81e311c24df827ee5ef0&redirect_uri=http://localhost:3000/intro/step1`;
   };
+
+  // accessToken이 있으면 메인으로 가기
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+
+    if (token) {
+      Router.push('/');
+    }
+  }, []);
 
   return (
     <Wrapper>

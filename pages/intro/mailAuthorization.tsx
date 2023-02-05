@@ -5,6 +5,8 @@ import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { getEmailAuthorization } from '@/apis/api';
+import { useRecoilState } from 'recoil';
+import { modalState } from '@/components/states';
 
 const MailAhthorization: NextPage<{ accessToken: string; githubEmail: string; nickname: string }> =
   () => {
@@ -12,20 +14,24 @@ const MailAhthorization: NextPage<{ accessToken: string; githubEmail: string; ni
     const { email, token } = router.query;
     const [message, setMessage] = useState('이메일 인증 중... ');
 
+    const [modal, setModal] = useRecoilState(modalState);
+
     useEffect(() => {
+      if (!router.isReady) return;
+
       authoriza();
-    }, []);
+    }, [router.isReady]);
 
     const authoriza = async () => {
       const response = await getEmailAuthorization(String(email), String(token)).then((res) => res);
       console.log(response);
 
       if (response.status === 500) {
-        setMessage('이메일 인증에 실패하였습니다 ㅠㅠ');
+        setMessage('이메일 인증에 실패하였습니다 ㅠㅠ 다시 시도해주세요 🐶');
         return;
       }
-      setMessage('인증완료 🐶');
-      await alert('인증완료하였습니다! ');
+      await setMessage('인증완료 🐶');
+      await setModal({ ...modal, isShow: true, title: '인증완료되었습니다 🐶' });
 
       router.push('/intro/step2');
     };
@@ -37,53 +43,6 @@ const MailAhthorization: NextPage<{ accessToken: string; githubEmail: string; ni
       </DefaultLayout>
     );
   };
-
-/**
- *
- * 이메일 전송이 완료되었습니다. 메일함에서 인증 링크를 눌러 진행해 주세요!
- * 유효 기간 : 2022 ~ 까지
- *
- * [링크 다시보내기] // 30초 후 활성화됩니다.
- */
-export async function getServerSideProps(context: any) {
-  const { code } = context.query;
-  let response = { accessToken: '', nickname: '', email: '', iseNewUser: 0 };
-  try {
-    if (code) {
-      const res = await axios.get(
-        `http://localhost:8080/users/sign-in/github/callback?code=${code}`
-      );
-      console.log(res);
-      const { accessToken, nickname, email, refreshToken, isNewUser } = res.data.response;
-      if (isNewUser) {
-        return {
-          redirect: {
-            parmanent: false,
-            destination: '/',
-          },
-        };
-      }
-      // if (email) {
-      //   return {
-      //     redirect: {
-      //       parmanent: false,
-      //       destination: '/intro/step2',
-      //     },
-      //   };
-      // }
-      response.accessToken = accessToken;
-      response.nickname = nickname;
-      response.email = email;
-    }
-  } catch (e: any) {}
-  return {
-    props: {
-      accessToken: response.accessToken,
-      githubEmail: response.email,
-      nickname: response.nickname,
-    },
-  };
-}
 
 const CoDogImage = styled.div`
   background: url('/images/codog.png');
