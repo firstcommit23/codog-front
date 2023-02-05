@@ -1,19 +1,28 @@
-import styled from '@emotion/styled';
-import DefaultLayout from '@/components/Layout/DefaultLayout';
-import Calendar from 'react-calendar';
-import { Common } from '@/styles/common';
-import Image from 'next/image';
-import moment from 'moment';
 import React, { useState, useEffect } from 'react';
+import { Common } from '@/styles/common';
+import axios from 'axios';
+import moment from 'moment';
+import styled from '@emotion/styled';
+import Calendar from 'react-calendar';
+import Image from 'next/image';
+import { infoType } from '@/public/types';
+import DefaultLayout from '@/components/Layout/DefaultLayout';
 
 const Home = () => {
   const [value, onChange] = useState(new Date());
   const [render, setRender] = useState(false);
+  const [datas, setDatas] = useState<infoType[]>([]);
+
+  const getData = async() => {
+      const res = await axios.get('/data/data.json');
+      setDatas(res.data);
+  };
 
   const formatShortWeekday = (locale: any, date: any) =>
     ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
 
   useEffect(() => {
+    getData();
     setRender(true);
   }, []);
 
@@ -36,24 +45,26 @@ const Home = () => {
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
-        <AchievementContainer>
+        {datas.map((data,key)=>(
+          <AchievementContainer key={key}>
           <div className="item">
             <div className="title">총</div>
             <div className="content">
-              <div className="total">20</div>
+              <div className="total">{data.totalCount}</div>
             </div>
           </div>
           <div className="vertical"></div>
           <div className="item">
             <div className="title">이번달</div>
-            <div className="content">10</div>
+            <div className="content">{data.month}</div>
           </div>
           <div className="vertical"></div>
           <div className="item">
             <div className="title">연속</div>
-            <div className="content">8</div>
+            <div className="content">{data.continuousCount}</div>
           </div>
         </AchievementContainer>
+        ))}
       </ProfileContainer>
       {/* 달력 */}
       <HorizontalRule />
