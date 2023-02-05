@@ -7,18 +7,16 @@ import DefaultLayout from '@/components/Layout/DefaultLayout';
 const IntroStep3 = () => {
   const router = useRouter();
   const [user] = useRecoilState(userState);
-  console.log(user);
-
   return (
     <DefaultLayout>
       <CoDogImage />
       <ContentMessage>
-        오늘도달린다개님,
+        {user.nickname}님,
         <br />
         <strong>개발자국 찍기</strong>를 시작합니다!
         <ul>
           <li>Github에 커밋을 하면, 발자국이 찍혀요!</li>
-          <li>알림톡으로 오늘 하루 발자국을 보내드려요.</li>
+          <li>등록하신 이메일로 오늘 하루 발자국을 보내드려요.</li>
           <li>매일 저녁 9시에 체크돼요.</li>
         </ul>
       </ContentMessage>

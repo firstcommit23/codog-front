@@ -4,7 +4,7 @@ import { Common } from '@/styles/common';
 
 const LoginPage = () => {
   const handleKakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=8f966f4f2bce0413c66f6a8fbb6a6e0e&redirect_uri=http://localhost:3000/intro/step1&response_type=code`;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=81e311c24df827ee5ef0&redirect_uri=http://localhost:3000/intro/step1`;
   };
 
   return (
@@ -21,7 +21,7 @@ const LoginPage = () => {
         <Catchphrase>
           <h1>오늘도 코딩하는</h1>
         </Catchphrase>
-        <KaKaoLoginButton onClick={handleKakaoLogin}>카카오로 3초만에 시작하기</KaKaoLoginButton>
+        <KaKaoLoginButton onClick={handleKakaoLogin}>Github으로 3초만에 시작하기</KaKaoLoginButton>
       </Container>
     </Wrapper>
   );

@@ -2,101 +2,49 @@ import { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
-import { useAuthorizationMailMutation } from '@/hooks/query/useSignupMutation';
-import { userState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import { getEmailAuthorization } from '@/apis/api';
 
-const IntroStep1: NextPage<{ accessToken: string; githubEmail: string; nickname: string }> = ({
-  accessToken,
-  githubEmail,
-  nickname,
-}) => {
-  const router = useRouter();
-  const [user, setUser] = useRecoilState(userState);
-  const sendAuthorizationMail = useAuthorizationMailMutation();
-  const [email, setEmail] = useState(user.email);
-  const [emailAuthorization, setEmailAuthorization] = useState(true);
-  const [emailError, setEmailError] = useState('');
+const MailAhthorization: NextPage<{ accessToken: string; githubEmail: string; nickname: string }> =
+  () => {
+    const router = useRouter();
+    const { email, token } = router.query;
+    const [message, setMessage] = useState('이메일 인증 중... ');
 
-  console.log(accessToken);
+    useEffect(() => {
+      authoriza();
+    }, []);
 
-  //FIXME: 리팩토링 필요
-  useEffect(() => {
-    if (accessToken) {
-      localStorage.setItem('accessToken', accessToken);
-    }
+    const authoriza = async () => {
+      const response = await getEmailAuthorization(String(email), String(token)).then((res) => res);
+      console.log(response);
 
-    if (!localStorage.getItem('accessToken')) {
-      alert('비정상적인 접근 입니다!');
-      router.push('/login');
-    }
+      if (response.status === 500) {
+        setMessage('이메일 인증에 실패하였습니다 ㅠㅠ');
+        return;
+      }
+      setMessage('인증완료 🐶');
+      await alert('인증완료하였습니다! ');
 
-    if (githubEmail && githubEmail !== 'null') {
-      setEmail(githubEmail);
-      setEmailAuthorization(false);
-      setUser({ ...user, email: githubEmail, nickname: nickname });
-    }
-  }, []);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setEmail(e.target.value);
-    setEmailError('');
-  };
-
-  const handleSubmit = () => {
-    if (!emailAuthorization) {
       router.push('/intro/step2');
-      return;
-    }
+    };
 
-    sendAuthorizationMail.mutateAsync(email, {
-      onSuccess: () => {
-        setUser({ ...user, email });
-        //router.push('/intro/step2');
-        alert(
-          '입력하신 이메일로 인증 메일 전송하였습니다. 메일의 인증완료 버튼 클릭 후 다음으로 진행해주세요! 멍멍!'
-        );
-      },
-      onError: (error: any) => {
-        const { status, data } = error.response;
-        if (status === 401) {
-          alert('이메일 인증에 실패했습니다. 관리자에게 문의 바랍니다.');
-          return;
-        }
-        const message = data.error.message || '';
-        setEmailError(message);
-      },
-    });
+    return (
+      <DefaultLayout>
+        <CoDogImage />
+        <ContentMessage>{message}</ContentMessage>
+      </DefaultLayout>
+    );
   };
 
-  return (
-    <DefaultLayout>
-      <CoDogImage />
-      <ContentMessage>이메일을 입력해주세요.</ContentMessage>
-      {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
-      <InputText
-        type="text"
-        name="githubId"
-        onChange={handleChange}
-        placeholder="codog_develop@codog.com"
-        value={email}
-        className={emailError && 'error'}
-        readOnly={emailAuthorization ? false : true}
-      />
-      <ButtonSubmit onClick={handleSubmit}>
-        {emailAuthorization ? '인증하기' : '인증완료'}
-      </ButtonSubmit>
-      <StepNavigation>
-        <span className="active"></span>
-        <span></span>
-        <span></span>
-      </StepNavigation>
-    </DefaultLayout>
-  );
-};
-
+/**
+ *
+ * 이메일 전송이 완료되었습니다. 메일함에서 인증 링크를 눌러 진행해 주세요!
+ * 유효 기간 : 2022 ~ 까지
+ *
+ * [링크 다시보내기] // 30초 후 활성화됩니다.
+ */
 export async function getServerSideProps(context: any) {
   const { code } = context.query;
   let response = { accessToken: '', nickname: '', email: '', iseNewUser: 0 };
@@ -237,4 +185,4 @@ const StepNavigation = styled.div`
   }
 `;
 
-export default IntroStep1;
+export default MailAhthorization;
