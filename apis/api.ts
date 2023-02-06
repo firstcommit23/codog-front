@@ -3,7 +3,9 @@ import Instance from './instance';
 import type { User } from './type';
 
 export const getUserProfile = () => {
-  return Instance.get('/users/detail').then((res) => res.data.response);
+  return Instance.get('/users/detail')
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
 };
 
 export const postSiginupGithubid = (githubId: string) => {
@@ -20,10 +22,8 @@ export const postSighupNickname = (user: User) => {
   return Instance.post('/users/sign-up', user).then((res) => res.data.response);
 };
 
-export const postSighupUser = (user: User) => {
-  return Instance.post('/users/detail', { email: user.email, nickname: user.nickname }).then(
-    (res) => res.data.response
-  );
+export const postSighupUser = (nickname: string) => {
+  return Instance.post('/users/detail', { nickname: nickname }).then((res) => res.data.response);
 };
 
 export const postAuthorizationMail = (email: string) => {
@@ -33,7 +33,9 @@ export const postAuthorizationMail = (email: string) => {
 };
 
 export const getFootprint = (year: string, month: string) => {
-  return Instance.get(`/footprints?year=${year}&month=${month}`).then((res) => res.data.response);
+  return Instance.get(`/footprints?year=${year}&month=${month}`)
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
 };
 
 export const getEmailAuthorization = (email: string, token: string) => {
@@ -49,5 +51,6 @@ export const getToken = () => {
     .get('http://localhost:8080/users/token', {
       headers: { Authorization: `Bearer ${refreshToken}` },
     })
-    .then((res) => res.data.response);
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
 };

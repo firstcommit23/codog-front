@@ -7,6 +7,7 @@ const Modal = () => {
   const handleClose = () => {
     setModal({ ...modal, isShow: false });
   };
+
   return (
     <>
       {modal.isShow && (
@@ -58,6 +59,7 @@ const SubText = styled.div`
   color: #8c8c8c;
   line-height: 1.5;
   margin: 15px 0 30px 0;
+  white-space: pre-wrap;
 `;
 
 const ConfirmButton = styled.button`

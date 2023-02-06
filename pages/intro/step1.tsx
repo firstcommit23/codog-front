@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
 import { NextPage } from 'next';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import { useRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
 import styled from '@emotion/styled';
-import { useAuthorizationMailMutation } from '@/hooks/query/useSignupMutation';
-import { userState, modalState } from '@/components/states';
+import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import { postAuthorizationMail } from '@/apis/api';
 
 const IntroStep1: NextPage<{
   accessToken: string;
   refreshToken: string;
   githubEmail: string;
   nickname: string;
-}> = ({ accessToken, githubEmail, nickname, refreshToken }) => {
+}> = ({ accessToken, refreshToken }) => {
   const router = useRouter();
-  const [user, setUser] = useRecoilState(userState);
-  const [modal, setModal] = useRecoilState(modalState);
-  const sendAuthorizationMail = useAuthorizationMailMutation();
-  const [email, setEmail] = useState(user.email);
-  const [emailAuthorization, setEmailAuthorization] = useState(true);
+  const [, setModal] = useRecoilState(modalState);
+  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
 
-  console.log(accessToken);
+  const { mutate, isLoading, isSuccess } = useMutation((email: string) =>
+    postAuthorizationMail(email)
+  );
 
-  //FIXME: 리팩토링 필요
+  const buttonLabel = isSuccess ? '다시 인증하기' : isLoading ? '메일전송중' : '인증하기';
+
   useEffect(() => {
     if (accessToken) {
       localStorage.setItem('accessToken', accessToken);
@@ -35,12 +36,6 @@ const IntroStep1: NextPage<{
       alert('비정상적인 접근 입니다!');
       router.push('/login');
     }
-
-    if (githubEmail && githubEmail !== 'null') {
-      setEmail(githubEmail);
-      setEmailAuthorization(false);
-      setUser({ ...user, email: githubEmail, nickname: nickname });
-    }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -49,23 +44,13 @@ const IntroStep1: NextPage<{
   };
 
   const handleSubmit = () => {
-    if (!emailAuthorization) {
-      router.push('/intro/step2');
-      return;
-    }
-
-    sendAuthorizationMail.mutateAsync(email, {
+    mutate(email, {
       onSuccess: () => {
-        setUser({ ...user, email });
-        //router.push('/intro/step2');
         setModal({
           isShow: true,
           title: '인증 메일 전송하였습니다.',
-          content: '메일의 인증링크를 클릭 후 다음으로 진행해주세요!\r\n멍멍!',
+          content: '메일의 인증링크를 클릭 후 다음으로\n진행해주세요! 멍멍!',
         });
-        // alert(
-        //   '입력하신 이메일로 인증 메일 전송하였습니다. 메일의 인증완료 버튼 클릭 후 다음으로 진행해주세요! 멍멍!'
-        // );
       },
       onError: (error: any) => {
         const { status, data } = error.response;
@@ -73,12 +58,11 @@ const IntroStep1: NextPage<{
           alert('이메일 인증에 실패했습니다. 관리자에게 문의 바랍니다.');
           return;
         }
-        const message = data.error.message || '';
+        const message = data.error?.message || '';
         setEmailError(message);
       },
     });
   };
-
   return (
     <DefaultLayout>
       <CoDogImage />
@@ -91,10 +75,9 @@ const IntroStep1: NextPage<{
         placeholder="codog_develop@codog.com"
         value={email}
         className={emailError && 'error'}
-        readOnly={emailAuthorization ? false : true}
       />
-      <ButtonSubmit onClick={handleSubmit}>
-        {emailAuthorization ? '인증하기' : '인증완료'}
+      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+        {buttonLabel}
       </ButtonSubmit>
       <StepNavigation>
         <span className="active"></span>
@@ -123,18 +106,11 @@ export async function getServerSideProps(context: any) {
           },
         };
       }
-      // if (email) {
-      //   return {
-      //     redirect: {
-      //       parmanent: false,
-      //       destination: '/intro/step2',
-      //     },
-      //   };
-      // }
+
       response.accessToken = accessToken;
+      response.refreshToken = refreshToken;
       response.nickname = nickname;
       response.email = email;
-      response.refreshToken = refreshToken;
     }
   } catch (e: any) {}
   return {
@@ -231,6 +207,9 @@ const ButtonSubmit = styled.button`
   &:hover {
     background-color: #585858;
     cursor: pointer;
+  }
+  &:disabled {
+    background-color: #eeeeee;
   }
 `;
 

@@ -1,30 +1,32 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { checkToken } from '@/utils/ServiceUtils';
 
 const Instance: AxiosInstance = axios.create({
   baseURL: 'http://localhost:8080/',
 });
 
-Instance.interceptors.request.use(
-  async (config) => {
-    const token = await checkToken(localStorage.getItem('accessToken') || '');
+Instance.interceptors.request.use(async (config) => {
+  const token = await checkToken(localStorage.getItem('accessToken') || '');
 
-    config.headers = {
-      ...config.headers,
-      Authorization: token ? `Bearer ${token}` : '',
-    };
-    return await Promise.resolve(config);
+  config.headers = {
+    ...config.headers,
+    Authorization: token ? `Bearer ${token}` : '',
+  };
+  return await Promise.resolve(config);
+});
+
+Instance.interceptors.response.use(
+  (response) => {
+    return response;
   },
   (error) => {
-    if (error.response.status === 401) {
-      return {
-        redirect: {
-          destination: '/login',
-        },
-      };
+    const err = error as AxiosError;
+    if (err.response?.status === 401) {
+      window.location.href = '/login';
+
+      return new Promise(() => {});
     }
     return Promise.reject(error);
   }
 );
-
 export default Instance;

@@ -1,28 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
 import styled from '@emotion/styled';
-import { getRandomNickname } from '@/apis/api';
-import { useSighupUserMutation } from '@/hooks/query/useSignupMutation';
-import { userState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import { getRandomNickname, postSighupUser } from '@/apis/api';
 
 const IntroStep2 = () => {
   const router = useRouter();
-  const [user, setUser] = useRecoilState(userState);
   const [nickname, setNickname] = useState('');
   const [nicknameError, setNicknameError] = useState('');
-  const postSignup = useSighupUserMutation();
+  const { mutate, isLoading } = useMutation((nickname: string) => postSighupUser(nickname));
 
-  console.log(user);
-  console.log(nickname);
+  async function getNickname() {
+    const response = await getRandomNickname();
+    if (typeof response === 'string') setNickname(response);
+  }
+
   useEffect(() => {
-    async function getNickname() {
-      const response = await getRandomNickname();
-      setNickname(response);
-      setUser({ ...user, nickname });
-    }
-    user.nickname || getNickname();
+    getNickname();
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -31,23 +26,15 @@ const IntroStep2 = () => {
   };
 
   const handleSubmit = async () => {
-    setUser({
-      ...user,
-      nickname,
+    mutate(nickname, {
+      onSuccess: () => {
+        router.push('/intro/step3');
+      },
+      onError: (error: any) => {
+        const message = error?.response.data.error.message || '';
+        setNicknameError(message);
+      },
     });
-    console.log(user);
-    await postSignup.mutateAsync(
-      { email: user.email, nickname },
-      {
-        onSuccess: () => {
-          router.push('/intro/step3');
-        },
-        onError: (error: any) => {
-          const message = error?.response.data.error.message || '';
-          setNicknameError(message);
-        },
-      }
-    );
   };
 
   return (
@@ -56,7 +43,10 @@ const IntroStep2 = () => {
       <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
       {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
       <InputText type="text" name="nickname" onChange={handleChange} value={nickname} />
-      <ButtonSubmit onClick={handleSubmit}>등록하기</ButtonSubmit>
+      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+        등록하기
+      </ButtonSubmit>
+      <ButtonSubmit onClick={getNickname}>다른 닉네임!</ButtonSubmit>
       <StepNavigation>
         <span></span>
         <span className="active"></span>
@@ -142,9 +132,12 @@ const ButtonSubmit = styled.button`
   color: #ffffff;
   line-height: 19px;
 
-  &:hover{
+  &:hover {
     background-color: #585858;
-    cursor:pointer;
+    cursor: pointer;
+  }
+  &:disabled {
+    background-color: #eeeeee;
   }
 `;
 

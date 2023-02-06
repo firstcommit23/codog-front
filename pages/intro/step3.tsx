@@ -1,17 +1,29 @@
-import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
-import { userState } from '@/components/states';
+import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import { getUserProfile } from '@/apis/api';
 
 const IntroStep3 = () => {
   const router = useRouter();
-  const [user] = useRecoilState(userState);
+  const [nickname, setNickname] = useState('');
+
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  const getProfile = async () => {
+    const result = await getUserProfile();
+    if (result) {
+      setNickname(result?.nickname || '');
+    }
+  };
+
   return (
     <DefaultLayout>
       <CoDogImage />
       <ContentMessage>
-        {user.nickname}님,
+        {nickname}님,
         <br />
         <strong>개발자국 찍기</strong>를 시작합니다!
         <ul>
@@ -74,9 +86,9 @@ const ButtonSubmit = styled.button`
   color: #ffffff;
   line-height: 19px;
 
-  &:hover{
+  &:hover {
     background-color: #585858;
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 
