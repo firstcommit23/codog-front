@@ -6,6 +6,7 @@ const userState = atom({
     email: '',
     nickname: '',
     githubId: '',
+    character: '',
   },
 });
 

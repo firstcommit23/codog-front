@@ -1,0 +1,40 @@
+import styled from '@emotion/styled';
+
+interface DogCharacterProps {
+  character: 'A' | 'B' | 'C';
+  pose?: 'Default' | 'Hi';
+  clothes?: 'Default';
+}
+
+const DogCharacter = ({
+  character = 'A',
+  pose = 'Default',
+  clothes = 'Default',
+}: DogCharacterProps) => {
+  const dogImage = `/images/dogs/${character}/${clothes}_${pose}.png`;
+
+  // TODO: 노트북은 커밋 갯수에따라 자동 업그레이드 되어야 한다.
+  return (
+    <>
+      <DogCharacterDiv img={dogImage} />
+      <Laptop />
+    </>
+  );
+};
+
+const DogCharacterDiv = styled.div<{ img: string }>`
+  content: url(${(props) => `${props.img ? props.img : '/images/dogs/A/Default_Default.png'}`});
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  bottom: -2.8rem;
+`;
+
+const Laptop = styled.div`
+  content: url('/images/notebook.png');
+  position: absolute;
+  left: 17%;
+  bottom: 0;
+`;
+
+export default DogCharacter;

@@ -6,16 +6,18 @@ import React from 'react';
 import { Common } from '@/styles/common';
 
 interface Props {
+  isShowMenu?: boolean;
   children: React.ReactNode;
+  backgroundColor?: string;
 }
 
-const DefaultLayout = ({ children }: Props) => {
+const DefaultLayout = ({ children, isShowMenu = true, backgroundColor }: Props) => {
   return (
     <Wrapper>
       {/* <Menu /> */}
       <Modal />
-      <Header />
-      <Container>{children}</Container>
+      <Header isShowMenu={isShowMenu} />
+      <Container color={backgroundColor}>{children}</Container>
     </Wrapper>
   );
 };
@@ -33,11 +35,11 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 4rem 3rem 7rem 3rem;
+  padding: 0; //4rem 3rem 7rem 3rem;
   max-width: ${Common.maxWidth};
   margin: 0 auto;
   box-sizing: border-box;
   height: 100vh;
-  background: #ffffff;
+  background: ${(props) => `${props.color ? props.color : '#ffffff'}`};
 `;
 export default DefaultLayout;

@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
-import { getRandomNickname, postSighupUser } from '@/apis/api';
+import { getRandomNickname } from '@/apis/api';
+import { useRecoilState } from 'recoil';
+import { userState } from '@/components/states';
+import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 
-const IntroStep2 = () => {
+const IntroNicknamePage = () => {
   const router = useRouter();
-  const [nickname, setNickname] = useState('');
+  const [user, setUser] = useRecoilState(userState);
+  const [nickname, setNickname] = useState(user.nickname || '');
   const [nicknameError, setNicknameError] = useState('');
-  const { mutate, isLoading } = useMutation((nickname: string) => postSighupUser(nickname));
 
   async function getNickname() {
     const response = await getRandomNickname();
@@ -17,7 +19,9 @@ const IntroStep2 = () => {
   }
 
   useEffect(() => {
-    getNickname();
+    if (!user.nickname) {
+      getNickname();
+    }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -26,45 +30,39 @@ const IntroStep2 = () => {
   };
 
   const handleSubmit = async () => {
-    mutate(nickname, {
-      onSuccess: () => {
-        router.push('/intro/step3');
-      },
-      onError: (error: any) => {
-        const message = error?.response.data.error.message || '';
-        setNicknameError(message);
-      },
-    });
+    if (!nickname) {
+      setNicknameError('닉네임을 지어주세용');
+    }
+    setUser({ ...user, nickname });
+    router.push('/intro/confirm');
   };
 
   return (
-    <DefaultLayout>
-      <CoDogImage />
-      <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
-      {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
-      <InputText type="text" name="nickname" onChange={handleChange} value={nickname} />
-      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
-        등록하기
-      </ButtonSubmit>
-      <ButtonSubmit onClick={getNickname}>다른 닉네임!</ButtonSubmit>
+    <DefaultLayout isShowMenu={false}>
+      <Canvas>
+        <DogCharacter character="A" />
+        <Balloon color="#3274FF" fontSize="1.4rem">
+          맘에 들어요!
+        </Balloon>
+      </Canvas>
       <StepNavigation>
         <span></span>
         <span className="active"></span>
         <span></span>
       </StepNavigation>
+      <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
+      {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
+      <InputText type="text" name="nickname" onChange={handleChange} value={nickname} />
+      <ButtonSubmit onClick={handleSubmit}>등록하기</ButtonSubmit>
+      <ButtonSubmit color="#8D8D8D" onClick={getNickname}>
+        랜덤으로 골라주세요
+      </ButtonSubmit>
     </DefaultLayout>
   );
 };
 
-const CoDogImage = styled.div`
-  background: url('/images/codog.png');
-  width: 174px;
-  height: 174px;
-  background-size: contain;
-`;
-
 const ContentMessage = styled.div`
-  padding-top: 44px;
+  padding-top: 2rem;
   color: #323232;
   font-size: 20px;
   font-weight: 600;
@@ -123,7 +121,7 @@ const ErrorMessage = styled.div`
 const ButtonSubmit = styled.button`
   width: 100%;
   max-width: 300px;
-  background: #282828;
+  background: ${(props) => `${props.color ? props.color : '#282828'}`};
   border-radius: 5px;
   border: 0;
   margin-top: 15px;
@@ -144,7 +142,7 @@ const ButtonSubmit = styled.button`
 const StepNavigation = styled.div`
   display: flex;
   justify-content: cneter;
-  padding-top: 54px;
+  padding-top: 2rem;
 
   span {
     display: inline-block;
@@ -160,4 +158,4 @@ const StepNavigation = styled.div`
   }
 `;
 
-export default IntroStep2;
+export default IntroNicknamePage;

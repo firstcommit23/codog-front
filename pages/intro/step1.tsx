@@ -1,116 +1,116 @@
 import { useEffect, useState } from 'react';
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { useMutation } from '@tanstack/react-query';
 import styled from '@emotion/styled';
 import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
-import { postAuthorizationMail } from '@/apis/api';
+import { NextPage } from 'next';
 
 const IntroStep1: NextPage<{
   accessToken: string;
   refreshToken: string;
   githubEmail: string;
   nickname: string;
-}> = ({ accessToken, refreshToken }) => {
+  isNewUser: string;
+}> = ({ accessToken, refreshToken, isNewUser }) => {
   const router = useRouter();
   const [, setModal] = useRecoilState(modalState);
   const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { mutate, isLoading, isSuccess } = useMutation((email: string) =>
-    postAuthorizationMail(email)
-  );
+  const [character, setCharacter] = useState('');
 
-  const buttonLabel = isSuccess ? '다시 인증하기' : isLoading ? '메일전송중' : '인증하기';
+  const CharacterList = [
+    { code: 'dog1', color: '#333333', image: '/', name: '멍멍1' },
+    { code: 'dog2', color: '#333333', image: '/', name: '멍멍2' },
+    { code: 'dog3', color: '#333333', image: '/', name: '멍멍3' },
+    { code: 'dog4', color: '#333333', image: '/', name: '멍멍4' },
+  ];
 
   useEffect(() => {
-    if (accessToken) {
+    // accessToken 우선하기
+    // localstorage에 있는 경우
+
+    console.log(accessToken);
+    console.log(localStorage.getItem('accessToken'));
+
+    if (!accessToken) {
+      alert('비정상적인 접근 입니다!');
+      // router.push('/login');
+    } else {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
     }
 
-    if (!localStorage.getItem('accessToken')) {
-      alert('비정상적인 접근 입니다!');
-      router.push('/login');
+    if (!isNewUser) {
+      router.push('/');
     }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setEmail(e.target.value);
-    setEmailError('');
+    setCharacter(e.target.value);
+    setErrorMessage('');
   };
 
   const handleSubmit = () => {
-    mutate(email, {
-      onSuccess: () => {
-        setModal({
-          isShow: true,
-          title: '인증 메일 전송하였습니다.',
-          content: '메일의 인증링크를 클릭 후 다음으로\n진행해주세요! 멍멍!',
-        });
-      },
-      onError: (error: any) => {
-        const { status, data } = error.response;
-        if (status === 401) {
-          alert('이메일 인증에 실패했습니다. 관리자에게 문의 바랍니다.');
-          return;
-        }
-        const message = data.error?.message || '';
-        setEmailError(message);
-      },
-    });
+    return null;
   };
+
   return (
     <DefaultLayout>
       <CoDogImage />
-      <ContentMessage>이메일을 입력해주세요.</ContentMessage>
-      {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
-      <InputText
-        type="text"
-        name="githubId"
-        onChange={handleChange}
-        placeholder="codog_develop@codog.com"
-        value={email}
-        className={emailError && 'error'}
-      />
-      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
-        {buttonLabel}
-      </ButtonSubmit>
+      <ContentMessage>함께할 코독 개발자를 골라주세요!</ContentMessage>
       <StepNavigation>
         <span className="active"></span>
         <span></span>
         <span></span>
       </StepNavigation>
+      {CharacterList.map((item: any) => {
+        return (
+          <>
+            <input
+              type="checkbox"
+              value={item.code}
+              onChange={handleChange}
+              checked={item.code === character}
+            />
+            {item.name}
+          </>
+        );
+      })}
+
+      <ButtonSubmit onClick={handleSubmit} disabled={!character}>
+        선택완료
+      </ButtonSubmit>
     </DefaultLayout>
   );
 };
 
 export async function getServerSideProps(context: any) {
   const { code } = context.query;
-  let response = { accessToken: '', refreshToken: '', nickname: '', email: '', iseNewUser: 0 };
+  let response = { accessToken: '', refreshToken: '', nickname: '', email: '', isNewUser: 0 };
+
   try {
     if (code) {
       const res = await axios.get(
         `http://localhost:8080/users/sign-in/github/callback?code=${code}`
       );
-      console.log(res);
       const { accessToken, nickname, email, refreshToken, isNewUser } = res.data.response;
-      if (!isNewUser) {
-        return {
-          redirect: {
-            parmanent: false,
-            destination: '/',
-          },
-        };
-      }
+      // if (!isNewUser) {
+      //   return {
+      //     redirect: {
+      //       parmanent: false,
+      //       destination: '/',
+      //     },
+      //   };
+      // }
 
       response.accessToken = accessToken;
       response.refreshToken = refreshToken;
       response.nickname = nickname;
       response.email = email;
+      response.isNewUser = isNewUser;
     }
   } catch (e: any) {}
   return {
@@ -119,6 +119,7 @@ export async function getServerSideProps(context: any) {
       refreshToken: response.refreshToken,
       githubEmail: response.email,
       nickname: response.nickname,
+      isNewUser: response.isNewUser,
     },
   };
 }

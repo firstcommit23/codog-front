@@ -12,6 +12,12 @@ export const postSiginupGithubid = (githubId: string) => {
   return Instance.post('/users/sign-up/github-id', { githubId }).then((res) => res.data.response);
 };
 
+export const getCharacter = () => {
+  return Instance.get('/users/code/character')
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
+};
+
 export const getRandomNickname = () => {
   return Instance.get('/users/nickname/new')
     .then((res) => res.data.response)
@@ -22,8 +28,11 @@ export const postSighupNickname = (user: User) => {
   return Instance.post('/users/sign-up', user).then((res) => res.data.response);
 };
 
-export const postSighupUser = (nickname: string) => {
-  return Instance.post('/users/detail', { nickname: nickname }).then((res) => res.data.response);
+export const postSighupUser = (user: User) => {
+  return Instance.post('/users/profile', {
+    characterCode: user.character,
+    nickname: user.nickname,
+  }).then((res) => res.data.response);
 };
 
 export const postAuthorizationMail = (email: string) => {

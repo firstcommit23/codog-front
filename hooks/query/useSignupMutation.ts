@@ -25,8 +25,8 @@ export const useCheckMutation = (options?: UseMutationOptions<any, Error, string
   });
 };
 
-export const useSighupUserMutation = (options?: UseMutationOptions<any, Error, string>) => {
-  return useMutation<any, Error, string>((nickname: string) => postSighupUser(nickname), {
+export const useSighupUserMutation = (options?: UseMutationOptions<any, Error, User>) => {
+  return useMutation<any, Error, User>((user: User) => postSighupUser(user), {
     ...options,
   });
 };
