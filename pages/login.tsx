@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
@@ -16,11 +16,17 @@ const LoginPage = () => {
     // }
   }, []);
 
+  const ThinkList = ['Coding...', '오늘 머먹지', '앗! 금지', '200!', '404...'];
+  const [random, setRandom] = useState(0);
+
   return (
     <DefaultLayout isShowMenu={false} backgroundColor="#282828">
       <Canvas>
-        <DogCharacter character="A" />
-        <Balloon type="Think">Coding...</Balloon>
+        <DogCharacter
+          character="A"
+          onClick={() => setRandom(Math.floor(Math.random() * (ThinkList.length - 1 + 1)) + 0)}
+        />
+        <Balloon type="Think">{ThinkList[random]}</Balloon>
       </Canvas>
       <Catchphrase>
         <div>오늘도 코딩하는</div>
