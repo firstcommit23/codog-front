@@ -118,7 +118,7 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   padding: 2rem 3rem 0 3rem;
   font-size: 2.2rem;
   gap: 3rem;

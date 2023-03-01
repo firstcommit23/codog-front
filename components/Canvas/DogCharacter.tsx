@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
+import { CHARACTER_CODES } from '@/apis/type';
 
 interface DogCharacterProps {
-  character: 'A' | 'B' | 'C';
+  character?: CHARACTER_CODES;
   pose?: 'Default' | 'Hi';
   clothes?: 'Default';
   onClick?: () => void;
