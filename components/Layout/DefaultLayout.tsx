@@ -25,7 +25,8 @@ const DefaultLayout = ({ children, isShowMenu = true, backgroundColor }: Props) 
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  margin: 0 auto;
+  height: 100%;
+  margin: auto 0;
   background: #f5f5f5;
 `;
 
@@ -39,7 +40,7 @@ const Container = styled.div`
   max-width: ${Common.maxWidth};
   margin: 0 auto;
   box-sizing: border-box;
-  height: 100vh;
+  height: 100%;
   background: ${(props) => `${props.color ? props.color : '#ffffff'}`};
 `;
 export default DefaultLayout;

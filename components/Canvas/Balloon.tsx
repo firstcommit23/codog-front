@@ -18,7 +18,7 @@ const Balloon = ({ children, type = 'Speech', color, fontSize }: BalloonProps) =
 const BallonDiv = styled.div<{ fontSize: string | undefined }>`
   position: absolute;
   top: 10rem;
-  right: 28rem;
+  right: 63%;
   padding: 0.8rem;
   background: #ffffff;
   border-radius: 1rem;

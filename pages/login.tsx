@@ -16,7 +16,14 @@ const LoginPage = () => {
     // }
   }, []);
 
-  const ThinkList = ['Coding...', '오늘 머먹지', '앗! 금지', '200!', '404...'];
+  const ThinkList = [
+    'Coding...',
+    '오늘 머먹지',
+    '앗! 금지',
+    '200!',
+    '404...',
+    '나는 코딩왕이 될테야',
+  ];
   const [random, setRandom] = useState(0);
 
   return (
@@ -106,14 +113,6 @@ const GithubLoginButton = styled.button`
   &:hover {
     cursor: pointer;
     background-color: #e0e0e0;
-  }
-
-  div {
-    background-image: url('/images/github-logo.svg');
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    margin-right: 10px;
   }
 `;
 export default LoginPage;

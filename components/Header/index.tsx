@@ -70,7 +70,8 @@ const Container = styled.div`
 const HeaderBox = styled.div`
   position: fixed;
   z-index: 10;
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   height: 60px;
   top: 0px;
   background: ${Common.colors.black};
@@ -117,7 +118,7 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   align-items: flex-start;
   box-sizing: border-box;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   padding: 2rem 3rem 0 3rem;
   font-size: 2.2rem;
   gap: 3rem;
