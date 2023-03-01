@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
-import { getRandomNickname } from '@/apis/api';
 import { useRecoilState } from 'recoil';
 import { userState } from '@/components/states';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import useIntroRandomNicknameQuery from '@/hooks/query/useIntroRandomNicknameQuery';
 
 const IntroNicknamePage = () => {
   const router = useRouter();
@@ -13,16 +13,15 @@ const IntroNicknamePage = () => {
   const [nickname, setNickname] = useState(user.nickname || '');
   const [nicknameError, setNicknameError] = useState('');
 
-  async function getNickname() {
-    const response = await getRandomNickname();
-    if (typeof response === 'string') setNickname(response);
-  }
+  const {
+    data: randomNickname,
+    refetch: refetchRandomNickname,
+    isSuccess,
+  } = useIntroRandomNicknameQuery({ enabled: !user.nickname });
 
   useEffect(() => {
-    if (!user.nickname) {
-      getNickname();
-    }
-  }, []);
+    if (isSuccess && randomNickname) setNickname(randomNickname);
+  }, [isSuccess, randomNickname]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setNickname(e.target.value);
@@ -54,7 +53,7 @@ const IntroNicknamePage = () => {
       {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
       <InputText type="text" name="nickname" onChange={handleChange} value={nickname} />
       <ButtonSubmit onClick={handleSubmit}>등록하기</ButtonSubmit>
-      <ButtonSubmit color="#8D8D8D" onClick={getNickname}>
+      <ButtonSubmit color="#8D8D8D" onClick={() => refetchRandomNickname()}>
         랜덤으로 골라주세요
       </ButtonSubmit>
     </DefaultLayout>

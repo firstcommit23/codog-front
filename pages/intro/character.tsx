@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
-import { getCharacter } from '@/apis/api';
 import { userState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
 
 const IntroCharacterPage = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userState);
 
-  type CharacterType = {
-    id: number;
-    code: string;
-    name: string;
-    image_url?: string;
-  };
   const [errorMessage, setErrorMessage] = useState('');
   const [character, setCharacter] = useState(user.character);
-  const [characterList, setCharacterList] = useState<CharacterType[]>([]);
 
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
-
-  const getNickname = async () => {
-    const response = await getCharacter();
-    setCharacterList(response);
-  };
-
-  useEffect(() => {
-    getNickname();
-  }, []);
+  const { data: characters } = useIntroCharacterListQuery();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
@@ -60,7 +45,7 @@ const IntroCharacterPage = () => {
       </StepNavigation>
       <ContentMessage>함께할 코독 개발자를 골라주세요!</ContentMessage>
       <CharacterList>
-        {characterList.map((item: any, index: number) => {
+        {characters?.map((item: any, index: number) => {
           return (
             <CharacterItem key={item.code} color={colorList[index]}>
               <input
