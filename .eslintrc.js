@@ -22,5 +22,6 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 0,
     'react-hooks/exhaustice-deps': [0, { additionalHooks: 'useRecoilCallback' }],
+    'react/prop-types': 'off',
   },
 };

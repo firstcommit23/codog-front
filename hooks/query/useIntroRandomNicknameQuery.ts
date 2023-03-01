@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 import { getRandomNickname } from '@/apis/api';
-import { queryKeys } from '../../constants/queryKeys';
+import { queryKeys } from '@/constants/queryKeys';
 
 const useIntroRandomNicknameQuery = (options?: UseQueryOptions<string>) => {
   return useQuery({

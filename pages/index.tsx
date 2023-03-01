@@ -5,7 +5,6 @@ import axios from 'axios';
 import moment from 'moment';
 import styled from '@emotion/styled';
 import Calendar from 'react-calendar';
-import Image from 'next/image';
 import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
@@ -17,11 +16,13 @@ const Home: NextPage = () => {
   const [render, setRender] = useState(false);
   const [datas, setDatas] = useState<infoType[]>([]);
 
-  const { data: userData, isSuccess: isUserSuccess } = useUserProfileQuery();
-  // const { data: footprintData, isSuccess: isFootprintSuccess } = useUserFootprintQuery(
-  //   String(moment(value).year()),
-  //   String(moment(value).month())
-  // );
+  const { data: userData } = useUserProfileQuery();
+  const { data: footprintData } = useUserFootprintQuery(
+    String(moment(value).year()),
+    String(moment(value).month())
+  );
+
+  console.log(footprintData);
 
   const getData = async () => {
     const res = await axios.get('/data/data.json');

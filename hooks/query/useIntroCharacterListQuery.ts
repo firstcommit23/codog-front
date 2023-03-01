@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import { queryKeys } from '../../constants/queryKeys';
+import { queryKeys } from '@/constants/queryKeys';
 import { getCharacter } from '@/apis/api';
 import { CharacterType } from '@/apis/type';
 

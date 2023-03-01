@@ -34,7 +34,7 @@ const Callback: NextPage<{
 
 export async function getServerSideProps(context: any) {
   const { code } = context.query;
-  let response = { accessToken: '', refreshToken: '', nickname: '', email: '', isNewUser: 0 };
+  const response = { accessToken: '', refreshToken: '', nickname: '', email: '', isNewUser: 0 };
 
   try {
     if (code) {
@@ -50,7 +50,9 @@ export async function getServerSideProps(context: any) {
       response.email = email;
       response.isNewUser = isNewUser;
     }
-  } catch (e: any) {}
+  } catch (e: any) {
+    console.log(e);
+  }
   return {
     props: {
       accessToken: response.accessToken,
