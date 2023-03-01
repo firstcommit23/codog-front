@@ -1,21 +1,23 @@
 import styled from '@emotion/styled';
 import Header from '@/components/Header';
 // import Menu from '@/components/Menu';
-// import Modal from '@/components/Modal';
+import Modal from '@/components/Modal';
 import React from 'react';
 import { Common } from '@/styles/common';
 
 interface Props {
+  isShowMenu?: boolean;
   children: React.ReactNode;
+  backgroundColor?: string;
 }
 
-const DefaultLayout = ({ children }: Props) => {
+const DefaultLayout = ({ children, isShowMenu = true, backgroundColor }: Props) => {
   return (
     <Wrapper>
       {/* <Menu /> */}
-      {/* <Modal></Modal> */}
-      <Header />
-      <Container>{children}</Container>
+      <Modal />
+      <Header isShowMenu={isShowMenu} />
+      <Container color={backgroundColor}>{children}</Container>
     </Wrapper>
   );
 };
@@ -23,7 +25,8 @@ const DefaultLayout = ({ children }: Props) => {
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  margin: 0 auto;
+  height: 100%;
+  margin: auto 0;
   background: #f5f5f5;
 `;
 
@@ -33,11 +36,11 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 4rem 3rem 7rem 3rem;
+  padding: 0; //4rem 3rem 7rem 3rem;
   max-width: ${Common.maxWidth};
   margin: 0 auto;
   box-sizing: border-box;
-  height: 100vh;
-  background: #ffffff;
+  height: 100%;
+  background: ${(props) => `${props.color ? props.color : '#ffffff'}`};
 `;
 export default DefaultLayout;

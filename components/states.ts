@@ -5,7 +5,17 @@ const userState = atom({
   default: {
     email: '',
     nickname: '',
+    githubId: '',
+    character: '',
   },
 });
 
-export { userState };
+const modalState = atom({
+  key: 'MODAL',
+  default: {
+    isShow: false,
+    title: '',
+    content: '',
+  },
+});
+export { userState, modalState };

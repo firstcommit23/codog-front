@@ -11,8 +11,8 @@
     "moduleResolution": "node",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
@@ -24,7 +24,8 @@
       "@/apis/*": ["apis/*"],
       "@/hooks/*": ["hooks/*"],
       "@/utils/*": ["utils/*"],
-      "@/public/*": ["public/*"]
+      "@/public/*": ["public/*"],
+      "@/constants/*": ["constants/*"]
     },
     "incremental": true
   },

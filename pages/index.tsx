@@ -1,21 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { NextPage } from 'next';
 import { Common } from '@/styles/common';
 import axios from 'axios';
 import moment from 'moment';
 import styled from '@emotion/styled';
 import Calendar from 'react-calendar';
-import Image from 'next/image';
 import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
+import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
+import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 
-const Home = () => {
+const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const [render, setRender] = useState(false);
   const [datas, setDatas] = useState<infoType[]>([]);
 
-  const getData = async() => {
-      const res = await axios.get('/data/data.json');
-      setDatas(res.data);
+  const { data: userData } = useUserProfileQuery();
+  const { data: footprintData } = useUserFootprintQuery(
+    String(moment(value).year()),
+    String(moment(value).month())
+  );
+
+  console.log(footprintData);
+
+  const getData = async () => {
+    const res = await axios.get('/data/data.json');
+    setDatas(res.data);
   };
 
   const formatShortWeekday = (locale: any, date: any) =>
@@ -30,40 +41,43 @@ const Home = () => {
     <DefaultLayout>
       <ProfileContainer>
         <ProfileBox>
-          <CoDogImage />
           <ProfileWrapper>
             <ProfileContent>
-              <span className="nickname">멍멍진도</span>님, <br />
+              <span className="nickname">{userData?.nickname}</span>님, <br />
               오늘도 코독하게 코딩해봅시다.
             </ProfileContent>
-            <ProfileButtonArea>
+            {/* <ProfileButtonArea>
               <DdayBox>D+123</DdayBox>
               <ShareButton>
                 <span>공유하기</span>
                 <Image src="/images/Share_Android.svg" width="18px" height="18px" alt="share" />
               </ShareButton>
-            </ProfileButtonArea>
+            </ProfileButtonArea> */}
           </ProfileWrapper>
         </ProfileBox>
-        {datas.map((data,key)=>(
+        <Canvas>
+          <DogCharacter character={userData?.characterCode} />
+          <Balloon type="Think">밥머먹지</Balloon>
+        </Canvas>
+        {datas.map((data, key) => (
           <AchievementContainer key={key}>
-          <div className="item">
-            <div className="title">총</div>
-            <div className="content">
-              <div className="total">{data.totalCount}</div>
+            <div className="item">
+              <div className="title">총</div>
+              <div className="content">
+                <div className="total">{data.totalCount}</div>
+              </div>
             </div>
-          </div>
-          <div className="vertical"></div>
-          <div className="item">
-            <div className="title">이번달</div>
-            <div className="content">{data.month}</div>
-          </div>
-          <div className="vertical"></div>
-          <div className="item">
-            <div className="title">연속</div>
-            <div className="content">{data.continuousCount}</div>
-          </div>
-        </AchievementContainer>
+            <div className="vertical"></div>
+            <div className="item">
+              <div className="title">이번달</div>
+              <div className="content">{data.month}</div>
+            </div>
+            <div className="vertical"></div>
+            <div className="item">
+              <div className="title">연속</div>
+              <div className="content">{data.continuousCount}</div>
+            </div>
+          </AchievementContainer>
         ))}
       </ProfileContainer>
       {/* 달력 */}
@@ -105,14 +119,15 @@ const CoDogImage = styled.div`
 const ProfileWrapper = styled.div``;
 
 const ProfileContent = styled.div`
+  padding: 1rem 2rem 0;
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 28px;
-  color: #323232;
-  margin-bottom: 15px;
+  color: #ffffff;
+  background: #282828;
 
   .nickname {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 600;
   }
   strong {
