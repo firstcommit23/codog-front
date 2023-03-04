@@ -39,7 +39,7 @@ export async function getServerSideProps(context: any) {
   try {
     if (code) {
       const res = await axios.get(
-        `http://localhost:8080/users/sign-in/github/callback?code=${code}`
+        `${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/sign-in/github/callback?code=${code}`
       );
       console.log(res);
       const { accessToken, nickname, email, refreshToken, isNewUser } = res.data.response;
