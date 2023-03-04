@@ -25,7 +25,7 @@ const DefaultLayout = ({ children, isShowMenu = true, backgroundColor }: Props) 
 const Wrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
+  // height: 100%;
   margin: auto 0;
   background: #f5f5f5;
 `;
