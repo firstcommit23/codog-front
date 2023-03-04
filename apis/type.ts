@@ -23,3 +23,16 @@ export type UserProfileType = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type FootprintType = {
+  footprintId: number;
+  githubId: string;
+  totalCount: number;
+  thisMonthTotalCount: number;
+  continuousCount: number;
+  year: string;
+  month: string;
+  dayStamp: any[];
+  createdAt: string;
+  today: number;
+};

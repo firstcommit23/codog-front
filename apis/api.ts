@@ -3,7 +3,7 @@ import Instance from './instance';
 import type { User } from './type';
 
 export const getUserProfile = () => {
-  return Instance.get('/users/detail')
+  return Instance.get('/users/profile/detail')
     .then((res) => res.data.response)
     .catch((error) => error.response);
 };
@@ -13,7 +13,7 @@ export const postSiginupGithubid = (githubId: string) => {
 };
 
 export const getCharacter = () => {
-  return Instance.get('/users/code/character')
+  return Instance.get('/codes/character')
     .then((res) => res.data.response)
     .catch((error) => error.response);
 };
