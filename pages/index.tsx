@@ -9,7 +9,7 @@ import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
-import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
@@ -59,7 +59,11 @@ const Home: NextPage = () => {
         </ProfileBox>
         <Canvas>
           <DogCharacter character={userData?.characterCode} />
-          <Balloon type="Think">밥머먹지</Balloon>
+          <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
+            밥머먹지
+          </Balloon>
+          <FoodItem food={userData.foodItem} />
+          <FurnitureItem furniture={userData.furnitureItem} />
         </Canvas>
         {datas.map((data, key) => (
           <AchievementContainer key={key}>
