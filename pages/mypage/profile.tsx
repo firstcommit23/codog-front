@@ -1,0 +1,117 @@
+import { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
+import styled from '@emotion/styled';
+import moment from 'moment';
+import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
+import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
+import { modalState } from '@/components/states';
+import DefaultLayout from '@/components/Layout/DefaultLayout';
+import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
+import { postSighupUser } from '@/apis/api';
+import type { CharacterType, User } from '@/apis/type';
+
+const ProfilePage = () => {
+  const {
+    data: userData,
+    isSuccess: isSuccessUserData,
+    refetch: refetchUserData,
+  } = useUserProfileQuery();
+  const { data: characters } = useIntroCharacterListQuery();
+  const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
+
+  const [profileUpdateData, setProfileUpdateData] = useState<User>({ nickname: '', character: '' });
+  const [, setModal] = useRecoilState(modalState);
+
+  useEffect(() => {
+    if (isSuccessUserData) {
+      setProfileUpdateData({
+        nickname: userData.nickname || '',
+        character: userData.characterCode || 'A',
+      });
+    }
+  }, [isSuccessUserData]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setProfileUpdateData({
+      ...profileUpdateData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async () => {
+    mutate(
+      { nickname: profileUpdateData.nickname, character: profileUpdateData.character },
+      {
+        onSuccess: () => {
+          setModal({
+            isShow: true,
+            title: '완료',
+            content: '프로필 수정 완료하였습니다.',
+          });
+          refetchUserData();
+        },
+        onError: (error: any) => {
+          const message = error?.response.data.error.message || '';
+          alert(message);
+        },
+      }
+    );
+  };
+
+  return (
+    <DefaultLayout backgroundColor="#282828" height="none">
+      {isSuccessUserData && (
+        <>
+          <Canvas>
+            <DogCharacter character={userData?.characterCode} />
+            <FoodItem food={userData.foodItem} />
+            <FurnitureItem furniture={userData.furnitureItem} />
+          </Canvas>
+          <UserProfileTable>
+            <div>닉네임</div>
+            <div>
+              <input
+                type="text"
+                name="nickname"
+                value={profileUpdateData.nickname}
+                onChange={handleChange}
+              />
+            </div>
+            <div>캐릭터</div>
+            <div>
+              {characters?.map((item: CharacterType, index: number) => {
+                return (
+                  <span key={item.code}>
+                    <img src={item.image_url || ''} width="30px" height="30px" />
+                    {item.name}
+                    <input
+                      type="radio"
+                      id="character"
+                      name="character"
+                      value={item.code}
+                      onChange={handleChange}
+                      checked={item.code === profileUpdateData.character ? true : false}
+                    />
+                  </span>
+                );
+              })}
+            </div>
+            <div>이메일</div>
+            <div>{userData.email}</div>
+            <div>가입일자</div>
+            <div>{moment(userData.createDate).format('YYYY/MM/DD HH:mm:ss')}</div>
+            <button onClick={handleSubmit}>수정하기</button>
+          </UserProfileTable>
+        </>
+      )}
+    </DefaultLayout>
+  );
+};
+
+const UserProfileTable = styled.div`
+  color: #fff;
+  font-size: 2rem;
+`;
+
+export default ProfilePage;
