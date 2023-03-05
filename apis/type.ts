@@ -19,9 +19,12 @@ export type UserProfileType = {
   email: string | null;
   isNewUser: 0 | 1;
   characterCode: CHARACTER_CODES;
-  itemCodes: [];
+  itemCodes: [] | string;
   createdAt: string;
   updatedAt: string;
+  foodItem?: string;
+  furnitureItem?: string;
+  createDate?: Date;
 };
 
 export type FootprintType = {

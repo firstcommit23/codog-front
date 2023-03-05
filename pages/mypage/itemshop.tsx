@@ -92,13 +92,11 @@ const ItemShopPage = () => {
 
   // TODO: 아이템 목록 조회
 
-  // TODO: 내가 선택한 아이템 가져오기
   useEffect(() => {
     if (isSuccessUserData && userData && userData.itemCodes.length > 0) {
-      console.log(userData.itemCodes, userData.itemCodes);
-      // setSeletedItem(userData.itemCodes);
+      setSeletedItem(userData.itemCodes);
     }
-  }, [userData, isSuccessUserData]);
+  }, [isSuccessUserData]);
 
   // TODO: 저장하기
   const handleSubmit = () => {
@@ -129,17 +127,21 @@ const ItemShopPage = () => {
   };
 
   return (
-    <DefaultLayout isShowMenu={false} backgroundColor="#282828">
-      <FootprintCount>
-        <span>
-          내 발자국 수 🐾 : <em>{footprintData?.totalCount}</em>
-        </span>
-      </FootprintCount>
-      <Canvas>
-        <DogCharacter character="A" />
-        <FoodItem food={selectedFoodItem} />
-        <FurnitureItem furniture={selectedFurnitureItem} />
-      </Canvas>
+    <DefaultLayout backgroundColor="#282828" height="none">
+      {isSuccessUserData && (
+        <>
+          <FootprintCount>
+            <span>
+              내 발자국 수 🐾 : <em>{footprintData?.totalCount}</em>
+            </span>
+          </FootprintCount>
+          <Canvas>
+            <DogCharacter character={userData?.characterCode} />
+            <FoodItem food={selectedFoodItem} />
+            <FurnitureItem furniture={selectedFurnitureItem} />
+          </Canvas>
+        </>
+      )}
 
       <ItemContainer>
         <Title>코독 하우스 아이템</Title>
@@ -205,6 +207,7 @@ const CodogItem = styled.div`
   background-color: #3a3a3a;
 
   &.selected {
+    margin: -2px;
     border: 2px solid ${(props) => `${props.color ? props.color : '#ff646c'}`};
   }
 

@@ -16,7 +16,7 @@ const Home: NextPage = () => {
   const [render, setRender] = useState(false);
   const [datas, setDatas] = useState<infoType[]>([]);
 
-  const { data: userData } = useUserProfileQuery();
+  const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
     String(moment(value).year()),
     String(moment(value).month())
@@ -36,6 +36,8 @@ const Home: NextPage = () => {
     getData();
     setRender(true);
   }, []);
+
+  if (!isSuccessUserData) return null;
 
   return (
     <DefaultLayout>
@@ -103,10 +105,10 @@ const ProfileContainer = styled.div`
 `;
 const ProfileBox = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: 30px;
+  // display: flex;
+  // justify-content: flex-start;
+  // align-items: center;
+  // column-gap: 30px;
 `;
 
 const CoDogImage = styled.div`
