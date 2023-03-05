@@ -5,7 +5,7 @@ import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 
 const LoginPage = () => {
   const handleGithubLogin = () => {
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=81e311c24df827ee5ef0&redirect_uri=http://localhost:3000/intro/callback`;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_CODOG_FRONT_URL}/intro/callback`;
   };
 
   // accessToken이 있으면 메인으로 가기

@@ -9,14 +9,14 @@ import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
-import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const [render, setRender] = useState(false);
   const [datas, setDatas] = useState<infoType[]>([]);
 
-  const { data: userData } = useUserProfileQuery();
+  const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
     String(moment(value).year()),
     String(moment(value).month())
@@ -36,6 +36,8 @@ const Home: NextPage = () => {
     getData();
     setRender(true);
   }, []);
+
+  if (!isSuccessUserData) return null;
 
   return (
     <DefaultLayout>
@@ -57,7 +59,11 @@ const Home: NextPage = () => {
         </ProfileBox>
         <Canvas>
           <DogCharacter character={userData?.characterCode} />
-          <Balloon type="Think">밥머먹지</Balloon>
+          <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
+            밥머먹지
+          </Balloon>
+          <FoodItem food={userData.foodItem} />
+          <FurnitureItem furniture={userData.furnitureItem} />
         </Canvas>
         {datas.map((data, key) => (
           <AchievementContainer key={key}>
@@ -103,10 +109,10 @@ const ProfileContainer = styled.div`
 `;
 const ProfileBox = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  column-gap: 30px;
+  // display: flex;
+  // justify-content: flex-start;
+  // align-items: center;
+  // column-gap: 30px;
 `;
 
 const CoDogImage = styled.div`

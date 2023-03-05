@@ -3,7 +3,7 @@ import Instance from './instance';
 import type { User } from './type';
 
 export const getUserProfile = () => {
-  return Instance.get('/users/detail')
+  return Instance.get('/users/profile/detail')
     .then((res) => res.data.response)
     .catch((error) => error.response);
 };
@@ -13,7 +13,7 @@ export const postSiginupGithubid = (githubId: string) => {
 };
 
 export const getCharacter = () => {
-  return Instance.get('/users/code/character')
+  return Instance.get('/codes/character')
     .then((res) => res.data.response)
     .catch((error) => error.response);
 };
@@ -49,7 +49,9 @@ export const getFootprint = (year: string, month: string) => {
 
 export const getEmailAuthorization = (email: string, token: string) => {
   return axios
-    .get(`http://localhost:8080/users/email/authorization?email=${email}&token=${token}`)
+    .get(
+      `${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/email/authorization?email=${email}&token=${token}`
+    )
     .then((res) => res.data.response)
     .catch((error) => error.response);
 };
@@ -57,9 +59,9 @@ export const getEmailAuthorization = (email: string, token: string) => {
 export const getToken = () => {
   const refreshToken = localStorage.getItem('refreshToken');
   return axios
-    .get('http://localhost:8080/users/token', {
+    .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/token`, {
       headers: { Authorization: `Bearer ${refreshToken}` },
     })
-    .then((res) => res.data.response)
-    .catch((error) => error.response);
+    .then((res) => res.data.response);
+  // .catch((error) => error.response);
 };

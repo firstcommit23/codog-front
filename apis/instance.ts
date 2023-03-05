@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance } from 'axios';
 import { checkToken } from '@/utils/serviceUtils';
 
 const Instance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: process.env.NEXT_PUBLIC_CODOG_BACK_URL,
 });
 
 Instance.interceptors.request.use(async (config) => {
