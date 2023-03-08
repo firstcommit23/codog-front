@@ -11,7 +11,8 @@ const App = ({ Component, pageProps }: AppProps) => {
     <>
       <Head>
         <meta charSet="utf-8" />
-        <title>codog</title>
+        <link rel="shortcut icon" href="/favicon.png" />
+        <title>Codog</title>
       </Head>
       {GlobalStyles}
       <QueryClientProvider client={queryClient}>
