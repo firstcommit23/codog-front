@@ -3,4 +3,5 @@ export const queryKeys = {
   INTRO_RANDOM_NICKNAME: '/intro/randomNickname',
   USER_PROFILE_DATA: '/user/profile',
   USER_FOOTPRINT_DATA: '/user/footprint',
+  TOTAL_ITEM_DATA: '/codes/item',
 };
