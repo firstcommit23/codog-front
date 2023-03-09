@@ -47,6 +47,19 @@ export const getFootprint = (year: string, month: string) => {
     .catch((error) => error.response);
 };
 
+export const getTotalItems = () => {
+  return Instance.get(`/codes/item`)
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
+};
+
+export const postProfileItem = (itemCodes: string[]) => {
+  console.log(itemCodes);
+  return Instance.post('/users/profile/item', {
+    itemCodes,
+  }).then((res) => res.data.response);
+};
+
 export const getEmailAuthorization = (email: string, token: string) => {
   return axios
     .get(

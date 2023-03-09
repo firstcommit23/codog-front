@@ -38,7 +38,7 @@ const DogCharacter = ({
 const DogCharacterDiv = styled.div<{ img: string; bottom?: string }>`
   content: url(${(props) => `${props.img ? props.img : '/images/dogs/A/Default_Default.png'}`});
   position: absolute;
-  left: 50%;
+  left: 53%;
   transform: translate(-50%, 0%);
   bottom: ${(props) => `${props.bottom}`};
   cursor: pointer;
@@ -47,7 +47,7 @@ const DogCharacterDiv = styled.div<{ img: string; bottom?: string }>`
 const Laptop = styled.div`
   content: url('/images/notebook.png');
   position: absolute;
-  left: 17%;
+  left: 22%;
   bottom: 0;
 `;
 

@@ -1,96 +1,29 @@
 import { useEffect, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import moment from 'moment';
+import { postProfileItem } from '@/apis/api';
+import { ItemType } from '@/apis/type';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
+import useItemListQuery from '@/hooks/query/useItemListQuery';
+import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
 
-const ITEM_LIST = [
-  {
-    code: 'A01',
-    name: '아이스아메리카노',
-    requisite: 1,
-    image_url: '/images/items/A01.png',
-    code_category_id: 'A',
-  },
-  {
-    code: 'A02',
-    name: '따뜻한아메리카노',
-    requisite: 5,
-    image_url: '/images/items/A02.png',
-    code_category_id: 'A',
-  },
-  {
-    code: 'A03',
-    name: '따뜻한티',
-    requisite: 10,
-    image_url: '/images/items/A03.png',
-    code_category_id: 'A',
-  },
-  {
-    code: 'A04',
-    name: '딸기 케이크',
-    requisite: 20,
-    image_url: '/images/items/A04.png',
-    code_category_id: 'A',
-  },
-
-  {
-    code: 'A05',
-    name: '에너지 드링크',
-    requisite: 30,
-    image_url: '/images/items/A05.png',
-    code_category_id: 'A',
-  },
-  {
-    code: 'A06',
-    name: '컵라면과 삼김',
-    requisite: 40,
-    image_url: '/images/items/A06.png',
-    code_category_id: 'A',
-  },
-  {
-    code: 'A07',
-    name: '초코 케이크',
-    requisite: 20,
-    image_url: '/images/items/A07.png',
-    code_category_id: 'A',
-  },
-  {
-    code: 'B01',
-    name: '전등',
-    requisite: 50,
-    image_url: '/images/items/B01.png',
-    code_category_id: 'B',
-  },
-  {
-    code: 'B02',
-    name: '앗!금지 포스티잇',
-    requisite: 60,
-    image_url: '/images/items/B02.png',
-    code_category_id: 'B',
-  },
-  {
-    code: 'B03',
-    name: '푸릇푸릇 화분',
-    requisite: 70,
-    image_url: '/images/items/B03.png',
-    code_category_id: 'B',
-  },
-];
-
 const ItemShopPage = () => {
   const today = new Date();
-  const [selectedItem, setSeletedItem] = useState<string[]>([]); //A01, B01
+  const [selectedItem, setSeletedItem] = useState<string[]>([]);
+  const [, setModal] = useRecoilState(modalState);
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
+  const { data: itemsData, isSuccess: isSuccessItemsData } = useItemListQuery();
   const { data: footprintData } = useUserFootprintQuery(
     String(moment(today).year()),
     String(moment(today).month())
   );
-
-  // TODO: 아이템 목록 조회
+  const { mutate, isLoading } = useMutation((itemCodes: string[]) => postProfileItem(itemCodes));
 
   useEffect(() => {
     if (isSuccessUserData && userData && userData.itemCodes.length > 0) {
@@ -98,12 +31,21 @@ const ItemShopPage = () => {
     }
   }, [isSuccessUserData]);
 
-  // TODO: 저장하기
   const handleSubmit = () => {
-    alert('구현 예정!');
+    mutate(selectedItem, {
+      onSuccess: () => {
+        setModal({
+          isShow: true,
+          title: '완료',
+          content: '저장되었습니다.',
+        });
+      },
+      onError: (error: any) => {
+        const message = error?.response.data.error.message || '';
+        alert(message);
+      },
+    });
   };
-
-  // TODO: 내 발자국 갯수와 비교해서 아직 선택하지 못하는 아이템일 경우 딤드 처리
 
   const handleSelectItem = (code: string) => {
     const currentCategory = code.substring(0, 1);
@@ -116,15 +58,15 @@ const ItemShopPage = () => {
     });
   };
 
-  const selectedFoodItem = selectedItem?.filter((item: any) => item.includes('A')).join('') || '';
-  const selectedFurnitureItem =
-    selectedItem?.filter((item: any) => item.includes('B')).join('') || '';
-
-  const categoryColor = (category: string) => {
+  const getCategoryColor = (category: string) => {
     if (category === 'A') return '#ff646c';
     if (category === 'B') return '#64c8ff';
     return '#ff646c';
   };
+
+  const selectedFoodItem = selectedItem?.filter((item: any) => item.includes('A')).join('') || '';
+  const selectedFurnitureItem =
+    selectedItem?.filter((item: any) => item.includes('B')).join('') || '';
 
   return (
     <DefaultLayout backgroundColor="#282828" height="none">
@@ -136,7 +78,7 @@ const ItemShopPage = () => {
             </span>
           </FootprintCount>
           <Canvas>
-            <DogCharacter character={userData?.characterCode} />
+            <DogCharacter character={userData.characterCode} />
             <FoodItem food={selectedFoodItem} />
             <FurnitureItem furniture={selectedFurnitureItem} />
           </Canvas>
@@ -146,23 +88,35 @@ const ItemShopPage = () => {
       <ItemContainer>
         <Title>코독 하우스 아이템</Title>
         <CodogItemList>
-          {ITEM_LIST.map((item: any) => {
-            return (
-              <CodogItem
-                onClick={() => {
-                  handleSelectItem(item.code);
-                }}
-                color={categoryColor(item.code_category_id)}
-                key={item.code}
-                className={selectedItem?.includes(item.code) ? 'selected' : ''}>
-                <RequisiteCount>{item.requisite}</RequisiteCount>
-                <ItemImage src={item.image_url} />
-              </CodogItem>
-            );
-          })}
+          {isSuccessItemsData &&
+            itemsData?.map((item: ItemType) => {
+              const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
+              const isSelectedItem = selectedItem?.includes(item.itemCode);
+              const itemClassName = isAvailableItem
+                ? isSelectedItem
+                  ? 'selected'
+                  : ''
+                : 'commingsoon';
+              const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
+              return (
+                <CodogItem
+                  color={itemColor}
+                  className={itemClassName}
+                  key={item.itemCode}
+                  onClick={() => {
+                    isAvailableItem && handleSelectItem(item.itemCode);
+                  }}>
+                  <RequisiteCount>{item.questRequisite}</RequisiteCount>
+                  <ItemImage src={item.imageUrl || ''} />
+                  {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
+                </CodogItem>
+              );
+            })}
         </CodogItemList>
       </ItemContainer>
-      <ButtonSubmit onClick={handleSubmit}>저장하기</ButtonSubmit>
+      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+        저장하기
+      </ButtonSubmit>
     </DefaultLayout>
   );
 };
@@ -205,10 +159,18 @@ const CodogItem = styled.div`
   height: 9rem;
   overflow: hidden;
   background-color: #3a3a3a;
+  cursor: pointer;
 
   &.selected {
     margin: -2px;
     border: 2px solid ${(props) => `${props.color ? props.color : '#ff646c'}`};
+  }
+
+  &.commingsoon {
+    cursor: not-allowed;
+    img {
+      opacity: 0.2;
+    }
   }
 
   &::after {
@@ -225,6 +187,20 @@ const CodogItem = styled.div`
       rgba(255, 86, 147, 0.97) 100%
     );
   }
+
+  &.commingsoon::after {
+    background: none;
+  }
+`;
+
+const CommitSoonText = styled.div`
+  position: absolute;
+  text-align: center;
+  font-size: 2rem;
+  color: #ffffff;
+  top: 30%;
+  z-index: 999;
+  opacity: 1;
 `;
 
 const ItemContainer = styled.div`
@@ -267,6 +243,9 @@ const ButtonSubmit = styled.button`
   &:hover {
     background-color: #585858;
     cursor: pointer;
+  }
+  &:disabled {
+    background-color: #eeeeee;
   }
 `;
 
