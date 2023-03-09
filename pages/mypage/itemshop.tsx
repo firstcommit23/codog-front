@@ -47,8 +47,6 @@ const ItemShopPage = () => {
     });
   };
 
-  // TODO: 내 발자국 갯수와 비교해서 아직 선택하지 못하는 아이템일 경우 딤드 처리
-
   const handleSelectItem = (code: string) => {
     const currentCategory = code.substring(0, 1);
     const isExist = selectedItem?.includes(code);
@@ -92,16 +90,25 @@ const ItemShopPage = () => {
         <CodogItemList>
           {isSuccessItemsData &&
             itemsData?.map((item: ItemType) => {
+              const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
+              const isSelectedItem = selectedItem?.includes(item.itemCode);
+              const itemClassName = isAvailableItem
+                ? isSelectedItem
+                  ? 'selected'
+                  : ''
+                : 'commingsoon';
+              const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
               return (
                 <CodogItem
-                  onClick={() => {
-                    handleSelectItem(item.itemCode);
-                  }}
-                  color={getCategoryColor(item.categoryCode)}
+                  color={itemColor}
+                  className={itemClassName}
                   key={item.itemCode}
-                  className={selectedItem?.includes(item.itemCode) ? 'selected' : ''}>
+                  onClick={() => {
+                    isAvailableItem && handleSelectItem(item.itemCode);
+                  }}>
                   <RequisiteCount>{item.questRequisite}</RequisiteCount>
                   <ItemImage src={item.imageUrl || ''} />
+                  {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
                 </CodogItem>
               );
             })}
@@ -152,10 +159,18 @@ const CodogItem = styled.div`
   height: 9rem;
   overflow: hidden;
   background-color: #3a3a3a;
+  cursor: pointer;
 
   &.selected {
     margin: -2px;
     border: 2px solid ${(props) => `${props.color ? props.color : '#ff646c'}`};
+  }
+
+  &.commingsoon {
+    cursor: not-allowed;
+    img {
+      opacity: 0.2;
+    }
   }
 
   &::after {
@@ -172,6 +187,20 @@ const CodogItem = styled.div`
       rgba(255, 86, 147, 0.97) 100%
     );
   }
+
+  &.commingsoon::after {
+    background: none;
+  }
+`;
+
+const CommitSoonText = styled.div`
+  position: absolute;
+  text-align: center;
+  font-size: 2rem;
+  color: #ffffff;
+  top: 30%;
+  z-index: 999;
+  opacity: 1;
 `;
 
 const ItemContainer = styled.div`
