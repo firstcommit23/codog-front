@@ -106,6 +106,7 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 7rem;
 `;
 const ProfileBox = styled.div`
   width: 100%;

@@ -40,6 +40,7 @@ const LoginPage = () => {
         <em>Codog한 개발자...</em>
       </Catchphrase>
       <GithubLoginButton onClick={handleGithubLogin}>
+        <GithubLogo></GithubLogo>
         <span>github으로 3초만에 시작하기</span>
       </GithubLoginButton>
     </DefaultLayout>
@@ -113,6 +114,15 @@ const GithubLoginButton = styled.button`
   &:hover {
     cursor: pointer;
     background-color: #e0e0e0;
+    transition: all 0.3s ease;
   }
 `;
+
+const GithubLogo = styled.div`
+  background: url('/images/github-logo.svg') no-repeat;
+  width: 2.4rem;
+  height: 2.4rem;
+  margin-right: 1.5rem;
+`;
+
 export default LoginPage;
