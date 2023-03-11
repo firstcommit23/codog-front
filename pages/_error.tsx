@@ -5,11 +5,13 @@ import styled from '@emotion/styled';
 const errorPage = ({ statusCode, errorMessage }: { statusCode: string , errorMessage: string }) => {
   return (
     <DefaultLayout isShowMenu={false} backgroundColor="#282828">
-      <StatusCode>{statusCode}</StatusCode>
-      <ErrorMessage>{errorMessage}</ErrorMessage>
-      <ErrorImage></ErrorImage>
-      <DefaultMessage>페이지가 존재하지 않거나, <br/> 사용할 수 없는 페이지입니다.</DefaultMessage>
-      <HomeButton>홈으로 가기</HomeButton>
+      <HeightCenter>
+        <StatusCode>{statusCode}</StatusCode>
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <ErrorImage></ErrorImage>
+        <DefaultMessage>페이지가 존재하지 않거나, <br/> 사용할 수 없는 페이지입니다.</DefaultMessage>
+        <HomeButton>홈으로 가기</HomeButton>
+      </HeightCenter>
     </DefaultLayout>
   );
 };
@@ -21,11 +23,19 @@ errorPage.getInitialProps = (ctx: NextPageContext) => {
 };
 export default errorPage;
 
+const HeightCenter = styled.div`
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StatusCode = styled.div`
   color: #96B4FF;
   font-size: 4.5rem;
   font-family: 'Fira Code', monospace;
-  padding: 4.5rem 0 1rem 0;
+  padding-bottom: 1rem;
 `;
 
 const ErrorMessage = styled.div`
@@ -47,7 +57,7 @@ const DefaultMessage = styled.div`
   text-align: center;
   line-height: 1.7;
   font-weight: 400;
-  padding-bottom: 3rem;
+  padding: 1rem 0 3rem 0;
 `;
 
 const HomeButton = styled.button`

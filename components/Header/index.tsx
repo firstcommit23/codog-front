@@ -62,7 +62,6 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
   );
 };
 const Container = styled.div`
-  padding-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
