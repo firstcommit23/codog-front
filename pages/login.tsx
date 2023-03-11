@@ -28,24 +28,33 @@ const LoginPage = () => {
 
   return (
     <DefaultLayout isShowMenu={false} backgroundColor="#282828">
-      <Canvas>
-        <DogCharacter
-          character="A"
-          onClick={() => setRandom(Math.floor(Math.random() * (ThinkList.length - 1 + 1)) + 0)}
-        />
-        <Balloon type="Think">{ThinkList[random]}</Balloon>
-      </Canvas>
-      <Catchphrase>
-        <div>오늘도 코딩하는</div>
-        <em>Codog한 개발자...</em>
-      </Catchphrase>
-      <GithubLoginButton onClick={handleGithubLogin}>
-        <GithubLogo></GithubLogo>
-        <span>github으로 3초만에 시작하기</span>
-      </GithubLoginButton>
+      <CenterContainer>
+        <Canvas>
+          <DogCharacter
+            character="A"
+            onClick={() => setRandom(Math.floor(Math.random() * (ThinkList.length - 1 + 1)) + 0)}
+          />
+          <Balloon type="Think">{ThinkList[random]}</Balloon>
+        </Canvas>
+        <Catchphrase>
+          <div>오늘도 코딩하는</div>
+          <em>Codog한 개발자...</em>
+        </Catchphrase>
+        <GithubLoginButton onClick={handleGithubLogin}>
+          <span>github으로 3초만에 시작하기</span>
+        </GithubLoginButton>
+      </CenterContainer>
     </DefaultLayout>
   );
 };
+
+const CenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 15%;
+  min-height: 83vh;
+`;
 
 const Catchphrase = styled.div`
   align-self: center;

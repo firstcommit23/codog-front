@@ -11,15 +11,17 @@ const useUserProfileQuery = (options?: UseQueryOptions<UserProfileType>) => {
   });
 
   const itemCodes =
-    typeof query?.data?.itemCodes === 'string' ? JSON.parse(query.data.itemCodes) : [];
+    query?.data?.itemCodes && typeof query?.data?.itemCodes === 'string'
+      ? JSON.parse(query.data.itemCodes)[0]
+      : [];
 
   return {
     ...query,
     data: {
       ...query.data,
       itemCodes: itemCodes,
-      foodItem: itemCodes.filter((item: any) => item.includes('A')).join('') || '',
-      furnitureItem: itemCodes.filter((item: any) => item.includes('B')).join('') || '',
+      foodItem: itemCodes?.filter((item: any) => item.includes('A')).join('') || '',
+      furnitureItem: itemCodes?.filter((item: any) => item.includes('B')).join('') || '',
       createDate: new Date(query.data?.createdAt || ''),
     },
   };

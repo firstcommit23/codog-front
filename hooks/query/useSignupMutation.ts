@@ -5,6 +5,7 @@ import {
   postSighupNickname,
   postSighupUser,
   postAuthorizationMail,
+  postProfileItem,
 } from '@/apis/api';
 
 export const useCheckGithubIdMutation = (options?: UseMutationOptions<any, Error, String>) => {
@@ -33,6 +34,12 @@ export const useSighupUserMutation = (options?: UseMutationOptions<any, Error, U
 
 export const useAuthorizationMailMutation = (options?: UseMutationOptions<any, Error, string>) => {
   return useMutation<any, Error, string>((email: string) => postAuthorizationMail(email), {
+    ...options,
+  });
+};
+
+export const useProfileItemMutation = (options?: UseMutationOptions<any, Error, string[]>) => {
+  return useMutation<any, Error, string[]>((itemCodes: string[]) => postProfileItem(itemCodes), {
     ...options,
   });
 };

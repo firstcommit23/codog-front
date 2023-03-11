@@ -15,7 +15,7 @@ const IntroCharacterPage = () => {
   const [character, setCharacter] = useState(user.character);
 
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
-  const { data: characters } = useIntroCharacterListQuery();
+  const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
@@ -45,28 +45,29 @@ const IntroCharacterPage = () => {
       </StepNavigation>
       <ContentMessage>함께할 코독 개발자를 골라주세요!</ContentMessage>
       <CharacterList>
-        {characters?.map((item: any, index: number) => {
-          return (
-            <CharacterItem key={item.code} color={colorList[index]}>
-              <input
-                type="radio"
-                id={item.code}
-                value={item.code}
-                onChange={handleChange}
-                checked={item.code === character}
-              />
-              <label htmlFor={item.code}>
-                <img src={item.image_url} />
-                <span className="coverRadio">
-                  <svg viewBox="0 0 12 10">
-                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                  </svg>
-                </span>
-                <span className="blind">{item.name}</span>
-              </label>
-            </CharacterItem>
-          );
-        })}
+        {isSuccess &&
+          characters?.map((item: any, index: number) => {
+            return (
+              <CharacterItem key={item.code} color={colorList[index]}>
+                <input
+                  type="radio"
+                  id={item.code}
+                  value={item.code}
+                  onChange={handleChange}
+                  checked={item.code === character}
+                />
+                <label htmlFor={item.code}>
+                  <img src={item.image_url} />
+                  <span className="coverRadio">
+                    <svg viewBox="0 0 12 10">
+                      <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                    </svg>
+                  </span>
+                  <span className="blind">{item.name}</span>
+                </label>
+              </CharacterItem>
+            );
+          })}
       </CharacterList>
       <ButtonSubmit onClick={handleSubmit} disabled={!character}>
         선택완료

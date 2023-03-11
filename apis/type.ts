@@ -13,6 +13,17 @@ export type CharacterType = {
   image_url: string | null;
 };
 
+export type ItemType = {
+  item: string;
+  itemCode: string;
+  imageUrl: string | null;
+  category: string;
+  categoryCode: 'A' | 'B' | 'C';
+  query: string;
+  questType: number;
+  questRequisite: number;
+};
+
 export type UserProfileType = {
   id: string | null;
   nickname: string;

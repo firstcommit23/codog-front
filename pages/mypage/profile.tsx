@@ -68,46 +68,52 @@ const ProfilePage = () => {
             <FoodItem food={userData.foodItem} />
             <FurnitureItem furniture={userData.furnitureItem} />
           </Canvas>
-          <UserProfileTable>
-            <div>닉네임</div>
-            <div>
-              <input
-                type="text"
-                name="nickname"
-                value={profileUpdateData.nickname}
-                onChange={handleChange}
-              />
-            </div>
-            <div>캐릭터</div>
-            <div>
-              {characters?.map((item: CharacterType, index: number) => {
-                return (
-                  <span key={item.code}>
-                    <img src={item.image_url || ''} width="30px" height="30px" />
-                    {item.name}
-                    <input
-                      type="radio"
-                      id="character"
-                      name="character"
-                      value={item.code}
-                      onChange={handleChange}
-                      checked={item.code === profileUpdateData.character ? true : false}
-                    />
-                  </span>
-                );
-              })}
-            </div>
-            <div>이메일</div>
-            <div>{userData.email}</div>
-            <div>가입일자</div>
-            <div>{moment(userData.createDate).format('YYYY/MM/DD HH:mm:ss')}</div>
-            <button onClick={handleSubmit}>수정하기</button>
-          </UserProfileTable>
+          <ProfileWrapper>
+            <UserProfileTable>
+              <div>닉네임</div>
+              <div>
+                <input
+                  type="text"
+                  name="nickname"
+                  value={profileUpdateData.nickname}
+                  onChange={handleChange}
+                />
+              </div>
+              <div>캐릭터</div>
+              <div>
+                {characters?.map((item: CharacterType, index: number) => {
+                  return (
+                    <span key={item.code}>
+                      <img src={item.image_url || ''} width="30px" height="30px" />
+                      {item.name}
+                      <input
+                        type="radio"
+                        id="character"
+                        name="character"
+                        value={item.code}
+                        onChange={handleChange}
+                        checked={item.code === profileUpdateData.character ? true : false}
+                      />
+                    </span>
+                  );
+                })}
+              </div>
+              <div>이메일</div>
+              <div>{userData.email}</div>
+              <div>가입일자</div>
+              <div>{moment(userData.createDate).format('YYYY/MM/DD HH:mm:ss')}</div>
+              <button onClick={handleSubmit}>수정하기</button>
+            </UserProfileTable>
+          </ProfileWrapper>
         </>
       )}
     </DefaultLayout>
   );
 };
+
+const ProfileWrapper = styled.div`
+  min-height: 60vh;
+`;
 
 const UserProfileTable = styled.div`
   color: #fff;
