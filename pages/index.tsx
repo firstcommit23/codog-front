@@ -41,22 +41,23 @@ const Home: NextPage = () => {
 
   return (
     <DefaultLayout>
+      {/* 프로필 */}
       <ProfileContainer>
+        {/* 닉네임, 공유 버튼 */}
         <ProfileBox>
           <ProfileWrapper>
             <ProfileContent>
               <span className="nickname">{userData?.nickname}</span>님, <br />
-              오늘도 코독하게 코딩해봅시다.
+              코독하게 코딩해봅시다.
             </ProfileContent>
-            {/* <ProfileButtonArea>
-              <DdayBox>D+123</DdayBox>
+            <ProfileButtonArea>
               <ShareButton>
-                <span>공유하기</span>
-                <Image src="/images/Share_Android.svg" width="18px" height="18px" alt="share" />
+                <ShareIcon></ShareIcon>
               </ShareButton>
-            </ProfileButtonArea> */}
+            </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
+        {/* 코독 하우스 */}
         <Canvas>
           <DogCharacter character={userData?.characterCode} />
           <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
@@ -65,36 +66,40 @@ const Home: NextPage = () => {
           <FoodItem food={userData.foodItem} />
           <FurnitureItem furniture={userData.furnitureItem} />
         </Canvas>
-        {datas.map((data, key) => (
-          <AchievementContainer key={key}>
-            <div className="item">
-              <div className="title">총</div>
-              <div className="content">
-                <div className="total">{data.totalCount}</div>
+        {/* 개인 달성 지표 */}
+        <AchievementBox>
+          {datas.map((data, key) => (
+            <AchievementContainer key={key}>
+              <div className="item total">
+                <div className="title">총</div>
+                <div className="content">
+                  <div className="total">{data.totalCount}</div>
+                </div>
               </div>
-            </div>
-            <div className="vertical"></div>
-            <div className="item">
-              <div className="title">이번달</div>
-              <div className="content">{data.month}</div>
-            </div>
-            <div className="vertical"></div>
-            <div className="item">
-              <div className="title">연속</div>
-              <div className="content">{data.continuousCount}</div>
-            </div>
-          </AchievementContainer>
-        ))}
+              <div className="item month">
+                <div className="title">이번달</div>
+                <div className="content">{data.month}</div>
+              </div>
+              <div className="item continuous">
+                <div className="title">연속</div>
+                <div className="content">{data.continuousCount}</div>
+              </div>
+            </AchievementContainer>
+          ))}
+        </AchievementBox>
       </ProfileContainer>
+
       {/* 달력 */}
-      <HorizontalRule />
       <CalendarWrapper>
         {render && (
           <Calendar
             onChange={onChange}
             value={value}
+            minDetail="month"
+            maxDetail="month"
             formatDay={(locale, date) => moment(date).format('D')}
             formatShortWeekday={formatShortWeekday}
+            showNeighboringMonth ={false}
           />
         )}
       </CalendarWrapper>
@@ -106,14 +111,11 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 7rem;
+  padding-top: 7rem;
+  background-color: #282828;
 `;
 const ProfileBox = styled.div`
   width: 100%;
-  // display: flex;
-  // justify-content: flex-start;
-  // align-items: center;
-  // column-gap: 30px;
 `;
 
 const CoDogImage = styled.div`
@@ -123,18 +125,22 @@ const CoDogImage = styled.div`
   background-size: contain;
 `;
 
-const ProfileWrapper = styled.div``;
+const ProfileWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2rem 0 2.5rem;
+`;
 
 const ProfileContent = styled.div`
-  padding: 1rem 2rem 0;
   font-weight: 400;
-  font-size: 16px;
-  line-height: 28px;
+  font-size: 1.8rem;
+  line-height: 3rem;
   color: #ffffff;
-  background: #282828;
 
   .nickname {
-    font-size: 18px;
+    font-size: 2rem;
     font-weight: 600;
   }
   strong {
@@ -163,16 +169,15 @@ const DdayBox = styled.div`
 const ShareButton = styled.button`
   display: flex;
   flex-direction: row;
-  background-color: #282828;
-  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  background-color: #585858;
+  border-radius: 5rem;
   font-weight: 500;
-  font-size: 15px;
-  line-height: 18px;
-  color: #ffffff;
-  text-align: center;
-  padding: 10px 15px;
+  font-size: 1.5rem;
   border: none;
-  gap: 5px;
 
   &:hover {
     cursor: pointer;
@@ -181,18 +186,53 @@ const ShareButton = styled.button`
   }
 `;
 
+const ShareIcon = styled.div`
+  background: url('/images/Share_Android.svg') no-repeat;
+  width: 2.5rem;
+  height: 2rem;
+`;
+
+const AchievementBox = styled.div`
+`;
+
 const AchievementContainer = styled.div`
   display: flex;
-  margin: 4rem 0 2.5rem 0;
-  row-gap: 18px;
+  padding: 3rem 2rem 3rem 2rem;
+  gap: 2rem;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  background-color: white;
 
   .item {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 10rem;
+    border-radius: 1rem;
+  }
+  .item.total{
+    background-color: #EAF1FF;
+    color: #3274FF;
+    .title{
+      color: #3274FF;
+    }
+  }
+  .item.month{
+    background-color: #FAF1FF;
+    color: #C871FF;
+    .title{
+      color: #C871FF;
+    }
+  }
+  .item.continuous{
+    background-color: #FFEEF0;
+    color: #FF646C;
+    .title{
+      color: #FF646C;
+    }
   }
   .title {
     font-weight: 400;
@@ -210,15 +250,6 @@ const AchievementContainer = styled.div`
     font-weight: 600;
     font-size: 32px;
     line-height: 30px;
-    color: #323232;
-
-    .total {
-      color: #1480ff;
-    }
-    div {
-      width: 40px;
-      text-align: center;
-    }
   }
 
   .vertical {

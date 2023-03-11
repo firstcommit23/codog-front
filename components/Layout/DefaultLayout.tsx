@@ -39,7 +39,6 @@ const Container = styled.div<{ height?: string }>`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 0 3rem;
   max-width: ${Common.maxWidth};
   margin: 0 auto;
   box-sizing: border-box;
