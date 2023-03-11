@@ -39,10 +39,11 @@ const Container = styled.div<{ height?: string }>`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 0; //4rem 3rem 7rem 3rem;
+  padding: 0 3rem;
   max-width: ${Common.maxWidth};
   margin: 0 auto;
   box-sizing: border-box;
+  letter-spacing: -0.2px;
   height: ${(props) => `${props.height ? props.height : '100%'}`};
   background: ${(props) => `${props.color ? props.color : '#ffffff'}`};
 `;
