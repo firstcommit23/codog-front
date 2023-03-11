@@ -17,16 +17,16 @@ const Balloon = ({ children, type = 'Speech', color, fontSize }: BalloonProps) =
 
 const BallonDiv = styled.div<{ fontSize: string | undefined }>`
   position: absolute;
-  top: 10rem;
+  top: 9rem;
   right: 63%;
-  padding: 0.8rem;
+  padding: 1rem 1.2rem;
   background: #ffffff;
   border-radius: 1rem;
   text-align: center;
   font-weight: 600;
   font-size: ${(props) => `${props.fontSize ? props.fontSize : '1.6rem'}`};
   line-height: 2.1rem;
-  color: ${(props) => `${props.color ? props.color : '#000'}`};
+  color: ${(props) => `${props.color ? props.color : '#282828'}`};
 
   &.Speech:before {
     content: '';
@@ -46,7 +46,7 @@ const BallonDiv = styled.div<{ fontSize: string | undefined }>`
     right: 0;
     width: 2.3rem;
     height: 2.8rem;
-    background: url('/images/ThinkBallon.png') no-repeat;
+    background: url('/images/ThinkBalloon.svg') no-repeat;
     border: 0;
   }
 `;

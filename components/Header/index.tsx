@@ -42,7 +42,7 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
               </Menu>
               <MenuList isOpen={isOpen}>
                 <Link href="/">홈</Link>
-                <Link href="/mypage">마이페이지</Link>
+                <Link href="/mypage/profile">마이페이지</Link>
                 <Link href="/">공지사항</Link>
                 <Link href="/">코독에 대하여...🐾</Link>
                 <span
@@ -62,7 +62,6 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
   );
 };
 const Container = styled.div`
-  padding-top: 60px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -23,7 +23,7 @@ const DogCharacter = ({
   clothes = 'Default',
   onClick,
 }: DogCharacterProps) => {
-  const dogImage = `/images/dogs/${character}/${clothes}_${pose}.png`;
+  const dogImage = `/images/dogs/${character}/${clothes}_${pose}.svg`;
 
   const { bottom } = getInfo(character);
   // TODO: 노트북은 커밋 갯수에따라 자동 업그레이드 되어야 한다.
@@ -45,7 +45,7 @@ const DogCharacterDiv = styled.div<{ img: string; bottom?: string }>`
 `;
 
 const Laptop = styled.div`
-  content: url('/images/notebook.png');
+  content: url('/images/notebook.svg');
   position: absolute;
   left: 22%;
   bottom: 0;
