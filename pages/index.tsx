@@ -12,7 +12,6 @@ import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/compon
 
 const Home: NextPage = () => {
   const [today, onChange] = useState(new Date());
-  const [render, setRender] = useState(false);
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -364,34 +363,4 @@ const CalendarWrapper = styled.div`
     background-size: 12%;
   }
 `;
-
-// const MonthControl = styled.div`
-//   display: flex;
-//   justify-content: space-evenly;
-//   padding: 35px;
-// `;
-
-// const MonthContent = styled.div`
-//   font-weight: 500;
-//   font-size: 24px;
-//   line-height: 29px;
-//   color: #282828;
-// `;
-// const CalendarArea = styled.div`
-//   & > div {
-//     display: flex;
-//     justify-content: space-evenly;
-//     padding: 8px;
-//   }
-//   span {
-//     width: 15px;
-//     text-align: center;
-//     font-weight: 500;
-//     font-size: 14px;
-//     line-height: 17px;
-//     color: #282828;
-//   }
-// `;
-
-// login 전이면 인트로 이동
 export default Home;
