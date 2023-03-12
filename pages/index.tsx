@@ -11,15 +11,16 @@ import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
 
 const Home: NextPage = () => {
-  const [today, onChange] = useState(new Date());
+  const [value, onChange] = useState(new Date());
+  const today = new Date();
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
-    String(moment(today).year()),
-    String(moment(today).month())
+    String(moment(value).year()),
+    String(moment(value).month())
   );
 
-  // console.log(footprintData);
+  console.log(footprintData);
   // console.log('userData',userData);
 
   const formatShortWeekday = (locale: any, date: any) =>
@@ -65,7 +66,6 @@ const Home: NextPage = () => {
           </DdayBox>
         </Canvas>
         {/* 개인 달성 지표 */}
-        <AchievementBox>
             <AchievementContainer>
               <div className="item total">
                 <div className="title">총</div>
@@ -80,19 +80,30 @@ const Home: NextPage = () => {
                 <div className="content">{footprintData?.continuousCount}</div>
               </div>
             </AchievementContainer>
-        </AchievementBox>
       </ProfileContainer>
 
       {/* 달력 */}
       <CalendarWrapper>
           <Calendar
             onChange={onChange}
-            value={today}
+            value={value}
             minDetail="month"
             maxDetail="month"
             formatDay={(locale, date) => moment(date).format('D')}
             formatShortWeekday={formatShortWeekday}
             showNeighboringMonth ={false}
+            tileContent={({date,view})=>{
+              if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
+                let day = moment(date).format('D');
+                let content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
+                return(
+                  <Popup>{content}개</Popup>
+                );
+              }
+              return(
+                <FootPrintMark></FootPrintMark>
+              );
+            }}
           />
       </CalendarWrapper>
     </DefaultLayout>
@@ -356,4 +367,7 @@ const CalendarWrapper = styled.div`
     background-size: 12%;
   }
 `;
+
+const Popup = styled.div``;
+const FootPrintMark = styled.div``;
 export default Home;
