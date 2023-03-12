@@ -3,30 +3,32 @@ import React from 'react';
 
 interface CanvasProps {
   children: React.ReactNode;
+  paddingTop?: string;
 }
 
-const Canvas = ({ children }: CanvasProps) => {
+const Canvas = ({ children, paddingTop }: CanvasProps) => {
   return (
-    <CanvasWapper>
+    <CanvasWrapper padding={paddingTop}>
       <DogRoom />
       {children}
-    </CanvasWapper>
+    </CanvasWrapper>
   );
 };
 
-const CanvasWapper = styled.div`
+const CanvasWrapper = styled.div<{padding?:string}>`
   position: relative;
   width: 100%;
   height: 25rem;
   background-color: #282828;
   overflow: hidden;
+  padding-top: ${(props) => `${props.padding ? props.padding : '0'}`};
 `;
 
 const DogRoom = styled.div`
   position: absolute;
   width: 18.8rem;
   height: 30.8rem;
-  top: 3rem;
+  bottom: -9rem;
   left: 50%;
   transform: translate(-50%, 0%);
   background: #99b9ff;

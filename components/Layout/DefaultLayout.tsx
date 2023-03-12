@@ -15,7 +15,6 @@ interface Props {
 const DefaultLayout = ({ children, isShowMenu = true, backgroundColor, height }: Props) => {
   return (
     <Wrapper>
-      {/* <Menu /> */}
       <Modal />
       <Header isShowMenu={isShowMenu} />
       <Container color={backgroundColor} height={height}>

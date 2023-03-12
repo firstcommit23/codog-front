@@ -17,7 +17,10 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
       <HeaderBox>
         <HeaderArea>
           <LogoTitle>
-            <Link href="/">{`{Codog}`}</Link>
+            <div
+              onClick={() => {
+                router.push('/');
+              }}>{`{Codog}`}</div>
           </LogoTitle>
           {isShowMenu && (
             <>
@@ -41,18 +44,38 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                 )}
               </Menu>
               <MenuList isOpen={isOpen}>
-                <Link href="/">홈</Link>
-                <Link href="/mypage/profile">마이페이지</Link>
-                <Link href="/">공지사항</Link>
-                <Link href="/">코독에 대하여...🐾</Link>
-                <span
+                <div
+                  onClick={() => {
+                    router.push('/');
+                  }}>
+                  홈
+                </div>
+                <div
+                  onClick={() => {
+                    router.push('/mypage/profile');
+                  }}>
+                  마이페이지
+                </div>
+                <div
+                  onClick={() => {
+                    router.push('/');
+                  }}>
+                  코독에 대하여...
+                </div>
+                <div
+                  onClick={() => {
+                    router.push('/');
+                  }}>
+                  공지사항
+                </div>
+                <div
                   onClick={() => {
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
                     router.push('/login');
                   }}>
                   로그아웃
-                </span>
+                </div>
               </MenuList>
             </>
           )}
@@ -91,12 +114,12 @@ const LogoTitle = styled.div`
   line-height: 2.9rem;
   color: #ffffff;
 
-  a {
+  div {
     text-decoration: none;
     color: white;
   }
 
-  a:visited {
+  div:visited {
     color: white;
   }
 
@@ -129,22 +152,20 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   top: 60px;
   left: 0;
 
-  a,
-  span {
+  div {
     font-weight: 400;
     text-decoration: none;
     color: white;
     cursor: pointer;
   }
 
-  a:hover,
-  span:hover {
+  div:hover {
     transition: all 0.3s ease-in-out;
     color: ${Common.colors.gray} !important;
+    cursor: pointer;
   }
 
-  a:visited,
-  span:visited {
+  div:visited {
     color: ${Common.colors.white};
   }
 `;

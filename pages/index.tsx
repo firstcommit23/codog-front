@@ -5,7 +5,6 @@ import axios from 'axios';
 import moment from 'moment';
 import styled from '@emotion/styled';
 import Calendar from 'react-calendar';
-import { infoType } from '@/public/types';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
@@ -13,8 +12,7 @@ import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/compon
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
-  const [render, setRender] = useState(false);
-  const [datas, setDatas] = useState<infoType[]>([]);
+  const today = new Date();
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -22,20 +20,20 @@ const Home: NextPage = () => {
     String(moment(value).month())
   );
 
-  console.log(footprintData);
-
-  const getData = async () => {
-    const res = await axios.get('/data/data.json');
-    setDatas(res.data);
+  const onActiveStartDateChangeHandler = ({activeStartDate}:any) => {
+    onChange(activeStartDate);
   };
+  console.log(footprintData);
+  // console.log('userData',userData);
 
   const formatShortWeekday = (locale: any, date: any) =>
     ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
 
-  useEffect(() => {
-    getData();
-    setRender(true);
-  }, []);
+  const getDday  = (today:Date, createdDate:Date) => {
+    const a = moment(today);
+    const b = moment(createdDate);
+    return a.diff(b,'days');
+  }
 
   if (!isSuccessUserData) return null;
 
@@ -65,33 +63,30 @@ const Home: NextPage = () => {
           </Balloon>
           <FoodItem food={userData.foodItem} />
           <FurnitureItem furniture={userData.furnitureItem} />
+          <DdayBox>
+            <div className="pin"></div>
+            <span className="Dday">D+{getDday(today,userData?.createDate)}</span>
+          </DdayBox>
         </Canvas>
         {/* 개인 달성 지표 */}
-        <AchievementBox>
-          {datas.map((data, key) => (
-            <AchievementContainer key={key}>
+            <AchievementContainer>
               <div className="item total">
                 <div className="title">총</div>
-                <div className="content">
-                  <div className="total">{data.totalCount}</div>
-                </div>
+                <div className="content">{footprintData?.totalCount}</div>
               </div>
               <div className="item month">
                 <div className="title">이번달</div>
-                <div className="content">{data.month}</div>
+                <div className="content">{footprintData?.thisMonthTotalCount}</div>
               </div>
               <div className="item continuous">
                 <div className="title">연속</div>
-                <div className="content">{data.continuousCount}</div>
+                <div className="content">{footprintData?.continuousCount}</div>
               </div>
             </AchievementContainer>
-          ))}
-        </AchievementBox>
       </ProfileContainer>
 
       {/* 달력 */}
       <CalendarWrapper>
-        {render && (
           <Calendar
             onChange={onChange}
             value={value}
@@ -100,8 +95,20 @@ const Home: NextPage = () => {
             formatDay={(locale, date) => moment(date).format('D')}
             formatShortWeekday={formatShortWeekday}
             showNeighboringMonth ={false}
+            onActiveStartDateChange={onActiveStartDateChangeHandler}
+            tileContent={({date,view})=>{
+              if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
+                let day = moment(date).format('D');
+                let content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
+                return(
+                  <Popup>{content}개</Popup>
+                );
+              }
+              return(
+                <FootPrintMark></FootPrintMark>
+              );
+            }}
           />
-        )}
       </CalendarWrapper>
     </DefaultLayout>
   );
@@ -116,13 +123,6 @@ const ProfileContainer = styled.div`
 `;
 const ProfileBox = styled.div`
   width: 100%;
-`;
-
-const CoDogImage = styled.div`
-  background: url('/images/codog.png');
-  width: 120px;
-  height: 120px;
-  background-size: contain;
 `;
 
 const ProfileWrapper = styled.div`
@@ -153,17 +153,33 @@ const ProfileButtonArea = styled.div`
 `;
 
 const DdayBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #efefef;
-  border-radius: 5px;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 18px;
-  color: #282828;
-  text-align: center;
-  padding: 10px 15px;
+    position: absolute;
+    right: 3rem;
+    top: 2rem;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+
+  .pin{
+    background: url('/images/Dday_pin.svg') no-repeat;
+    width: 1.4rem;
+    height: 2.2rem;
+  }
+  .Dday{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #efefef;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+    color: #282828;
+    padding: 0.8rem 1.5rem;
+    max-width: 4rem;
+    margin-top: -0.2rem;
+  }
 `;
 
 const ShareButton = styled.button`
@@ -232,6 +248,17 @@ const AchievementContainer = styled.div`
     color: #FF646C;
     .title{
       color: #FF646C;
+      display:flex;
+      align-items: center;
+    }
+    .title::after{
+      content: "";
+      background: url('/images/fire.png');
+      background-size: cover;
+      display: inline-block;
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-left: 0.2rem;
     }
   }
   .title {
@@ -267,7 +294,7 @@ const HorizontalRule = styled.hr`
 `;
 
 const CalendarWrapper = styled.div`
-  padding: 4rem 0;
+  padding: 3rem 2rem;
 
   .react-calendar button {
     background-color: white;
@@ -345,33 +372,6 @@ const CalendarWrapper = styled.div`
   }
 `;
 
-// const MonthControl = styled.div`
-//   display: flex;
-//   justify-content: space-evenly;
-//   padding: 35px;
-// `;
-
-// const MonthContent = styled.div`
-//   font-weight: 500;
-//   font-size: 24px;
-//   line-height: 29px;
-//   color: #282828;
-// `;
-// const CalendarArea = styled.div`
-//   & > div {
-//     display: flex;
-//     justify-content: space-evenly;
-//     padding: 8px;
-//   }
-//   span {
-//     width: 15px;
-//     text-align: center;
-//     font-weight: 500;
-//     font-size: 14px;
-//     line-height: 17px;
-//     color: #282828;
-//   }
-// `;
-
-// login 전이면 인트로 이동
+const Popup = styled.div``;
+const FootPrintMark = styled.div``;
 export default Home;
