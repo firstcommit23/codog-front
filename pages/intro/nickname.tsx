@@ -2,16 +2,21 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
+import { useMutation } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
+import { postSighupUser } from '@/apis/api';
 import { userState } from '@/components/states';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 import useIntroRandomNicknameQuery from '@/hooks/query/useIntroRandomNicknameQuery';
+import { User } from '@/apis/type';
 
 const IntroNicknamePage = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userState);
   const [nickname, setNickname] = useState(user.nickname || '');
   const [nicknameError, setNicknameError] = useState('');
+
+  const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
 
   const {
     data: randomNickname,
@@ -29,11 +34,19 @@ const IntroNicknamePage = () => {
   };
 
   const handleSubmit = async () => {
-    if (!nickname) {
-      setNicknameError('닉네임을 지어주세용');
-    }
-    setUser({ ...user, nickname });
-    router.push('/intro/confirm');
+    mutate(
+      { nickname: nickname, character: user.character },
+      {
+        onSuccess: () => {
+          setUser({ ...user, nickname });
+          router.push('/intro/confirm');
+        },
+        onError: (error: any) => {
+          const message = error?.response.data.error.message || '';
+          setNicknameError(message);
+        },
+      }
+    );
   };
 
   return (
@@ -50,8 +63,8 @@ const IntroNicknamePage = () => {
         <span></span>
       </StepNavigation>
       <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
-      {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
       <InputText type="text" name="nickname" onChange={handleChange} value={nickname} />
+      {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
       <ButtonSubmit onClick={handleSubmit}>등록하기</ButtonSubmit>
       <ButtonSubmit color="#8D8D8D" onClick={() => refetchRandomNickname()}>
         랜덤으로 골라주세요
@@ -84,37 +97,9 @@ const InputText = styled.input`
 `;
 
 const ErrorMessage = styled.div`
-  position: relative;
-  width: 15rem;
-  height: 2rem;
-  padding-top: 0.8rem;
-  background: #fff6f6;
-  border: #e8c8c8 solid 1px;
-  border-radius: 6rem;
-  text-align: center;
-  font-weight: 600;
-  line-height: 2.1rem;
-
-  &:after {
-    position: absolute;
-    top: 3.5rem;
-    left: 7.4rem;
-    content: '';
-    border-color: #e8c8c8 transparent;
-    border-style: solid;
-    border-width: 17px 7px 0px 7px;
-    z-index: 1;
-  }
-  &:before {
-    position: absolute;
-    top: 3.6rem;
-    left: 7.4rem;
-    content: '';
-    border-color: #e8c8c8 transparent;
-    border-style: solid;
-    border-width: 19px 8px 0px 8px;
-    z-index: 0;
-  }
+  padding: 1rem;
+  color: red;
+  font-size: 1.4rem;
 `;
 
 const ButtonSubmit = styled.button`

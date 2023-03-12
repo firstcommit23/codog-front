@@ -35,7 +35,7 @@ const IntroCharacterPage = () => {
   return (
     <DefaultLayout isShowMenu={false}>
       <Canvas>
-        <DogCharacter character="A" pose="Hi" />
+        <DogCharacter character="A" />
         <Balloon>👋</Balloon>
       </Canvas>
       <StepNavigation>
