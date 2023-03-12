@@ -22,6 +22,7 @@ const ProfilePage = () => {
   const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
 
   const [profileUpdateData, setProfileUpdateData] = useState<User>({ nickname: '', character: '' });
+  const [updateModal, setUpdateModal] = useState(false);
   const [, setModal] = useRecoilState(modalState);
   const [error, setError] = useState('');
 
@@ -48,12 +49,8 @@ const ProfilePage = () => {
       { nickname: profileUpdateData.nickname, character: profileUpdateData.character },
       {
         onSuccess: () => {
-          setModal({
-            isShow: true,
-            title: '완료',
-            content: '프로필 수정 완료하였습니다.',
-            onClick: () => refetchUserData(),
-          });
+          setUpdateModal(false);
+          refetchUserData();
         },
         onError: (error: any) => {
           const message = error?.response.data.error.message || '';
@@ -97,7 +94,13 @@ const ProfilePage = () => {
               <div className="email">junandkang@gmail.com</div>
             </UserProfileTable>
             <BtnWrapper>
-              <NameUpdateButton color="#DCDCDC">이름 수정하기</NameUpdateButton>
+              <NameUpdateButton
+                onClick={() => {
+                  setUpdateModal(true);
+                }}
+                color="#DCDCDC">
+                이름 수정하기
+              </NameUpdateButton>
               <HouseUpdateButton
                 onClick={() => {
                   router.push('/mypage/itemshop');
@@ -106,20 +109,29 @@ const ProfilePage = () => {
               </HouseUpdateButton>
             </BtnWrapper>
           </ProfileWrapper>
-          <ModifyModal>
-            <div className="title">코독 이름</div>
-            <input
-              type="text"
-              name="nickname"
-              value={profileUpdateData.nickname}
-              onChange={handleChange}
-            />
-            <ErrorMessage>{error}</ErrorMessage>
-            <ModalBtnWrapper>
-              <CancelButton>취소</CancelButton>
-              <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
-            </ModalBtnWrapper>
-          </ModifyModal>
+          {updateModal && (
+            <UpdateModal>
+              <Container>
+                <div className="title">코독 이름</div>
+                <input
+                  type="text"
+                  name="nickname"
+                  value={profileUpdateData.nickname}
+                  onChange={handleChange}
+                />
+                <ErrorMessage>{error}</ErrorMessage>
+                <ModalBtnWrapper>
+                  <CancelButton
+                    onClick={() => {
+                      setUpdateModal(false);
+                    }}>
+                    취소
+                  </CancelButton>
+                  <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
+                </ModalBtnWrapper>
+              </Container>
+            </UpdateModal>
+          )}
         </>
       )}
     </DefaultLayout>
@@ -203,13 +215,26 @@ const HouseUpdateButton = styled.button`
   }
 `;
 
-const ModifyModal = styled.div`
-  position: relative;
+const UpdateModal = styled.div`
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Container = styled.div`
   background-color: #f2f2f2;
   border-radius: 0.5rem;
   padding: 3rem;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  max-height: 13rem;
+  position: relative;
 
   .title {
     font-size: 1.5rem;
