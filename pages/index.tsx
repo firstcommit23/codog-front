@@ -110,13 +110,6 @@ const ProfileBox = styled.div`
   width: 100%;
 `;
 
-const CoDogImage = styled.div`
-  background: url('/images/codog.png');
-  width: 120px;
-  height: 120px;
-  background-size: contain;
-`;
-
 const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: row;
