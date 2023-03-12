@@ -60,7 +60,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <DefaultLayout backgroundColor="#282828" height="none">
+    <DefaultLayout backgroundColor="white" height="100vh">
       {isSuccessUserData && (
         <>
           <Canvas>
@@ -70,17 +70,16 @@ const ProfilePage = () => {
           </Canvas>
           <ProfileWrapper>
             <UserProfileTable>
-              <div>닉네임</div>
-              <div>
-                <input
+              <div className="nickname">
+              {profileUpdateData.nickname}
+                {/* <input
                   type="text"
                   name="nickname"
                   value={profileUpdateData.nickname}
                   onChange={handleChange}
-                />
+                /> */}
               </div>
-              <div>캐릭터</div>
-              <div>
+              {/* <div>
                 {characters?.map((item: CharacterType, index: number) => {
                   return (
                     <span key={item.code}>
@@ -97,13 +96,14 @@ const ProfilePage = () => {
                     </span>
                   );
                 })}
-              </div>
-              <div>이메일</div>
-              <div>{userData.email}</div>
-              <div>가입일자</div>
-              <div>{moment(userData.createDate).format('YYYY/MM/DD HH:mm:ss')}</div>
-              <button onClick={handleSubmit}>수정하기</button>
+              </div> */}
+              {/* <div className="email">{userData.email}</div> */}
+              <div className="email">junandkang@gmail.com</div>
             </UserProfileTable>
+            <BtnWrapper>
+              <NameUpdateButton color="#DCDCDC">이름 수정하기</NameUpdateButton>
+              <HouseUpdateButton>코독 하우스 편집</HouseUpdateButton>
+            </BtnWrapper>
           </ProfileWrapper>
         </>
       )}
@@ -113,11 +113,78 @@ const ProfilePage = () => {
 
 const ProfileWrapper = styled.div`
   min-height: 60vh;
+  width: 100%;
 `;
 
 const UserProfileTable = styled.div`
-  color: #fff;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  font-weight: 400;
+  text-align: center;
+  padding: 4rem;
+
+  .nickname{font-weight: 600;}
+  .email{
+    display: flex;
+    justify-content: center;
+    font-size: 1.6rem;
+    margin-top: 1.5rem;
+    color: #504f4f;
+  }
+  .email::before{
+    content: "";
+      background: url('/images/github-logo.svg');
+      background-size: cover;
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      margin-right: 1rem;
+  }
+`;
+
+const BtnWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  padding: 0 2rem;
+`;
+
+const NameUpdateButton = styled.button`
+  width: 100%;
+  max-width: 30rem;
+  background: ${(props) => `${props.color ? props.color : '#282828'}`};
+  border-radius: 0.5rem;
+  border: 0;
+  padding: 1.6rem 0;
+  font-size: 1.6rem;
+  color: #2E2E2E;
+
+  &:hover {
+    background-color: #BEBEBE;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  &:disabled {
+    background-color: #eeeeee;
+  }
+`;
+const HouseUpdateButton = styled.button`
+  width: 100%;
+  max-width: 30rem;
+  background: ${(props) => `${props.color ? props.color : '#282828'}`};
+  border-radius: 0.5rem;
+  border: 0;
+  padding: 1.6rem 0;
+  font-size: 1.6rem;
+  color: white;
+
+  &:hover {
+    background-color: #585858;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  &:disabled {
+    background-color: #eeeeee;
+  }
 `;
 
 export default ProfilePage;
