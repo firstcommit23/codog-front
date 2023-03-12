@@ -98,8 +98,8 @@ const Home: NextPage = () => {
             onActiveStartDateChange={onActiveStartDateChangeHandler}
             tileContent={({date,view})=>{
               if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
-                let day = moment(date).format('D');
-                let content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
+                const day = moment(date).format('D');
+                const content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
                 return(
                   <Popup>{content}개</Popup>
                 );
@@ -206,9 +206,6 @@ const ShareIcon = styled.div`
   background: url('/images/Share_Android.svg') no-repeat;
   width: 2.5rem;
   height: 2rem;
-`;
-
-const AchievementBox = styled.div`
 `;
 
 const AchievementContainer = styled.div`
