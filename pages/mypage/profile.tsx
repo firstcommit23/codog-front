@@ -10,6 +10,7 @@ import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
 import { postSighupUser } from '@/apis/api';
 import type { CharacterType, User } from '@/apis/type';
+import { useRouter } from 'next/router';
 
 const ProfilePage = () => {
   const {
@@ -22,6 +23,9 @@ const ProfilePage = () => {
 
   const [profileUpdateData, setProfileUpdateData] = useState<User>({ nickname: '', character: '' });
   const [, setModal] = useRecoilState(modalState);
+  const [error, setError] =useState('');
+
+  const router = useRouter();
 
   useEffect(() => {
     if (isSuccessUserData) {
@@ -53,7 +57,7 @@ const ProfilePage = () => {
         },
         onError: (error: any) => {
           const message = error?.response.data.error.message || '';
-          alert(message);
+          setError(message);
         },
       }
     );
@@ -63,7 +67,7 @@ const ProfilePage = () => {
     <DefaultLayout backgroundColor="white" height="100vh">
       {isSuccessUserData && (
         <>
-          <Canvas>
+          <Canvas paddingTop='5rem'>
             <DogCharacter character={userData?.characterCode} />
             <FoodItem food={userData.foodItem} />
             <FurnitureItem furniture={userData.furnitureItem} />
@@ -71,13 +75,7 @@ const ProfilePage = () => {
           <ProfileWrapper>
             <UserProfileTable>
               <div className="nickname">
-              {profileUpdateData.nickname}
-                {/* <input
-                  type="text"
-                  name="nickname"
-                  value={profileUpdateData.nickname}
-                  onChange={handleChange}
-                /> */}
+              {userData?.nickname}
               </div>
               {/* <div>
                 {characters?.map((item: CharacterType, index: number) => {
@@ -102,9 +100,25 @@ const ProfilePage = () => {
             </UserProfileTable>
             <BtnWrapper>
               <NameUpdateButton color="#DCDCDC">이름 수정하기</NameUpdateButton>
-              <HouseUpdateButton>코독 하우스 편집</HouseUpdateButton>
+              <HouseUpdateButton onClick={()=>{router.push('/mypage/itemshop');}}>
+                코독 하우스 편집
+              </HouseUpdateButton>
             </BtnWrapper>
           </ProfileWrapper>
+          <ModifyModal>
+            <div className="title">코독 이름</div>
+            <input
+                    type="text"
+                    name="nickname"
+                    value={profileUpdateData.nickname}
+                    onChange={handleChange}
+            />
+            <ErrorMessage>{error}</ErrorMessage>
+            <ModalBtnWrapper>
+              <CancelButton>취소</CancelButton>
+              <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
+            </ModalBtnWrapper>
+          </ModifyModal>
         </>
       )}
     </DefaultLayout>
@@ -185,6 +199,79 @@ const HouseUpdateButton = styled.button`
   &:disabled {
     background-color: #eeeeee;
   }
+`;
+
+const ModifyModal = styled.div`
+  position:relative;
+  background-color: #f2f2f2;
+  border-radius: 0.5rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+
+  .title{
+    font-size: 1.5rem;
+    color: #7C7C7C;
+    font-weight: light;
+    margin-bottom: 1.5rem;
+  }
+
+  input{
+    border: 1px solid #CDCDCD;
+    border-radius: 0.5rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.6rem;
+  }
+
+  input:focus {outline:none;}
+  
+`;
+
+const ModalBtnWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 3.5rem;
+`;
+
+const CancelButton = styled.button`
+  font-size: 1.6rem;
+  color: #282828;
+  background-color: #DCDCDC;
+  border: 0;
+  border-bottom-left-radius: 0.5rem;
+  width: 50%;
+  padding: 1.2rem;
+  position: absolute;
+  bottom: 0;
+  left:0;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ConfirmButton = styled.button`
+  font-size: 1.6rem;
+  color: white;
+  background-color: #282828;
+  border: 0;
+  border-bottom-right-radius: 0.5rem;
+  width: 50%;
+  padding: 1.2rem;
+  position: absolute;
+  bottom: 0;
+  right:0;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ErrorMessage = styled.span`
+  font-size: 1.4rem;
+  color: #FF3E13;
+  margin-top: 1rem;
 `;
 
 export default ProfilePage;

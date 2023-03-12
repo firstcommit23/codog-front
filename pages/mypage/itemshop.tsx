@@ -69,7 +69,7 @@ const ItemShopPage = () => {
     selectedItem?.filter((item: any) => item.includes('B')).join('') || '';
 
   return (
-    <DefaultLayout backgroundColor="#282828" height="none">
+    <DefaultLayout backgroundColor="#282828" height="100vh">
       {isSuccessUserData && (
         <>
           <FootprintCount>
@@ -77,7 +77,7 @@ const ItemShopPage = () => {
               내 발자국 수 🐾 : <em>{footprintData?.totalCount}</em>
             </span>
           </FootprintCount>
-          <Canvas>
+          <Canvas paddingTop='5rem'>
             <DogCharacter character={userData.characterCode} />
             <FoodItem food={selectedFoodItem} />
             <FurnitureItem furniture={selectedFurnitureItem} />
