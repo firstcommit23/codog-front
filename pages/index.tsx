@@ -20,6 +20,9 @@ const Home: NextPage = () => {
     String(moment(value).month())
   );
 
+  const onActiveStartDateChangeHandler = ({activeStartDate}:any) => {
+    onChange(activeStartDate);
+  };
   console.log(footprintData);
   // console.log('userData',userData);
 
@@ -92,6 +95,7 @@ const Home: NextPage = () => {
             formatDay={(locale, date) => moment(date).format('D')}
             formatShortWeekday={formatShortWeekday}
             showNeighboringMonth ={false}
+            onActiveStartDateChange={onActiveStartDateChangeHandler}
             tileContent={({date,view})=>{
               if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
                 let day = moment(date).format('D');
