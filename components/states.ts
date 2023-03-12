@@ -9,8 +9,14 @@ const userState = atom({
     character: '',
   },
 });
+type ModalType = {
+  isShow: boolean;
+  title: string;
+  content: string;
+  onClick?: any;
+};
 
-const modalState = atom({
+const modalState = atom<ModalType>({
   key: 'MODAL',
   default: {
     isShow: false,

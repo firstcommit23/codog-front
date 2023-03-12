@@ -35,6 +35,10 @@ export const postSighupUser = (user: User) => {
   }).then((res) => res.data.response);
 };
 
+export const postDropOutUser = () => {
+  return Instance.post('/users/drop-out').then((res) => res.data.response);
+};
+
 export const postAuthorizationMail = (email: string) => {
   return Instance.post('/users/email/authorization-mail', { email: email }).then(
     (res) => res.data.response

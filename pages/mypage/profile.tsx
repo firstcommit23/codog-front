@@ -18,13 +18,13 @@ const ProfilePage = () => {
     isSuccess: isSuccessUserData,
     refetch: refetchUserData,
   } = useUserProfileQuery();
-  const { data: characters } = useIntroCharacterListQuery();
+  const { data: characters, isSuccess } = useIntroCharacterListQuery();
   const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
 
   const [profileUpdateData, setProfileUpdateData] = useState<User>({ nickname: '', character: '' });
   const [updateModal, setUpdateModal] = useState(false);
   const [, setModal] = useRecoilState(modalState);
-  const [error, setError] =useState('');
+  const [error, setError] = useState('');
 
   const router = useRouter();
 
@@ -64,16 +64,14 @@ const ProfilePage = () => {
     <DefaultLayout backgroundColor="white" height="100vh">
       {isSuccessUserData && (
         <>
-          <Canvas paddingTop='5rem'>
+          <Canvas paddingTop="5rem">
             <DogCharacter character={userData?.characterCode} />
             <FoodItem food={userData.foodItem} />
             <FurnitureItem furniture={userData.furnitureItem} />
           </Canvas>
           <ProfileWrapper>
             <UserProfileTable>
-              <div className="nickname">
-              {userData?.nickname}
-              </div>
+              <div className="nickname">{userData?.nickname}</div>
               {/* <div>
                 {characters?.map((item: CharacterType, index: number) => {
                   return (
@@ -96,36 +94,49 @@ const ProfilePage = () => {
               <div className="email">junandkang@gmail.com</div>
             </UserProfileTable>
             <BtnWrapper>
-              <NameUpdateButton onClick={()=>{setUpdateModal(true);}} color="#DCDCDC">이름 수정하기</NameUpdateButton>
-              <HouseUpdateButton onClick={()=>{router.push('/mypage/itemshop');}}>
+              <NameUpdateButton
+                onClick={() => {
+                  setUpdateModal(true);
+                }}
+                color="#DCDCDC">
+                이름 수정하기
+              </NameUpdateButton>
+              <HouseUpdateButton
+                onClick={() => {
+                  router.push('/mypage/itemshop');
+                }}>
                 코독 하우스 편집
               </HouseUpdateButton>
             </BtnWrapper>
           </ProfileWrapper>
-          {updateModal &&
-          <UpdateModal>
-            <Container>
-              <div className="title">코독 이름</div>
-              <input
-                      type="text"
-                      name="nickname"
-                      value={profileUpdateData.nickname}
-                      onChange={handleChange}
-              />
-              <ErrorMessage>{error}</ErrorMessage>
-              <ModalBtnWrapper>
-                <CancelButton onClick={()=>{setUpdateModal(false);}}>취소</CancelButton>
-                <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
-              </ModalBtnWrapper>
-            </Container>
-          </UpdateModal>
-          }
+          {updateModal && (
+            <UpdateModal>
+              <Container>
+                <div className="title">코독 이름</div>
+                <input
+                  type="text"
+                  name="nickname"
+                  value={profileUpdateData.nickname}
+                  onChange={handleChange}
+                />
+                <ErrorMessage>{error}</ErrorMessage>
+                <ModalBtnWrapper>
+                  <CancelButton
+                    onClick={() => {
+                      setUpdateModal(false);
+                    }}>
+                    취소
+                  </CancelButton>
+                  <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
+                </ModalBtnWrapper>
+              </Container>
+            </UpdateModal>
+          )}
         </>
       )}
     </DefaultLayout>
   );
 };
-
 const ProfileWrapper = styled.div`
   min-height: 60vh;
   width: 100%;
@@ -137,22 +148,24 @@ const UserProfileTable = styled.div`
   text-align: center;
   padding: 4rem;
 
-  .nickname{font-weight: 600;}
-  .email{
+  .nickname {
+    font-weight: 600;
+  }
+  .email {
     display: flex;
     justify-content: center;
     font-size: 1.6rem;
     margin-top: 1.5rem;
     color: #504f4f;
   }
-  .email::before{
-    content: "";
-      background: url('/images/github-logo.svg');
-      background-size: cover;
-      display: inline-block;
-      width: 2rem;
-      height: 2rem;
-      margin-right: 1rem;
+  .email::before {
+    content: '';
+    background: url('/images/github-logo.svg');
+    background-size: cover;
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    margin-right: 1rem;
   }
 `;
 
@@ -171,10 +184,10 @@ const NameUpdateButton = styled.button`
   border: 0;
   padding: 1.6rem 0;
   font-size: 1.6rem;
-  color: #2E2E2E;
+  color: #2e2e2e;
 
   &:hover {
-    background-color: #BEBEBE;
+    background-color: #bebebe;
     cursor: pointer;
     transition: all 0.3s ease;
   }
@@ -221,24 +234,25 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   max-height: 13rem;
-  position:relative;
+  position: relative;
 
-  .title{
+  .title {
     font-size: 1.5rem;
-    color: #7C7C7C;
+    color: #7c7c7c;
     font-weight: light;
     margin-bottom: 1.5rem;
   }
 
-  input{
-    border: 1px solid #CDCDCD;
+  input {
+    border: 1px solid #cdcdcd;
     border-radius: 0.5rem;
     padding: 1.2rem 2rem;
     font-size: 1.6rem;
   }
 
-  input:focus {outline:none;}
-  
+  input:focus {
+    outline: none;
+  }
 `;
 
 const ModalBtnWrapper = styled.div`
@@ -251,14 +265,14 @@ const ModalBtnWrapper = styled.div`
 const CancelButton = styled.button`
   font-size: 1.6rem;
   color: #282828;
-  background-color: #DCDCDC;
+  background-color: #dcdcdc;
   border: 0;
   border-bottom-left-radius: 0.5rem;
   width: 50%;
   padding: 1.2rem;
   position: absolute;
   bottom: 0;
-  left:0;
+  left: 0;
 
   &:hover {
     cursor: pointer;
@@ -275,7 +289,7 @@ const ConfirmButton = styled.button`
   padding: 1.2rem;
   position: absolute;
   bottom: 0;
-  right:0;
+  right: 0;
 
   &:hover {
     cursor: pointer;
@@ -284,8 +298,13 @@ const ConfirmButton = styled.button`
 
 const ErrorMessage = styled.span`
   font-size: 1.4rem;
-  color: #FF3E13;
+  color: #ff3e13;
   margin-top: 1rem;
+`;
+
+const UserDropOutLink = styled.span`
+  cursor: pointer;
+  text-decoration: underline;
 `;
 
 export default ProfilePage;

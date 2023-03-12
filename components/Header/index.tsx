@@ -17,7 +17,10 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
       <HeaderBox>
         <HeaderArea>
           <LogoTitle>
-            <div onClick={()=>{router.push('/');}}>{`{Codog}`}</div>
+            <div
+              onClick={() => {
+                router.push('/');
+              }}>{`{Codog}`}</div>
           </LogoTitle>
           {isShowMenu && (
             <>
@@ -41,10 +44,30 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                 )}
               </Menu>
               <MenuList isOpen={isOpen}>
-                <div onClick={()=>{router.push('/');}}>홈</div>
-                <div onClick={()=>{router.push('/mypage/profile');}}>마이페이지</div>
-                <div onClick={()=>{router.push('/');}}>코독에 대하여...</div>
-                <div onClick={()=>{router.push('/');}}>공지사항</div>
+                <div
+                  onClick={() => {
+                    router.push('/');
+                  }}>
+                  홈
+                </div>
+                <div
+                  onClick={() => {
+                    router.push('/mypage/profile');
+                  }}>
+                  마이페이지
+                </div>
+                <div
+                  onClick={() => {
+                    router.push('/');
+                  }}>
+                  코독에 대하여...
+                </div>
+                <div
+                  onClick={() => {
+                    router.push('/');
+                  }}>
+                  공지사항
+                </div>
                 <div
                   onClick={() => {
                     localStorage.removeItem('accessToken');
@@ -90,9 +113,10 @@ const LogoTitle = styled.div`
   font-size: 2.6rem;
   line-height: 2.9rem;
   color: #ffffff;
-  
+
   div {
     text-decoration: none;
+    color: white;
   }
 
   div:visited {
@@ -128,9 +152,11 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   top: 60px;
   left: 0;
 
-  div{
+  div {
     font-weight: 400;
     text-decoration: none;
+    color: white;
+    cursor: pointer;
   }
 
   div:hover {

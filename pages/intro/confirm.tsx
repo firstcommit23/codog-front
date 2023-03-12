@@ -23,8 +23,8 @@ const IntroConfirmPage = () => {
             isShow: true,
             title: '회원가입 성공하였습니다 🐣',
             content: '함께 코독하게 코딩해봅시다!',
+            onClick: () => router.push('/'),
           });
-          router.push('/');
         },
         onError: (error: any) => {
           const message = error?.response.data.error.message || '';
@@ -36,7 +36,7 @@ const IntroConfirmPage = () => {
   return (
     <DefaultLayout isShowMenu={false}>
       <Canvas>
-        <DogCharacter character="A" pose="Hi" />
+        <DogCharacter character="A" />
       </Canvas>
       <StepNavigation>
         <span></span>

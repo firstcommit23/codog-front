@@ -5,6 +5,7 @@ import { modalState } from '@/components/states';
 const Modal = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const handleClose = () => {
+    modal.onClick && modal.onClick();
     setModal({ ...modal, isShow: false });
   };
 

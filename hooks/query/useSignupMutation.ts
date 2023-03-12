@@ -6,6 +6,7 @@ import {
   postSighupUser,
   postAuthorizationMail,
   postProfileItem,
+  postDropOutUser,
 } from '@/apis/api';
 
 export const useCheckGithubIdMutation = (options?: UseMutationOptions<any, Error, String>) => {
@@ -40,6 +41,12 @@ export const useAuthorizationMailMutation = (options?: UseMutationOptions<any, E
 
 export const useProfileItemMutation = (options?: UseMutationOptions<any, Error, string[]>) => {
   return useMutation<any, Error, string[]>((itemCodes: string[]) => postProfileItem(itemCodes), {
+    ...options,
+  });
+};
+
+export const useDropOutUser = (options?: UseMutationOptions<any, Error, null>) => {
+  return useMutation<any, Error, null>(() => postDropOutUser(), {
     ...options,
   });
 };
