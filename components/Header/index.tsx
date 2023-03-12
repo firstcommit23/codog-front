@@ -93,6 +93,7 @@ const LogoTitle = styled.div`
 
   a {
     text-decoration: none;
+    color: white;
   }
 
   a:visited {
@@ -128,17 +129,22 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   top: 60px;
   left: 0;
 
-  a {
+  a,
+  span {
     font-weight: 400;
     text-decoration: none;
+    color: white;
+    cursor: pointer;
   }
 
-  a:hover {
+  a:hover,
+  span:hover {
     transition: all 0.3s ease-in-out;
     color: ${Common.colors.gray} !important;
   }
 
-  a:visited {
+  a:visited,
+  span:visited {
     color: ${Common.colors.white};
   }
 `;
