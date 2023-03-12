@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import moment from 'moment';
 import { postProfileItem } from '@/apis/api';
-import { ItemType } from '@/apis/type';
+import type { ItemType } from '@/apis/type';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import useItemListQuery from '@/hooks/query/useItemListQuery';
@@ -77,7 +77,7 @@ const ItemShopPage = () => {
               내 발자국 수 🐾 : <em>{footprintData?.totalCount}</em>
             </span>
           </FootprintCount>
-          <Canvas paddingTop='5rem'>
+          <Canvas paddingTop="5rem">
             <DogCharacter character={userData.characterCode} />
             <FoodItem food={selectedFoodItem} />
             <FurnitureItem furniture={selectedFurnitureItem} />
@@ -199,7 +199,7 @@ const CommitSoonText = styled.div`
   font-size: 2rem;
   color: #ffffff;
   top: 30%;
-  z-index: 999;
+  z-index: 9;
   opacity: 1;
 `;
 
