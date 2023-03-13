@@ -9,10 +9,12 @@ import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
+  const router = useRouter()
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -34,9 +36,9 @@ const Home: NextPage = () => {
     const b = moment(createdDate);
     return a.diff(b,'days');
   }
-
+  //isLoading
   if (!isSuccessUserData) return null;
-
+  if (userData.isNewUser) router.push('/login');
   return (
     <DefaultLayout>
       {/* 프로필 */}
