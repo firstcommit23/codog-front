@@ -2,45 +2,43 @@ import styled from '@emotion/styled';
 import { CHARACTER_CODES } from '@/apis/type';
 
 interface DogCharacterProps {
-  character?: CHARACTER_CODES;
+  character?: CHARACTER_CODES | string ;
   pose?: 'Default' | 'Hi';
   clothes?: 'Default';
   onClick?: () => void;
 }
 
-const getInfo = (code: string) => {
-  const defaultValue = { bottom: '-2.8rem' };
-  switch (code) {
-    case 'C':
-      return { ...defaultValue, bottom: '0' };
-    default:
-      return defaultValue;
-  }
-};
+// const getInfo = (code: string) => {
+//   const defaultValue = { bottom: '-0.5rem' };
+//   switch (code) {
+//     // case 'C':
+//     //   return { ...defaultValue, bottom: '0' };
+//     default:
+//       return defaultValue;
+//   }
+// };
 const DogCharacter = ({
-  character = 'A',
+  character,
   pose = 'Default',
   clothes = 'Default',
   onClick,
 }: DogCharacterProps) => {
   const dogImage = `/images/dogs/${character}/${clothes}_${pose}.svg`;
-
-  const { bottom } = getInfo(character);
   // TODO: 노트북은 커밋 갯수에따라 자동 업그레이드 되어야 한다.
   return (
     <>
-      <DogCharacterDiv img={dogImage} onClick={onClick} bottom={bottom} />
+      <DogCharacterDiv img={dogImage} onClick={onClick}/>
       <Laptop />
     </>
   );
 };
 
 const DogCharacterDiv = styled.div<{ img: string; bottom?: string }>`
-  content: url(${(props) => `${props.img ? props.img : '/images/dogs/A/Default_Default.png'}`});
+  content: url(${(props) => `${props.img ? props.img : '/images/dogs/A/Default_Default.svg'}`});
   position: absolute;
   left: 53%;
   transform: translate(-50%, 0%);
-  bottom: ${(props) => `${props.bottom}`};
+  bottom: -0.5rem;
   cursor: pointer;
 `;
 

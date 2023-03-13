@@ -17,6 +17,20 @@ const IntroCharacterPage = () => {
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
+  const getRoomColor = (code:string) =>{
+    const defaultValue = '#999999'
+    switch (code){
+      case 'A' :
+        return '#82AAFF';
+      case 'B' :
+        return '#F07178';
+      case 'C' :
+        return '#F9C66A';
+      default :
+        return defaultValue;
+    }
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
     setErrorMessage('');
@@ -34,9 +48,9 @@ const IntroCharacterPage = () => {
 
   return (
     <DefaultLayout isShowMenu={false} height="120vh">
-      <Canvas paddingTop="5rem">
-        <DogCharacter character="A" />
-        <Balloon>👋</Balloon>
+      <Canvas paddingTop="4rem" roomColor={getRoomColor(character)}>
+        <DogCharacter character={character}/>
+        <Balloon top="15rem" right="59%" fontSize="2rem">👋</Balloon>
       </Canvas>
       <StepNavigation>
         <span className="active"></span>
@@ -70,7 +84,7 @@ const IntroCharacterPage = () => {
           })}
       </CharacterList>
         <ButtonSubmit onClick={handleSubmit} disabled={!character}>
-          선택완료
+          선택 완료
         </ButtonSubmit>
     </DefaultLayout>
   );
@@ -215,7 +229,7 @@ const ButtonSubmit = styled.button`
   border-radius: 0.5rem;
   border: 0;
   margin-top: 1.5rem;
-  padding: 1.6rem 0;
+  padding: 1.8rem 0;
   font-size: 1.8rem;
   color: #ffffff;
   line-height: 1.9rem;

@@ -5,20 +5,22 @@ interface BalloonProps {
   type?: 'Speech' | 'Think';
   color?: string;
   fontSize?: string;
+  top? : string;
+  right? : string;
 }
 
-const Balloon = ({ children, type = 'Speech', color, fontSize }: BalloonProps) => {
+const Balloon = ({ children, type = 'Speech', color, fontSize, top, right }: BalloonProps) => {
   return (
-    <BallonDiv className={type} color={color} fontSize={fontSize}>
+    <BallonDiv className={type} color={color} fontSize={fontSize} top={top} right={right}>
       {children}
     </BallonDiv>
   );
 };
 
-const BallonDiv = styled.div<{ fontSize: string | undefined }>`
+const BallonDiv = styled.div<{ fontSize: string | undefined, top: string | undefined , right: string | undefined}>`
   position: absolute;
-  top: 9rem;
-  right: 63%;
+  top: ${(props)=>`${props.top ? props.top : '9rem'}`};
+  right: ${(props)=>`${props.right ? props.right : '60%'}`};
   padding: 1rem 1.2rem;
   background: #ffffff;
   border-radius: 1rem;
@@ -35,7 +37,7 @@ const BallonDiv = styled.div<{ fontSize: string | undefined }>`
     right: 0;
     width: 1.3rem;
     height: 1.8rem;
-    background: url('/images/SpeechBallon.png') no-repeat;
+    background: url('/images/SpeechBalloon.svg') no-repeat;
     border: 0;
   }
 
