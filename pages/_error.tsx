@@ -1,16 +1,20 @@
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { NextPageContext } from 'next';
 import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 
 const errorPage = ({ statusCode, errorMessage }: { statusCode: string , errorMessage: string }) => {
+
+  const router = useRouter();
+
   return (
-    <DefaultLayout isShowMenu={false} backgroundColor="#282828">
+    <DefaultLayout isShowMenu={false} backgroundColor="#282828" height='100vh'>
       <HeightCenter>
         <StatusCode>{statusCode}</StatusCode>
         <ErrorMessage>{errorMessage}</ErrorMessage>
         <ErrorImage></ErrorImage>
         <DefaultMessage>페이지가 존재하지 않거나, <br/> 사용할 수 없는 페이지입니다.</DefaultMessage>
-        <HomeButton>홈으로 가기</HomeButton>
+        <HomeButton onClick={()=>{router.push('/')}}>홈으로 가기</HomeButton>
       </HeightCenter>
     </DefaultLayout>
   );
@@ -24,7 +28,7 @@ errorPage.getInitialProps = (ctx: NextPageContext) => {
 export default errorPage;
 
 const HeightCenter = styled.div`
-  height: 90vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;

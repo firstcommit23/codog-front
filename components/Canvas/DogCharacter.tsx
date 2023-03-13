@@ -49,6 +49,10 @@ const Laptop = styled.div`
   position: absolute;
   left: 22%;
   bottom: 0;
+
+  @media screen and (max-width: 480px) {
+        left: 18%;
+    }
 `;
 
 export default DogCharacter;

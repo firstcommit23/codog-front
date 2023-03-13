@@ -62,9 +62,9 @@ const IntroConfirmPage = () => {
 const ContentMessage = styled.div`
   padding-top: 2rem;
   color: #323232;
-  font-size: 20px;
+  font-size: 2.2rem;
   font-weight: 600;
-  line-height: 30px;
+  line-height: 3rem;
   letter-spacing: -0.01em;
 
   strong {
@@ -72,29 +72,28 @@ const ContentMessage = styled.div`
   }
 
   ul {
-    padding: 11px;
+    padding: 1.1rem;
     list-style-image: url('/images/listIcon.png');
   }
   li {
-    padding: 5px;
+    padding: 0.5rem;
     font-weight: 400;
-    font-size: 16px;
-    line-height: 19px;
+    font-size: 1.6rem;
+    line-height: 1.9rem;
     color: #282828;
   }
 `;
 
 const ButtonSubmit = styled.button`
   width: 100%;
-  max-width: 300px;
   background: #282828;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   border: 0;
-  margin-top: 15px;
-  padding: 16px 0;
-  font-size: 18px;
+  margin-top: 1.5rem;
+  padding: 1.6rem 0;
+  font-size: 1.8rem;
   color: #ffffff;
-  line-height: 19px;
+  line-height: 1.9rem;
 
   &:hover {
     background-color: #585858;
@@ -109,11 +108,11 @@ const StepNavigation = styled.div`
 
   span {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 0.8rem;
+    height: 0.8rem;
     border-radius: 50%;
     background: #d9d9d9;
-    margin: 3px;
+    margin: 0.3rem;
 
     &.active {
       background: #444444;
