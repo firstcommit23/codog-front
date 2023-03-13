@@ -72,12 +72,11 @@ const ItemShopPage = () => {
     <DefaultLayout backgroundColor="#282828" height="100vh">
       {isSuccessUserData && (
         <>
-          <FootprintCount>
-            <span>
-              내 발자국 수 🐾 : <em>{footprintData?.totalCount}</em>
-            </span>
-          </FootprintCount>
           <Canvas paddingTop="5rem">
+            <FootprintCount>
+              <div>내 발자국 수</div>
+              <TotalCount>{footprintData?.totalCount}</TotalCount>
+            </FootprintCount>
             <DogCharacter character={userData.characterCode} />
             <FoodItem food={selectedFoodItem} />
             <FurnitureItem furniture={selectedFurnitureItem} />
@@ -206,6 +205,7 @@ const CommitSoonText = styled.div`
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
   background: #494747;
 `;
 
@@ -216,17 +216,33 @@ const Title = styled.div`
 `;
 
 const FootprintCount = styled.div`
-  width: 100%;
+  padding-top: 2rem;
   text-align: right;
   background: #282828;
+  margin-right: 2rem;
 
-  span {
-    margin-right: 3rem;
+  div {
     color: #fff;
     font-size: 1.2rem;
     em {
       font-weight: 600;
     }
+  }
+`;
+
+const TotalCount = styled.span`
+  position: relative;
+  display: inline-block;
+  background: #f9f9f9;
+  border-radius: 900rem;
+  padding: 0.8rem 1.2rem 0.8rem 2.2rem;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+
+  :before {
+    content: url('/images/footprint_s_icon.svg');
+    position: absolute;
+    left: 0.7rem;
   }
 `;
 

@@ -65,7 +65,9 @@ const IntroNicknamePage = () => {
       <ContentMessage>코독한 개발자 이름을 지어주세요.</ContentMessage>
       <InputText type="text" name="nickname" onChange={handleChange} value={nickname} />
       {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
-      <ButtonSubmit onClick={handleSubmit}>등록하기</ButtonSubmit>
+      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+        등록하기
+      </ButtonSubmit>
       <ButtonSubmit color="#8D8D8D" onClick={() => refetchRandomNickname()}>
         랜덤으로 골라주세요
       </ButtonSubmit>

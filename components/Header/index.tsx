@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from '@emotion/styled';
@@ -7,10 +7,15 @@ import Image from 'next/image';
 
 const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
   const router = useRouter();
+
+  useEffect(() => {
+    setIsLogin(localStorage.getItem('accessToken') ? true : false);
+  }, []);
 
   return (
     <Container>
@@ -20,6 +25,7 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
             <div
               onClick={() => {
                 router.push('/');
+                setIsOpen(false);
               }}>{`{Codog}`}</div>
           </LogoTitle>
           {isShowMenu && (
@@ -47,6 +53,7 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                 <div
                   onClick={() => {
                     router.push('/');
+                    setIsOpen(false);
                   }}>
                   홈
                 </div>
@@ -68,14 +75,23 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                   }}>
                   공지사항
                 </div>
-                <div
-                  onClick={() => {
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
-                    router.push('/login');
-                  }}>
-                  로그아웃
-                </div>
+                {isLogin ? (
+                  <div
+                    onClick={() => {
+                      localStorage.removeItem('accessToken');
+                      localStorage.removeItem('refreshToken');
+                      router.push('/login');
+                    }}>
+                    로그아웃
+                  </div>
+                ) : (
+                  <div
+                    onClick={() => {
+                      router.push('/login');
+                    }}>
+                    로그인
+                  </div>
+                )}
               </MenuList>
             </>
           )}

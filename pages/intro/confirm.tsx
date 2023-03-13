@@ -2,9 +2,6 @@ import { useRouter } from 'next/router';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { useRecoilState } from 'recoil';
 import { modalState, userState } from '@/components/states';
-import { useMutation } from '@tanstack/react-query';
-import { postSighupUser } from '@/apis/api';
-import { User } from '@/apis/type';
 import styled from '@emotion/styled';
 import { Canvas, DogCharacter } from '@/components/Canvas';
 
@@ -12,27 +9,16 @@ const IntroConfirmPage = () => {
   const router = useRouter();
   const [user] = useRecoilState(userState);
   const [, setModal] = useRecoilState(modalState);
-  const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
 
   const handleSubmit = async () => {
-    mutate(
-      { nickname: user.nickname, character: user.character },
-      {
-        onSuccess: () => {
-          setModal({
-            isShow: true,
-            title: '회원가입 성공하였습니다 🐣',
-            content: '함께 코독하게 코딩해봅시다!',
-            onClick: () => router.push('/'),
-          });
-        },
-        onError: (error: any) => {
-          const message = error?.response.data.error.message || '';
-          alert(message);
-        },
-      }
-    );
+    setModal({
+      isShow: true,
+      title: '환영합니다 🐣',
+      content: '함께 코독하게 코딩해봅시다!',
+      onClick: () => router.push('/'),
+    });
   };
+
   return (
     <DefaultLayout isShowMenu={false}>
       <Canvas>
@@ -52,9 +38,7 @@ const IntroConfirmPage = () => {
           <li>매일 저녁 9시에 체크돼요.</li>
         </ul>
       </ContentMessage>
-      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
-        시작하기
-      </ButtonSubmit>
+      <ButtonSubmit onClick={handleSubmit}>홈으로 가기</ButtonSubmit>
     </DefaultLayout>
   );
 };
