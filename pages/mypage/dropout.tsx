@@ -68,7 +68,8 @@ const DropOutPage = () => {
 };
 
 const Wrapper = styled.div`
-  padding: 1rem 2rem;
+  padding: 7rem 2rem 0 2rem;
+  height: 94vh;
 `;
 
 const Title = styled.div`
