@@ -216,10 +216,13 @@ const Title = styled.div`
 `;
 
 const FootprintCount = styled.div`
-  padding-top: 2rem;
-  text-align: right;
   background: #282828;
-  margin-right: 2rem;
+  position: absolute;
+  right: 2.2rem;
+  top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   div {
     color: #fff;

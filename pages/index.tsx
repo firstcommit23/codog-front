@@ -14,7 +14,7 @@ import { useRouter } from 'next/router';
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
-  const router = useRouter()
+  const router = useRouter();
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -22,7 +22,7 @@ const Home: NextPage = () => {
     String(moment(value).month())
   );
 
-  const onActiveStartDateChangeHandler = ({activeStartDate}:any) => {
+  const onActiveStartDateChangeHandler = ({ activeStartDate }: any) => {
     onChange(activeStartDate);
   };
   console.log(footprintData);
@@ -31,11 +31,11 @@ const Home: NextPage = () => {
   const formatShortWeekday = (locale: any, date: any) =>
     ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
 
-  const getDday  = (today:Date, createdDate:Date) => {
+  const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
     const b = moment(createdDate);
-    return a.diff(b,'days');
-  }
+    return a.diff(b, 'days');
+  };
   //isLoading
   if (!isSuccessUserData) return null;
   if (userData.isNewUser) router.push('/login');
@@ -67,50 +67,55 @@ const Home: NextPage = () => {
           <FurnitureItem furniture={userData.furnitureItem} />
           <DdayBox>
             <div className="pin"></div>
-            <span className="Dday">D+{getDday(today,userData?.createDate)}</span>
+            <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
           </DdayBox>
         </Canvas>
         {/* 개인 달성 지표 */}
-            <AchievementContainer>
-              <div className="item total">
-                <div className="title">총</div>
-                <div className="content">{footprintData?.totalCount}</div>
-              </div>
-              <div className="item month">
-                <div className="title">이번달</div>
-                <div className="content">{footprintData?.thisMonthTotalCount}</div>
-              </div>
-              <div className="item continuous">
-                <div className="title">연속</div>
-                <div className="content">{footprintData?.continuousCount}</div>
-              </div>
-            </AchievementContainer>
+        <AchievementContainer>
+          <div className="item total">
+            <div className="title">총</div>
+            <div className="content">{footprintData?.totalCount}</div>
+          </div>
+          <div className="item month">
+            <div className="title">이번달</div>
+            <div className="content">{footprintData?.thisMonthTotalCount}</div>
+          </div>
+          <div className="item continuous">
+            <div className="title">연속</div>
+            <div className="content">{footprintData?.continuousCount}</div>
+          </div>
+        </AchievementContainer>
       </ProfileContainer>
 
       {/* 달력 */}
       <CalendarWrapper>
-          <Calendar
-            onChange={onChange}
-            value={value}
-            minDetail="month"
-            maxDetail="month"
-            formatDay={(locale, date) => moment(date).format('D')}
-            formatShortWeekday={formatShortWeekday}
-            showNeighboringMonth ={false}
-            onActiveStartDateChange={onActiveStartDateChangeHandler}
-            tileContent={({date,view})=>{
-              if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
-                const day = moment(date).format('D');
-                const content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
-                return(
+        <Calendar
+          onChange={onChange}
+          value={value}
+          minDetail="month"
+          maxDetail="month"
+          formatDay={(locale, date) => moment(date).format('D')}
+          formatShortWeekday={formatShortWeekday}
+          showNeighboringMonth={false}
+          onActiveStartDateChange={onActiveStartDateChangeHandler}
+          tileContent={({ date, view }) => {
+            const day = moment(date).format('D');
+            const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
+            if (
+              Object.entries(footprintData?.dayStamp || {}).find(
+                (x) => x[0] === moment(date).format('D') && x[1] > 0
+              )
+            ) {
+              return (
+                <>
                   <Popup>{content}개</Popup>
-                );
-              }
-              return(
-                <FootPrintMark></FootPrintMark>
+                  <FootPrintMark></FootPrintMark>
+                </>
               );
-            }}
-          />
+            }
+            return null;
+          }}
+        />
       </CalendarWrapper>
     </DefaultLayout>
   );
@@ -155,20 +160,20 @@ const ProfileButtonArea = styled.div`
 `;
 
 const DdayBox = styled.div`
-    position: absolute;
-    right: 3rem;
-    top: 2rem;
-    display: flex;
-    flex-direction:column;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  .pin{
+  .pin {
     background: url('/images/Dday_pin.svg') no-repeat;
     width: 1.4rem;
     height: 2.2rem;
   }
-  .Dday{
+  .Dday {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -228,30 +233,30 @@ const AchievementContainer = styled.div`
     height: 10rem;
     border-radius: 1rem;
   }
-  .item.total{
-    background-color: #EAF1FF;
-    color: #3274FF;
-    .title{
-      color: #3274FF;
+  .item.total {
+    background-color: #eaf1ff;
+    color: #3274ff;
+    .title {
+      color: #3274ff;
     }
   }
-  .item.month{
-    background-color: #FAF1FF;
-    color: #C871FF;
-    .title{
-      color: #C871FF;
+  .item.month {
+    background-color: #faf1ff;
+    color: #c871ff;
+    .title {
+      color: #c871ff;
     }
   }
-  .item.continuous{
-    background-color: #FFEEF0;
-    color: #FF646C;
-    .title{
-      color: #FF646C;
-      display:flex;
+  .item.continuous {
+    background-color: #ffeef0;
+    color: #ff646c;
+    .title {
+      color: #ff646c;
+      display: flex;
       align-items: center;
     }
-    .title::after{
-      content: "";
+    .title::after {
+      content: '';
       background: url('/images/fire.png');
       background-size: cover;
       display: inline-block;
@@ -372,5 +377,11 @@ const CalendarWrapper = styled.div`
 `;
 
 const Popup = styled.div``;
-const FootPrintMark = styled.div``;
+const FootPrintMark = styled.div`
+  background: url('/images/paw_black.svg') no-repeat;
+  background-size: contain;
+  width: 3.2rem;
+  height: 3.2rem;
+  position: absolute;
+`;
 export default Home;
