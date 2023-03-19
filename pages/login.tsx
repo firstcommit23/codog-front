@@ -33,6 +33,7 @@ const LoginPage = () => {
           <DogCharacter
             character="A"
             onClick={() => setRandom(Math.floor(Math.random() * (ThinkList.length - 1 + 1)) + 0)}
+            left="5%"
           />
           <Balloon type="Think">{ThinkList[random]}</Balloon>
         </Canvas>
