@@ -38,7 +38,7 @@ const Container = styled.div`
 
 const ModalWrapper = styled.div`
   background-color: white;
-  width: 250px;
+  width: 280px;
   height: 180px;
   border-radius: 5px;
   display: flex;

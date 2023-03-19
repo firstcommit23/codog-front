@@ -9,10 +9,12 @@ import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
+  const router = useRouter()
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -34,9 +36,9 @@ const Home: NextPage = () => {
     const b = moment(createdDate);
     return a.diff(b,'days');
   }
-
+  //isLoading
   if (!isSuccessUserData) return null;
-
+  if (userData.isNewUser) router.push('/login');
   return (
     <DefaultLayout>
       {/* 프로필 */}
@@ -98,8 +100,8 @@ const Home: NextPage = () => {
             onActiveStartDateChange={onActiveStartDateChangeHandler}
             tileContent={({date,view})=>{
               if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
-                let day = moment(date).format('D');
-                let content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
+                const day = moment(date).format('D');
+                const content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
                 return(
                   <Popup>{content}개</Popup>
                 );
@@ -206,9 +208,6 @@ const ShareIcon = styled.div`
   background: url('/images/Share_Android.svg') no-repeat;
   width: 2.5rem;
   height: 2rem;
-`;
-
-const AchievementBox = styled.div`
 `;
 
 const AchievementContainer = styled.div`
