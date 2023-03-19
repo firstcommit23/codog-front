@@ -11,13 +11,13 @@ interface BalloonProps {
 
 const Balloon = ({ children, type = 'Speech', color, fontSize, top, right }: BalloonProps) => {
   return (
-    <BallonDiv className={type} color={color} fontSize={fontSize} top={top} right={right}>
+    <BalloonDiv className={type} color={color} fontSize={fontSize} top={top} right={right}>
       {children}
-    </BallonDiv>
+    </BalloonDiv>
   );
 };
 
-const BallonDiv = styled.div<{ fontSize: string | undefined, top: string | undefined , right: string | undefined}>`
+const BalloonDiv = styled.div<{ fontSize: string | undefined, top: string | undefined , right: string | undefined}>`
   position: absolute;
   top: ${(props)=>`${props.top ? props.top : '9rem'}`};
   right: ${(props)=>`${props.right ? props.right : '60%'}`};

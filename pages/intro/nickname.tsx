@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
 import { postSighupUser } from '@/apis/api';
 import { userState } from '@/components/states';
-import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import { Canvas, DogCharacter } from '@/components/Canvas';
 import useIntroRandomNicknameQuery from '@/hooks/query/useIntroRandomNicknameQuery';
 import { User } from '@/apis/type';
 
@@ -49,13 +49,24 @@ const IntroNicknamePage = () => {
     );
   };
 
+  const getRoomColor = (code:string) =>{
+    const defaultValue = '#999999'
+    switch (code){
+      case 'A' :
+        return '#82AAFF';
+      case 'B' :
+        return '#F07178';
+      case 'C' :
+        return '#F9C66A';
+      default :
+        return defaultValue;
+    }
+  }
+
   return (
-    <DefaultLayout isShowMenu={false}>
-      <Canvas>
-        <DogCharacter character="A" />
-        <Balloon color="#3274FF" fontSize="1.4rem">
-          맘에 들어요!
-        </Balloon>
+    <DefaultLayout isShowMenu={false} height="110vh">
+      <Canvas paddingTop="4rem" roomColor={getRoomColor(user?.character)}>
+        <DogCharacter character={user?.character} />
       </Canvas>
       <StepNavigation>
         <span></span>
@@ -86,14 +97,14 @@ const InputText = styled.input`
   margin-top: 20px;
   padding: 18px;
   box-sizing: border-box;
-  width: 100%;
+  width: 85%;
   height: 50px;
-  max-width: 300px;
   border: 1px solid #d3d3d3;
   border-radius: 5px;
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 19px;
+  color: #282828;
 `;
 
 const ErrorMessage = styled.div`
@@ -103,8 +114,7 @@ const ErrorMessage = styled.div`
 `;
 
 const ButtonSubmit = styled.button`
-  width: 100%;
-  max-width: 300px;
+  width: 85%;
   background: ${(props) => `${props.color ? props.color : '#282828'}`};
   border-radius: 5px;
   border: 0;
@@ -126,20 +136,30 @@ const ButtonSubmit = styled.button`
 const StepNavigation = styled.div`
   display: flex;
   justify-content: cneter;
-  padding-top: 2rem;
+  padding-top: 3rem;
 
   span {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 0.8rem;
+    height:  0.8rem;
     border-radius: 50%;
     background: #d9d9d9;
-    margin: 3px;
+    margin: 0.6rem;
 
     &.active {
       background: #444444;
     }
   }
+
+  @media screen and (max-width: 375px) {
+      padding-top: 2rem;
+
+      span {
+        width: 0.7rem;
+        height:  0.7rem;
+        margin: 0.5rem;
+      }
+    }
 `;
 
 export default IntroNicknamePage;
