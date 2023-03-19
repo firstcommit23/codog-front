@@ -2,9 +2,6 @@ import { useRouter } from 'next/router';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { useRecoilState } from 'recoil';
 import { modalState, userState } from '@/components/states';
-import { useMutation } from '@tanstack/react-query';
-import { postSighupUser } from '@/apis/api';
-import { User } from '@/apis/type';
 import styled from '@emotion/styled';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 
@@ -12,44 +9,33 @@ const IntroConfirmPage = () => {
   const router = useRouter();
   const [user] = useRecoilState(userState);
   const [, setModal] = useRecoilState(modalState);
-  const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
-  
-  const getRoomColor = (code:string) =>{
-    const defaultValue = '#999999'
-    switch (code){
-      case 'A' :
+
+  const getRoomColor = (code: string) => {
+    const defaultValue = '#999999';
+    switch (code) {
+      case 'A':
         return '#82AAFF';
-      case 'B' :
+      case 'B':
         return '#F07178';
-      case 'C' :
+      case 'C':
         return '#F9C66A';
-      default :
+      default:
         return defaultValue;
     }
-  }
+  };
 
   const handleSubmit = async () => {
-    mutate(
-      { nickname: user.nickname, character: user.character },
-      {
-        onSuccess: () => {
-          setModal({
-            isShow: true,
-            title: '회원가입에 성공했습니다. 🐣',
-            content: '함께 코독하게 코딩해봅시다!',
-            onClick: () => router.push('/'),
-          });
-        },
-        onError: (error: any) => {
-          const message = error?.response.data.error.message || '';
-          alert(message);
-        },
-      }
-    );
+    setModal({
+      isShow: true,
+      title: '환영합니다 🐣',
+      content: '함께 코독하게 코딩해봅시다!',
+      onClick: () => router.push('/'),
+    });
   };
+
   return (
     <DefaultLayout isShowMenu={false} height="110vh">
-      <Canvas  paddingTop="4rem" roomColor={getRoomColor(user?.character)}>
+      <Canvas paddingTop="4rem" roomColor={getRoomColor(user?.character)}>
         <DogCharacter character={user?.character} />
         <Balloon fontSize="1.4rem" top="14rem" right="59%">
           맘에 들어요!
@@ -69,9 +55,7 @@ const IntroConfirmPage = () => {
           <li>매일 저녁 9시에 체크돼요.</li>
         </ul>
       </ContentMessage>
-      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
-        시작하기
-      </ButtonSubmit>
+      <ButtonSubmit onClick={handleSubmit}>홈으로 가기</ButtonSubmit>
     </DefaultLayout>
   );
 };
@@ -128,7 +112,7 @@ const StepNavigation = styled.div`
   span {
     display: inline-block;
     width: 0.8rem;
-    height:  0.8rem;
+    height: 0.8rem;
     border-radius: 50%;
     background: #d9d9d9;
     margin: 0.6rem;
@@ -139,13 +123,13 @@ const StepNavigation = styled.div`
   }
 
   @media screen and (max-width: 375px) {
-      padding-top: 2rem;
+    padding-top: 2rem;
 
-      span {
-        width: 0.7rem;
-        height:  0.7rem;
-        margin: 0.5rem;
-      }
+    span {
+      width: 0.7rem;
+      height: 0.7rem;
+      margin: 0.5rem;
     }
+  }
 `;
 export default IntroConfirmPage;

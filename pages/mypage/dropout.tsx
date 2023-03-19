@@ -43,7 +43,7 @@ const DropOutPage = () => {
           <li>
             회원 탈퇴 시 지금까지 쌓인 내역 삭제
             <div className="desc">
-              발자국 누적 내역, 코독 하우스 아이템 등의 이용 내역들을 <br/>
+              발자국 누적 내역, 코독 하우스 아이템 등의 이용 내역들을 <br />
               다시 복구할 수 없습니다.
             </div>
           </li>
@@ -102,7 +102,7 @@ const DropoutDescriptionList = styled.ul`
 
 const HrLine = styled.div`
   margin: 2.2rem;
-  background: #D6D6D6;
+  background: #d6d6d6;
   height: 0.1rem;
 `;
 
@@ -139,7 +139,7 @@ const OpinionArea = styled.div`
     cursor: pointer;
   }
 
-  span:hover{
+  span:hover {
     color: #282828;
   }
 `;
