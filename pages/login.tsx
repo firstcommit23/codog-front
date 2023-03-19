@@ -27,7 +27,7 @@ const LoginPage = () => {
   const [random, setRandom] = useState(0);
 
   return (
-    <DefaultLayout isShowMenu={false} backgroundColor="#282828">
+    <DefaultLayout isShowMenu={false} backgroundColor="#282828" height="100vh">
       <CenterContainer>
         <Canvas>
           <DogCharacter
@@ -41,7 +41,7 @@ const LoginPage = () => {
           <em>Codog한 개발자...</em>
         </Catchphrase>
         <GithubLoginButton onClick={handleGithubLogin}>
-          <span>github으로 3초만에 시작하기</span>
+          <div>github으로 3초만에 시작하기</div>
         </GithubLoginButton>
       </CenterContainer>
     </DefaultLayout>
@@ -107,9 +107,9 @@ const GithubLoginButton = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  align-self: center;
   justify-content: center;
-  width: 29.9rem;
+  width: 100%;
+  padding: 1rem 2rem;
   height: 5rem;
   background: white;
   color: #282828;
@@ -124,6 +124,22 @@ const GithubLoginButton = styled.button`
     cursor: pointer;
     background-color: #e0e0e0;
     transition: all 0.3s ease;
+  }
+
+  div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  div::before{
+    content: "";
+    display: inline-block;
+    background: url('/images/github-logo.svg') no-repeat;
+    background-size: cover;
+    width: 2.4rem;
+    height: 2.4rem;
+    margin-right: 1.5rem;
   }
 `;
 

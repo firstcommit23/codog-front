@@ -99,16 +99,33 @@ const ProfilePage = () => {
                   setUpdateModal(true);
                 }}
                 color="#DCDCDC">
-                이름 수정하기
+                <span>이름 수정하기</span>
               </NameUpdateButton>
               <HouseUpdateButton
                 onClick={() => {
                   router.push('/mypage/itemshop');
-                }}>
-                코독 하우스 편집
+                }}
+                color="#DCDCDC">
+                <span>코독하우스 편집</span>
               </HouseUpdateButton>
             </BtnWrapper>
+            <BtnWrapper>
+              <LogOutButton  
+              onClick={() => {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    router.push('/login');
+                  }}
+                >로그아웃 하기</LogOutButton>
+            </BtnWrapper>
+            <UserDropOut>
+              코독 회원 탈퇴를 원하신다면 
+              <span onClick={()=>router.push('/mypage/dropout')}className="link">여기</span>
+              를 클릭하세요.
+            </UserDropOut>
           </ProfileWrapper>
+
+          {/* 업데이트 모달*/}
           {updateModal && (
             <UpdateModal>
               <Container>
@@ -194,6 +211,17 @@ const NameUpdateButton = styled.button`
   &:disabled {
     background-color: #eeeeee;
   }
+
+  span::before{
+    content: "";
+    background: url('/images/pencil.svg') no-repeat;
+    background-size: cover;
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: -0.3rem;
+    margin-right : 1.5rem;
+  }
 `;
 const HouseUpdateButton = styled.button`
   width: 100%;
@@ -203,15 +231,26 @@ const HouseUpdateButton = styled.button`
   border: 0;
   padding: 1.6rem 0;
   font-size: 1.6rem;
-  color: white;
+  color: #2e2e2e;
 
   &:hover {
-    background-color: #585858;
+    background-color: #bebebe;
     cursor: pointer;
     transition: all 0.3s ease;
   }
   &:disabled {
     background-color: #eeeeee;
+  }
+
+  span::before{
+    content: "";
+    background: url('/images/house.svg') no-repeat;
+    background-size: cover;
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-bottom: -0.1rem;
+    margin-right : 1.2rem;
   }
 `;
 
@@ -302,9 +341,38 @@ const ErrorMessage = styled.span`
   margin-top: 1rem;
 `;
 
-const UserDropOutLink = styled.span`
-  cursor: pointer;
-  text-decoration: underline;
+const LogOutButton = styled.button`
+  width: 100%;
+  font-size: 1.8rem;
+  color: white;
+  background-color: #282828;
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #666666;
+    transition: all 0.2s ease;
+  }
+`;
+
+const UserDropOut = styled.div`
+  font-size: 1.4rem;
+  color: #A1A1A1;
+  margin: 2rem;
+
+  span{
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    margin: 0 0.4rem;
+  }
+
+  span:hover{
+    color: #666666;
+  }
 `;
 
 export default ProfilePage;

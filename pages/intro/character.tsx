@@ -17,6 +17,20 @@ const IntroCharacterPage = () => {
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
+  const getRoomColor = (code:string) =>{
+    const defaultValue = '#999999'
+    switch (code){
+      case 'A' :
+        return '#82AAFF';
+      case 'B' :
+        return '#F07178';
+      case 'C' :
+        return '#F9C66A';
+      default :
+        return defaultValue;
+    }
+  }
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
     setErrorMessage('');
@@ -33,10 +47,10 @@ const IntroCharacterPage = () => {
   };
 
   return (
-    <DefaultLayout isShowMenu={false}>
-      <Canvas>
-        <DogCharacter character="A" />
-        <Balloon>👋</Balloon>
+    <DefaultLayout isShowMenu={false} height="110vh">
+      <Canvas paddingTop="4rem" roomColor={getRoomColor(character)}>
+        <DogCharacter character={character}/>
+        {character && <Balloon top="14rem" right="59%" fontSize="2rem">👋</Balloon> }
       </Canvas>
       <StepNavigation>
         <span className="active"></span>
@@ -69,34 +83,47 @@ const IntroCharacterPage = () => {
             );
           })}
       </CharacterList>
-      <ButtonSubmit onClick={handleSubmit} disabled={!character}>
-        선택완료
-      </ButtonSubmit>
+        <ButtonSubmit onClick={handleSubmit} disabled={!character}>
+          선택 완료
+        </ButtonSubmit>
     </DefaultLayout>
   );
 };
 
+
 const CharacterList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-end;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  padding: 2rem;
+  width: 85%;
+  margin: 3rem 0 2rem 0;
+
+  @media screen and (max-width: 375px) {
+    margin: 2.5rem 0 1.5rem 0;
+  }
 `;
 
 const CharacterItem = styled.div`
   display: flex;
   flex-flow: column wrap;
   border-radius: 0.6rem;
-  width: 40%;
+  width: 100%;
   height: 100px;
   background-color: ${(props) => `${props.color ? props.color : 'white'}`};
+
+  @media screen and (max-width: 375px){
+    height: 90px;
+  }
 
   input:checked + label .coverRadio svg {
     stroke-dashoffset: 0;
   }
   input {
     display: none;
+  }
+
+  input:checked + label .coverRadio{
+    background-color: black;
   }
 
   label {
@@ -120,14 +147,13 @@ const CharacterItem = styled.div`
 
     .coverRadio {
       position: absolute;
-      right: 5px;
-      top: 3px;
+      right: 1rem;
+      top: 1rem;
       z-index: 1;
-      width: 20px;
-      height: 20px;
+      width: 2rem;
+      height: 2rem;
       border-radius: 20%;
-      background: #282828;
-      border: 2px solid #fff;
+      background: white;
       transition: transform 0.15s, opacity calc(0.15s * 1.2) linear;
       opacity: 1;
       transform: scale(1);
@@ -139,7 +165,7 @@ const CharacterItem = styled.div`
         vertical-align: top;
         fill: none;
         margin: 5px 0 0 3px;
-        stroke: #fff;
+        stroke: white;
         stroke-width: 2;
         stroke-linecap: round;
         stroke-linejoin: round;
@@ -156,9 +182,9 @@ const CharacterItem = styled.div`
 
 const ContentMessage = styled.div`
   color: #323232;
-  font-size: 20px;
+  font-size: 2rem;
   font-weight: 600;
-  line-height: 30px;
+  line-height: 3rem;
   letter-spacing: -0.01em;
   padding-top: 2rem;
 `;
@@ -198,21 +224,21 @@ const ErrorMessage = styled.div`
 `;
 
 const ButtonSubmit = styled.button`
-  width: 100%;
-  max-width: 300px;
+  width: 85%;
   background: #282828;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   border: 0;
-  margin-top: 15px;
-  padding: 16px 0;
-  font-size: 18px;
+  margin-top: 1.5rem;
+  padding: 1.8rem 0;
+  font-size: 1.8rem;
   color: #ffffff;
-  line-height: 19px;
+  line-height: 1.9rem;
 
   &:hover {
     background-color: #585858;
     cursor: pointer;
   }
+
   &:disabled {
     background-color: #eeeeee;
   }
@@ -221,20 +247,30 @@ const ButtonSubmit = styled.button`
 const StepNavigation = styled.div`
   display: flex;
   justify-content: cneter;
-  padding-top: 2rem;
+  padding-top: 3rem;
 
   span {
     display: inline-block;
-    width: 8px;
-    height: 8px;
+    width: 0.8rem;
+    height:  0.8rem;
     border-radius: 50%;
     background: #d9d9d9;
-    margin: 3px;
+    margin: 0.6rem;
 
     &.active {
       background: #444444;
     }
   }
+
+  @media screen and (max-width: 375px) {
+      padding-top: 2rem;
+
+      span {
+        width: 0.7rem;
+        height:  0.7rem;
+        margin: 0.5rem;
+      }
+    }
 `;
 
 export default IntroCharacterPage;
