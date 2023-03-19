@@ -365,6 +365,9 @@ const CalendarWrapper = styled.div`
     color: #c0bebe;
   }
 
+  .react-calendar__month-view__days {
+    background-color: rgba(0, 0, 0, 0);
+  }
   .react-calendar__month-view__days abbr {
     font-size: 15px !important;
   }
@@ -373,6 +376,10 @@ const CalendarWrapper = styled.div`
     font-size: 18px !important;
     background: url('/images/blue-circle.svg') no-repeat 50% 100%;
     background-size: 12%;
+  }
+
+  .react-calendar__tile.react-calendar__month-view__days__day {
+    position: relative;
   }
 `;
 
@@ -383,5 +390,7 @@ const FootPrintMark = styled.div`
   width: 3.2rem;
   height: 3.2rem;
   position: absolute;
+  top: 0;
 `;
+
 export default Home;
