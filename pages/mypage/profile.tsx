@@ -71,7 +71,8 @@ const ProfilePage = () => {
           </Canvas>
           <ProfileWrapper>
             <UserProfileTable>
-              <div className="nickname">{userData?.nickname}</div>
+              <div className="nickname">
+                {userData?.nickname}</div>
               {/* <div>
                 {characters?.map((item: CharacterType, index: number) => {
                   return (
@@ -160,7 +161,7 @@ const ProfileWrapper = styled.div`
 `;
 
 const UserProfileTable = styled.div`
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   font-weight: 400;
   text-align: center;
   padding: 4rem;
@@ -266,7 +267,7 @@ const UpdateModal = styled.div`
 `;
 
 const Container = styled.div`
-  background-color: #f2f2f2;
+  background-color: white;
   border-radius: 0.5rem;
   padding: 3rem;
   display: flex;

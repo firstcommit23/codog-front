@@ -6,6 +6,7 @@ interface DogCharacterProps {
   pose?: 'Default' | 'Hi';
   clothes?: 'Default';
   onClick?: () => void;
+  left?: string;
 }
 
 // const getInfo = (code: string) => {
@@ -22,13 +23,14 @@ const DogCharacter = ({
   pose = 'Default',
   clothes = 'Default',
   onClick,
+  left
 }: DogCharacterProps) => {
   const dogImage = `/images/dogs/${character}/${clothes}_${pose}.svg`;
   // TODO: 노트북은 커밋 갯수에따라 자동 업그레이드 되어야 한다.
   return (
     <>
       <DogCharacterDiv img={dogImage} onClick={onClick}/>
-      <Laptop />
+      <Laptop left={left}/>
     </>
   );
 };
@@ -42,10 +44,10 @@ const DogCharacterDiv = styled.div<{ img: string; bottom?: string }>`
   cursor: pointer;
 `;
 
-const Laptop = styled.div`
+const Laptop = styled.div<{left?:string}>`
   content: url('/images/notebook.svg');
   position: absolute;
-  left: 22%;
+  left: ${(props)=>`${props.left ? props.left : '22%'}`};
   bottom: 0;
 
   @media screen and (max-width: 480px) {
