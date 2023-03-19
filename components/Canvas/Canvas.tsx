@@ -7,7 +7,7 @@ interface CanvasProps {
   roomColor? : string;
 }
 
-const Canvas = ({ children, paddingTop ,roomColor }: CanvasProps) => {
+const Canvas = ({ children, paddingTop , roomColor }: CanvasProps) => {
   return (
     <CanvasWrapper paddingTop={paddingTop}>
       <DogRoom roomColor={roomColor}/>
@@ -36,10 +36,12 @@ const DogRoom = styled.div<{roomColor?:string}>`
   border-radius: 260.5px;
 
   :before {
-    content: url('/images/Picture.png');
+    content: url('/images/Window_Day.svg');
     position: absolute;
-    right: 21px;
-    top: 54px;
+    right: 3rem;
+    top: 6rem;
+    /* border: 5px solid gray;
+    border-radius: 1.5rem; */
   }
 `;
 

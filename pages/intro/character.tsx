@@ -47,10 +47,10 @@ const IntroCharacterPage = () => {
   };
 
   return (
-    <DefaultLayout isShowMenu={false} height="120vh">
+    <DefaultLayout isShowMenu={false} height="110vh">
       <Canvas paddingTop="4rem" roomColor={getRoomColor(character)}>
         <DogCharacter character={character}/>
-        <Balloon top="15rem" right="59%" fontSize="2rem">👋</Balloon>
+        {character && <Balloon top="14rem" right="59%" fontSize="2rem">👋</Balloon> }
       </Canvas>
       <StepNavigation>
         <span className="active"></span>
