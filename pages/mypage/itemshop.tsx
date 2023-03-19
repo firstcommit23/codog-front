@@ -69,7 +69,7 @@ const ItemShopPage = () => {
     selectedItem?.filter((item: any) => item.includes('B')).join('') || '';
 
   return (
-    <DefaultLayout backgroundColor="#282828" height="100vh">
+    <DefaultLayout backgroundColor="#282828">
       {isSuccessUserData && (
         <>
           <Canvas paddingTop="5rem">
@@ -223,9 +223,9 @@ const FootprintCount = styled.div`
 
   div {
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     em {
-      font-weight: 600;
+      font-weight: 400;
     }
   }
 `;
@@ -235,14 +235,14 @@ const TotalCount = styled.span`
   display: inline-block;
   background: #f9f9f9;
   border-radius: 900rem;
-  padding: 0.8rem 1.2rem 0.8rem 2.2rem;
-  font-size: 1.2rem;
+  padding: 0.8rem 2rem 0.8rem 3.5rem;
+  font-size: 1.6rem;
   margin-top: 1rem;
 
   :before {
-    content: url('/images/footprint_s_icon.svg');
+    content: url('/images/paw_black.svg');
     position: absolute;
-    left: 0.7rem;
+    left: 1.5rem;
   }
 `;
 
