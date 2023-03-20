@@ -10,6 +10,7 @@ import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
 import { useRouter } from 'next/router';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
@@ -39,6 +40,21 @@ const Home: NextPage = () => {
   //isLoading
   if (!isSuccessUserData) return null;
   if (userData.isNewUser) router.push('/login');
+
+  const CustomTooltips = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: '#303030',
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: '#303030',
+      color: 'white',
+      padding: '1rem 1.2rem',
+      fontSize: 15,
+    },
+  }));
+
   return (
     <DefaultLayout>
       {/* 프로필 */}
@@ -108,8 +124,9 @@ const Home: NextPage = () => {
             ) {
               return (
                 <>
-                  <Popup>{content}개</Popup>
-                  <FootPrintMark></FootPrintMark>
+                  <CustomTooltips title={content} arrow placement="top">
+                    <FootPrintMark></FootPrintMark>
+                  </CustomTooltips>
                 </>
               );
             }
@@ -383,7 +400,6 @@ const CalendarWrapper = styled.div`
   }
 `;
 
-const Popup = styled.div``;
 const FootPrintMark = styled.div`
   background: url('/images/paw_black.svg') no-repeat;
   background-size: contain;
