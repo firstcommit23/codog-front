@@ -52,6 +52,7 @@ const Home: NextPage = () => {
       color: 'white',
       padding: '1rem 1.2rem',
       fontSize: 15,
+      bottom: '3rem',
     },
   }));
 
@@ -117,20 +118,24 @@ const Home: NextPage = () => {
           tileContent={({ date, view }) => {
             const day = moment(date).format('D');
             const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
-            if (
-              Object.entries(footprintData?.dayStamp || {}).find(
-                (x) => x[0] === moment(date).format('D') && x[1] > 0
-              )
-            ) {
-              return (
-                <>
-                  <CustomTooltips title={content} arrow placement="top">
-                    <FootPrintMark></FootPrintMark>
-                  </CustomTooltips>
-                </>
-              );
+            let html = [];
+            let object = Object.entries(footprintData?.dayStamp || {});
+            if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 0)) {
+              return null;
             }
-            return null;
+            if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 1 && x[1] < 3)) {
+              html.push(<FootPrintMarkLighten></FootPrintMarkLighten>);
+            }
+            if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 3)) {
+              html.push(<FootPrintMarkDarken></FootPrintMarkDarken>);
+            }
+            return (
+              <>
+                <CustomTooltips title={content} arrow placement="top">
+                  <div>{html}</div>
+                </CustomTooltips>
+              </>
+            );
           }}
         />
       </CalendarWrapper>
@@ -350,12 +355,13 @@ const CalendarWrapper = styled.div`
   }
 
   .react-calendar__tile.react-calendar__month-view__days__day {
-    padding: 1.5rem;
+    padding: 1.8rem;
     font-size: 1.4rem;
     color: ${Common.colors.lightBlack};
   }
 
-  .react-calendar__navigation__arrow {
+  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+    rotate: -45deg;
     color: white;
     border-right: 1.5px solid #bfbfbf !important;
     border-bottom: 1.5px solid #bfbfbf !important;
@@ -363,12 +369,13 @@ const CalendarWrapper = styled.div`
     width: 15px;
   }
 
-  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
-    rotate: -45deg;
-  }
-
   .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
     rotate: 135deg;
+    color: white;
+    border-right: 1.5px solid #bfbfbf !important;
+    border-bottom: 1.5px solid #bfbfbf !important;
+    height: 15px;
+    width: 15px;
   }
 
   .react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
@@ -387,6 +394,9 @@ const CalendarWrapper = styled.div`
   }
   .react-calendar__month-view__days abbr {
     font-size: 15px !important;
+    position: relative;
+    z-index: 2;
+    color: black;
   }
   .react-calendar__tile--now {
     font-weight: 700 !important;
@@ -400,13 +410,44 @@ const CalendarWrapper = styled.div`
   }
 `;
 
-const FootPrintMark = styled.div`
-  background: url('/images/paw_black.svg') no-repeat;
+const FootPrintMarkDarken = styled.div`
+  background: url('/images/paw-black.svg') no-repeat;
   background-size: contain;
-  width: 3.2rem;
-  height: 3.2rem;
+  width: 4rem;
+  height: 4rem;
   position: absolute;
-  top: 0;
+  top: 3%;
+  right: 15%;
+  transform: rotate(-5deg);
+
+  @media screen and (max-width: 480px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 8%;
+    right: 10%;
+  }
+`;
+
+const FootPrintMarkLighten = styled.div`
+  background: url('/images/paw-grey.svg') no-repeat;
+  background-size: contain;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 3%;
+  right: 15%;
+  transform: rotate(20deg);
+
+  @media screen and (max-width: 480px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 8%;
+    right: 10%;
+  }
+
+  @media screen and (max-width: 375px) {
+    right: 5%;
+  }
 `;
 
 export default Home;
