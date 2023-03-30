@@ -11,11 +11,15 @@ import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
 import { useRouter } from 'next/router';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import ApexCharts from 'react-apexcharts';
+import dynamic from 'next/dynamic';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
   const router = useRouter();
+
+  const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -23,11 +27,31 @@ const Home: NextPage = () => {
     String(moment(value).month())
   );
 
+  const dayStampValues = Object.values(footprintData?.dayStamp || []);
+  const dateIndex = footprintData?.today;
+  const recentFootprints = dateIndex ? dayStampValues.slice(dateIndex - 10, dateIndex) : [];
+
+  const chartState = {
+    options: {
+      chart: {
+        id: 'basic-bar',
+        toolbar: {
+          show: false,
+        },
+      },
+      xaxis: {},
+    },
+    series: [
+      {
+        name: 'series-1',
+        data: recentFootprints,
+      },
+    ],
+  };
+
   const onActiveStartDateChangeHandler = ({ activeStartDate }: any) => {
     onChange(activeStartDate);
   };
-  console.log(footprintData);
-  // console.log('userData',userData);
 
   const formatShortWeekday = (locale: any, date: any) =>
     ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
@@ -139,6 +163,13 @@ const Home: NextPage = () => {
           }}
         />
       </CalendarWrapper>
+
+      {/* 지난 10일 통계 */}
+      <WeekGraph>
+        <Title>지난 10일동안의 발자국 커밋은 🐾</Title>
+        <ApexCharts options={chartState?.options} series={chartState?.series} />
+      </WeekGraph>
+      <HorizontalRule></HorizontalRule>
     </DefaultLayout>
   );
 };
@@ -320,7 +351,8 @@ const HorizontalRule = styled.hr`
 `;
 
 const CalendarWrapper = styled.div`
-  padding: 3rem 2rem;
+  padding: 3rem 2rem 4rem 2rem;
+  border-bottom: 1px solid #f1f1f1;
 
   .react-calendar button {
     background-color: white;
@@ -448,6 +480,15 @@ const FootPrintMarkLighten = styled.div`
   @media screen and (max-width: 375px) {
     right: 5%;
   }
+`;
+
+const WeekGraph = styled.div`
+  padding: 4rem 2.2rem;
+`;
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
 `;
 
 export default Home;
