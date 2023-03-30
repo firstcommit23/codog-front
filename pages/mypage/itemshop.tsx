@@ -70,52 +70,54 @@ const ItemShopPage = () => {
 
   return (
     <DefaultLayout backgroundColor="#282828" height="100vh">
-      {isSuccessUserData && (
-        <>
-          <Canvas paddingTop="5rem">
-            <FootprintCount>
-              <div>내 발자국 수</div>
-              <TotalCount>{footprintData?.totalCount}</TotalCount>
-            </FootprintCount>
-            <DogCharacter character={userData.characterCode} />
-            <FoodItem food={selectedFoodItem} />
-            <FurnitureItem furniture={selectedFurnitureItem} />
-          </Canvas>
-        </>
-      )}
+      <div>
+        {isSuccessUserData && (
+          <>
+            <Canvas paddingTop="5rem">
+              <FootprintCount>
+                <div>내 발자국 수</div>
+                <TotalCount>{footprintData?.totalCount}</TotalCount>
+              </FootprintCount>
+              <DogCharacter character={userData.characterCode} />
+              <FoodItem food={selectedFoodItem} />
+              <FurnitureItem furniture={selectedFurnitureItem} />
+            </Canvas>
+          </>
+        )}
 
-      <ItemContainer>
-        <Title>코독 하우스 아이템</Title>
-        <CodogItemList>
-          {isSuccessItemsData &&
-            itemsData?.map((item: ItemType) => {
-              const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
-              const isSelectedItem = selectedItem?.includes(item.itemCode);
-              const itemClassName = isAvailableItem
-                ? isSelectedItem
-                  ? 'selected'
-                  : ''
-                : 'commingsoon';
-              const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
-              return (
-                <CodogItem
-                  color={itemColor}
-                  className={itemClassName}
-                  key={item.itemCode}
-                  onClick={() => {
-                    isAvailableItem && handleSelectItem(item.itemCode);
-                  }}>
-                  <RequisiteCount>{item.questRequisite}</RequisiteCount>
-                  <ItemImage src={item.imageUrl || ''} />
-                  {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
-                </CodogItem>
-              );
-            })}
-        </CodogItemList>
-      </ItemContainer>
-      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
-        저장하기
-      </ButtonSubmit>
+        <ItemContainer>
+          <Title>코독 하우스 아이템</Title>
+          <CodogItemList>
+            {isSuccessItemsData &&
+              itemsData?.map((item: ItemType) => {
+                const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
+                const isSelectedItem = selectedItem?.includes(item.itemCode);
+                const itemClassName = isAvailableItem
+                  ? isSelectedItem
+                    ? 'selected'
+                    : ''
+                  : 'commingsoon';
+                const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
+                return (
+                  <CodogItem
+                    color={itemColor}
+                    className={itemClassName}
+                    key={item.itemCode}
+                    onClick={() => {
+                      isAvailableItem && handleSelectItem(item.itemCode);
+                    }}>
+                    <RequisiteCount>{item.questRequisite}</RequisiteCount>
+                    <ItemImage src={item.imageUrl || ''} />
+                    {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
+                  </CodogItem>
+                );
+              })}
+          </CodogItemList>
+        </ItemContainer>
+        <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+          저장하기
+        </ButtonSubmit>
+      </div>
     </DefaultLayout>
   );
 };
