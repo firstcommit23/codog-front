@@ -17,19 +17,19 @@ const IntroCharacterPage = () => {
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
-  const getRoomColor = (code:string) =>{
-    const defaultValue = '#999999'
-    switch (code){
-      case 'A' :
+  const getRoomColor = (code: string) => {
+    const defaultValue = '#999999';
+    switch (code) {
+      case 'A':
         return '#82AAFF';
-      case 'B' :
+      case 'B':
         return '#F07178';
-      case 'C' :
+      case 'C':
         return '#F9C66A';
-      default :
+      default:
         return defaultValue;
     }
-  }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
@@ -49,8 +49,12 @@ const IntroCharacterPage = () => {
   return (
     <DefaultLayout isShowMenu={false} height="110vh">
       <Canvas paddingTop="4rem" roomColor={getRoomColor(character)}>
-        <DogCharacter character={character}/>
-        {character && <Balloon top="14rem" right="59%" fontSize="2rem">👋</Balloon> }
+        <DogCharacter character={character} />
+        {character && (
+          <Balloon top="14rem" right="59%" fontSize="2rem">
+            👋
+          </Balloon>
+        )}
       </Canvas>
       <StepNavigation>
         <span className="active"></span>
@@ -71,7 +75,7 @@ const IntroCharacterPage = () => {
                   checked={item.code === character}
                 />
                 <label htmlFor={item.code}>
-                  <img src={item.image_url} />
+                  <img src={item.imageUrl} />
                   <span className="coverRadio">
                     <svg viewBox="0 0 12 10">
                       <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
@@ -83,13 +87,12 @@ const IntroCharacterPage = () => {
             );
           })}
       </CharacterList>
-        <ButtonSubmit onClick={handleSubmit} disabled={!character}>
-          선택 완료
-        </ButtonSubmit>
+      <ButtonSubmit onClick={handleSubmit} disabled={!character}>
+        선택 완료
+      </ButtonSubmit>
     </DefaultLayout>
   );
 };
-
 
 const CharacterList = styled.div`
   display: grid;
@@ -111,7 +114,7 @@ const CharacterItem = styled.div`
   height: 100px;
   background-color: ${(props) => `${props.color ? props.color : 'white'}`};
 
-  @media screen and (max-width: 375px){
+  @media screen and (max-width: 375px) {
     height: 90px;
   }
 
@@ -122,7 +125,7 @@ const CharacterItem = styled.div`
     display: none;
   }
 
-  input:checked + label .coverRadio{
+  input:checked + label .coverRadio {
     background-color: black;
   }
 
@@ -252,7 +255,7 @@ const StepNavigation = styled.div`
   span {
     display: inline-block;
     width: 0.8rem;
-    height:  0.8rem;
+    height: 0.8rem;
     border-radius: 50%;
     background: #d9d9d9;
     margin: 0.6rem;
@@ -263,14 +266,14 @@ const StepNavigation = styled.div`
   }
 
   @media screen and (max-width: 375px) {
-      padding-top: 2rem;
+    padding-top: 2rem;
 
-      span {
-        width: 0.7rem;
-        height:  0.7rem;
-        margin: 0.5rem;
-      }
+    span {
+      width: 0.7rem;
+      height: 0.7rem;
+      margin: 0.5rem;
     }
+  }
 `;
 
 export default IntroCharacterPage;
