@@ -26,3 +26,17 @@ export const checkToken = async (token: string) => {
   }
   return token;
 };
+
+export const getRoomColor = (code: string) => {
+  const defaultValue = '#999999';
+  switch (code) {
+    case 'A':
+      return '#82AAFF';
+    case 'B':
+      return '#F07178';
+    case 'C':
+      return '#F9C66A';
+    default:
+      return defaultValue;
+  }
+};

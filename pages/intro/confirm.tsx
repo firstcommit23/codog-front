@@ -4,25 +4,12 @@ import { useRecoilState } from 'recoil';
 import { modalState, userState } from '@/components/states';
 import styled from '@emotion/styled';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import { getRoomColor } from '@/utils/serviceUtils';
 
 const IntroConfirmPage = () => {
   const router = useRouter();
   const [user] = useRecoilState(userState);
   const [, setModal] = useRecoilState(modalState);
-
-  const getRoomColor = (code: string) => {
-    const defaultValue = '#999999';
-    switch (code) {
-      case 'A':
-        return '#82AAFF';
-      case 'B':
-        return '#F07178';
-      case 'C':
-        return '#F9C66A';
-      default:
-        return defaultValue;
-    }
-  };
 
   const handleSubmit = async () => {
     setModal({

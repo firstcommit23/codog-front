@@ -9,6 +9,7 @@ import { userState } from '@/components/states';
 import { Canvas, DogCharacter } from '@/components/Canvas';
 import useIntroRandomNicknameQuery from '@/hooks/query/useIntroRandomNicknameQuery';
 import { User } from '@/apis/type';
+import { getRoomColor } from '@/utils/serviceUtils';
 
 const IntroNicknamePage = () => {
   const router = useRouter();

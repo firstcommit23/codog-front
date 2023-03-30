@@ -164,7 +164,7 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   background-color: ${Common.colors.black};
   color: ${Common.colors.white};
   position: absolute;
-  z-index: 2;
+  z-index: 300;
   top: 60px;
   left: 0;
 

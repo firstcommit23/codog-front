@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { CHARACTER_CODES } from '@/apis/type';
 
 interface DogCharacterProps {
-  character?: CHARACTER_CODES | string ;
+  character?: CHARACTER_CODES | string;
   pose?: 'Default' | 'Hi';
   clothes?: 'Default';
   onClick?: () => void;
@@ -23,14 +23,14 @@ const DogCharacter = ({
   pose = 'Default',
   clothes = 'Default',
   onClick,
-  left
+  left,
 }: DogCharacterProps) => {
   const dogImage = `/images/dogs/${character}/${clothes}_${pose}.svg`;
   // TODO: 노트북은 커밋 갯수에따라 자동 업그레이드 되어야 한다.
   return (
     <>
-      <DogCharacterDiv img={dogImage} onClick={onClick}/>
-      <Laptop left={left}/>
+      <DogCharacterDiv img={dogImage} onClick={onClick} />
+      <Laptop left={left} />
     </>
   );
 };
@@ -44,15 +44,15 @@ const DogCharacterDiv = styled.div<{ img: string; bottom?: string }>`
   cursor: pointer;
 `;
 
-const Laptop = styled.div<{left?:string}>`
+const Laptop = styled.div<{ left?: string }>`
   content: url('/images/notebook.svg');
   position: absolute;
-  left: ${(props)=>`${props.left ? props.left : '22%'}`};
+  left: ${(props) => `${props.left ? props.left : '22%'}`};
   bottom: 0;
 
   @media screen and (max-width: 480px) {
-        left: 18%;
-    }
+    left: 18%;
+  }
 `;
 
 export default DogCharacter;

@@ -10,11 +10,16 @@ import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
 import { useRouter } from 'next/router';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import ApexCharts from 'react-apexcharts';
+import dynamic from 'next/dynamic';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
-  const router = useRouter()
+  const router = useRouter();
+
+  const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData } = useUserFootprintQuery(
@@ -22,23 +27,59 @@ const Home: NextPage = () => {
     String(moment(value).month())
   );
 
-  const onActiveStartDateChangeHandler = ({activeStartDate}:any) => {
+  const dayStampValues = Object.values(footprintData?.dayStamp || []);
+  const dateIndex = footprintData?.today;
+  const recentFootprints = dateIndex ? dayStampValues.slice(dateIndex - 10, dateIndex) : [];
+
+  const chartState = {
+    options: {
+      chart: {
+        id: 'basic-bar',
+        toolbar: {
+          show: false,
+        },
+      },
+      xaxis: {},
+    },
+    series: [
+      {
+        name: 'series-1',
+        data: recentFootprints,
+      },
+    ],
+  };
+
+  const onActiveStartDateChangeHandler = ({ activeStartDate }: any) => {
     onChange(activeStartDate);
   };
-  console.log(footprintData);
-  // console.log('userData',userData);
 
   const formatShortWeekday = (locale: any, date: any) =>
     ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
 
-  const getDday  = (today:Date, createdDate:Date) => {
+  const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
     const b = moment(createdDate);
-    return a.diff(b,'days');
-  }
+    return a.diff(b, 'days');
+  };
   //isLoading
   if (!isSuccessUserData) return null;
   if (userData.isNewUser) router.push('/login');
+
+  const CustomTooltips = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.arrow}`]: {
+      color: '#303030',
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: '#303030',
+      color: 'white',
+      padding: '1rem 1.2rem',
+      fontSize: 15,
+      bottom: '3rem',
+    },
+  }));
+
   return (
     <DefaultLayout>
       {/* 프로필 */}
@@ -67,51 +108,68 @@ const Home: NextPage = () => {
           <FurnitureItem furniture={userData.furnitureItem} />
           <DdayBox>
             <div className="pin"></div>
-            <span className="Dday">D+{getDday(today,userData?.createDate)}</span>
+            <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
           </DdayBox>
         </Canvas>
         {/* 개인 달성 지표 */}
-            <AchievementContainer>
-              <div className="item total">
-                <div className="title">총</div>
-                <div className="content">{footprintData?.totalCount}</div>
-              </div>
-              <div className="item month">
-                <div className="title">이번달</div>
-                <div className="content">{footprintData?.thisMonthTotalCount}</div>
-              </div>
-              <div className="item continuous">
-                <div className="title">연속</div>
-                <div className="content">{footprintData?.continuousCount}</div>
-              </div>
-            </AchievementContainer>
+        <AchievementContainer>
+          <div className="item total">
+            <div className="title">총</div>
+            <div className="content">{footprintData?.totalCount}</div>
+          </div>
+          <div className="item month">
+            <div className="title">이번달</div>
+            <div className="content">{footprintData?.thisMonthTotalCount}</div>
+          </div>
+          <div className="item continuous">
+            <div className="title">연속</div>
+            <div className="content">{footprintData?.continuousCount}</div>
+          </div>
+        </AchievementContainer>
       </ProfileContainer>
 
       {/* 달력 */}
       <CalendarWrapper>
-          <Calendar
-            onChange={onChange}
-            value={value}
-            minDetail="month"
-            maxDetail="month"
-            formatDay={(locale, date) => moment(date).format('D')}
-            formatShortWeekday={formatShortWeekday}
-            showNeighboringMonth ={false}
-            onActiveStartDateChange={onActiveStartDateChangeHandler}
-            tileContent={({date,view})=>{
-              if(Object.entries(footprintData?.dayStamp || {}).find((x)=>x[0] === moment(date).format("D") && (x[1]>3))){
-                const day = moment(date).format('D');
-                const content = Object.values(footprintData?.dayStamp || [])[parseInt(day)-1];
-                return(
-                  <Popup>{content}개</Popup>
-                );
-              }
-              return(
-                <FootPrintMark></FootPrintMark>
-              );
-            }}
-          />
+        <Calendar
+          onChange={onChange}
+          value={value}
+          minDetail="month"
+          maxDetail="month"
+          formatDay={(locale, date) => moment(date).format('D')}
+          formatShortWeekday={formatShortWeekday}
+          showNeighboringMonth={false}
+          onActiveStartDateChange={onActiveStartDateChangeHandler}
+          tileContent={({ date, view }) => {
+            const day = moment(date).format('D');
+            const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
+            let html = [];
+            let object = Object.entries(footprintData?.dayStamp || {});
+            if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 0)) {
+              return null;
+            }
+            if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 1 && x[1] < 3)) {
+              html.push(<FootPrintMarkLighten></FootPrintMarkLighten>);
+            }
+            if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 3)) {
+              html.push(<FootPrintMarkDarken></FootPrintMarkDarken>);
+            }
+            return (
+              <>
+                <CustomTooltips title={content} arrow placement="top">
+                  <div>{html}</div>
+                </CustomTooltips>
+              </>
+            );
+          }}
+        />
       </CalendarWrapper>
+
+      {/* 지난 10일 통계 */}
+      <WeekGraph>
+        <Title>지난 10일동안의 발자국 커밋은 🐾</Title>
+        <ApexCharts options={chartState?.options} series={chartState?.series} />
+      </WeekGraph>
+      <HorizontalRule></HorizontalRule>
     </DefaultLayout>
   );
 };
@@ -155,20 +213,20 @@ const ProfileButtonArea = styled.div`
 `;
 
 const DdayBox = styled.div`
-    position: absolute;
-    right: 3rem;
-    top: 2rem;
-    display: flex;
-    flex-direction:column;
-    justify-content: center;
-    align-items: center;
+  position: absolute;
+  right: 3rem;
+  top: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-  .pin{
+  .pin {
     background: url('/images/Dday_pin.svg') no-repeat;
     width: 1.4rem;
     height: 2.2rem;
   }
-  .Dday{
+  .Dday {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -228,30 +286,30 @@ const AchievementContainer = styled.div`
     height: 10rem;
     border-radius: 1rem;
   }
-  .item.total{
-    background-color: #EAF1FF;
-    color: #3274FF;
-    .title{
-      color: #3274FF;
+  .item.total {
+    background-color: #eaf1ff;
+    color: #3274ff;
+    .title {
+      color: #3274ff;
     }
   }
-  .item.month{
-    background-color: #FAF1FF;
-    color: #C871FF;
-    .title{
-      color: #C871FF;
+  .item.month {
+    background-color: #faf1ff;
+    color: #c871ff;
+    .title {
+      color: #c871ff;
     }
   }
-  .item.continuous{
-    background-color: #FFEEF0;
-    color: #FF646C;
-    .title{
-      color: #FF646C;
-      display:flex;
+  .item.continuous {
+    background-color: #ffeef0;
+    color: #ff646c;
+    .title {
+      color: #ff646c;
+      display: flex;
       align-items: center;
     }
-    .title::after{
-      content: "";
+    .title::after {
+      content: '';
       background: url('/images/fire.png');
       background-size: cover;
       display: inline-block;
@@ -293,7 +351,8 @@ const HorizontalRule = styled.hr`
 `;
 
 const CalendarWrapper = styled.div`
-  padding: 3rem 2rem;
+  padding: 3rem 2rem 4rem 2rem;
+  border-bottom: 1px solid #f1f1f1;
 
   .react-calendar button {
     background-color: white;
@@ -328,12 +387,13 @@ const CalendarWrapper = styled.div`
   }
 
   .react-calendar__tile.react-calendar__month-view__days__day {
-    padding: 1.5rem;
+    padding: 1.8rem;
     font-size: 1.4rem;
     color: ${Common.colors.lightBlack};
   }
 
-  .react-calendar__navigation__arrow {
+  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+    rotate: -45deg;
     color: white;
     border-right: 1.5px solid #bfbfbf !important;
     border-bottom: 1.5px solid #bfbfbf !important;
@@ -341,12 +401,13 @@ const CalendarWrapper = styled.div`
     width: 15px;
   }
 
-  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
-    rotate: -45deg;
-  }
-
   .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
     rotate: 135deg;
+    color: white;
+    border-right: 1.5px solid #bfbfbf !important;
+    border-bottom: 1.5px solid #bfbfbf !important;
+    height: 15px;
+    width: 15px;
   }
 
   .react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
@@ -360,8 +421,14 @@ const CalendarWrapper = styled.div`
     color: #c0bebe;
   }
 
+  .react-calendar__month-view__days {
+    background-color: rgba(0, 0, 0, 0);
+  }
   .react-calendar__month-view__days abbr {
     font-size: 15px !important;
+    position: relative;
+    z-index: 2;
+    color: black;
   }
   .react-calendar__tile--now {
     font-weight: 700 !important;
@@ -369,8 +436,59 @@ const CalendarWrapper = styled.div`
     background: url('/images/blue-circle.svg') no-repeat 50% 100%;
     background-size: 12%;
   }
+
+  .react-calendar__tile.react-calendar__month-view__days__day {
+    position: relative;
+  }
 `;
 
-const Popup = styled.div``;
-const FootPrintMark = styled.div``;
+const FootPrintMarkDarken = styled.div`
+  background: url('/images/paw-black.svg') no-repeat;
+  background-size: contain;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 3%;
+  right: 15%;
+  transform: rotate(-5deg);
+
+  @media screen and (max-width: 480px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 8%;
+    right: 10%;
+  }
+`;
+
+const FootPrintMarkLighten = styled.div`
+  background: url('/images/paw-grey.svg') no-repeat;
+  background-size: contain;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 3%;
+  right: 15%;
+  transform: rotate(20deg);
+
+  @media screen and (max-width: 480px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 8%;
+    right: 10%;
+  }
+
+  @media screen and (max-width: 375px) {
+    right: 5%;
+  }
+`;
+
+const WeekGraph = styled.div`
+  padding: 4rem 2.2rem;
+`;
+const Title = styled.div`
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: left;
+`;
+
 export default Home;

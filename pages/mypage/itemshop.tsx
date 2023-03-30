@@ -69,55 +69,53 @@ const ItemShopPage = () => {
     selectedItem?.filter((item: any) => item.includes('B')).join('') || '';
 
   return (
-    <DefaultLayout backgroundColor="#282828" height="100vh">
-      <div>
-        {isSuccessUserData && (
-          <>
-            <Canvas paddingTop="5rem">
-              <FootprintCount>
-                <div>내 발자국 수</div>
-                <TotalCount>{footprintData?.totalCount}</TotalCount>
-              </FootprintCount>
-              <DogCharacter character={userData.characterCode} />
-              <FoodItem food={selectedFoodItem} />
-              <FurnitureItem furniture={selectedFurnitureItem} />
-            </Canvas>
-          </>
-        )}
+    <DefaultLayout backgroundColor="#282828">
+      {isSuccessUserData && (
+        <>
+          <Canvas paddingTop="5rem">
+            <FootprintCount>
+              <div>내 발자국 수</div>
+              <TotalCount>{footprintData?.totalCount}</TotalCount>
+            </FootprintCount>
+            <DogCharacter character={userData.characterCode} />
+            <FoodItem food={selectedFoodItem} />
+            <FurnitureItem furniture={selectedFurnitureItem} />
+          </Canvas>
+        </>
+      )}
 
-        <ItemContainer>
-          <Title>코독 하우스 아이템</Title>
-          <CodogItemList>
-            {isSuccessItemsData &&
-              itemsData?.map((item: ItemType) => {
-                const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
-                const isSelectedItem = selectedItem?.includes(item.itemCode);
-                const itemClassName = isAvailableItem
-                  ? isSelectedItem
-                    ? 'selected'
-                    : ''
-                  : 'commingsoon';
-                const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
-                return (
-                  <CodogItem
-                    color={itemColor}
-                    className={itemClassName}
-                    key={item.itemCode}
-                    onClick={() => {
-                      isAvailableItem && handleSelectItem(item.itemCode);
-                    }}>
-                    <RequisiteCount>{item.questRequisite}</RequisiteCount>
-                    <ItemImage src={item.imageUrl || ''} />
-                    {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
-                  </CodogItem>
-                );
-              })}
-          </CodogItemList>
-        </ItemContainer>
-        <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
-          저장하기
-        </ButtonSubmit>
-      </div>
+      <ItemContainer>
+        <Title>코독 하우스 아이템</Title>
+        <CodogItemList>
+          {isSuccessItemsData &&
+            itemsData?.map((item: ItemType) => {
+              const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
+              const isSelectedItem = selectedItem?.includes(item.itemCode);
+              const itemClassName = isAvailableItem
+                ? isSelectedItem
+                  ? 'selected'
+                  : ''
+                : 'commingsoon';
+              const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
+              return (
+                <CodogItem
+                  color={itemColor}
+                  className={itemClassName}
+                  key={item.itemCode}
+                  onClick={() => {
+                    isAvailableItem && handleSelectItem(item.itemCode);
+                  }}>
+                  <RequisiteCount>{item.questRequisite}</RequisiteCount>
+                  <ItemImage src={item.imageUrl || ''} />
+                  {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
+                </CodogItem>
+              );
+            })}
+        </CodogItemList>
+      </ItemContainer>
+      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+        저장하기
+      </ButtonSubmit>
     </DefaultLayout>
   );
 };
@@ -218,16 +216,19 @@ const Title = styled.div`
 `;
 
 const FootprintCount = styled.div`
-  padding-top: 2rem;
-  text-align: right;
   background: #282828;
-  margin-right: 2rem;
+  position: absolute;
+  right: 2.2rem;
+  top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   div {
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     em {
-      font-weight: 600;
+      font-weight: 400;
     }
   }
 `;
@@ -237,14 +238,14 @@ const TotalCount = styled.span`
   display: inline-block;
   background: #f9f9f9;
   border-radius: 900rem;
-  padding: 0.8rem 1.2rem 0.8rem 2.2rem;
-  font-size: 1.2rem;
+  padding: 0.8rem 2rem 0.8rem 3.5rem;
+  font-size: 1.6rem;
   margin-top: 1rem;
 
   :before {
-    content: url('/images/footprint_s_icon.svg');
+    content: url('/images/paw_black.svg');
     position: absolute;
-    left: 0.7rem;
+    left: 1.5rem;
   }
 `;
 

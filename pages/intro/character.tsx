@@ -6,6 +6,7 @@ import { userState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
+import { getRoomColor } from '@/utils/serviceUtils';
 
 const IntroCharacterPage = () => {
   const router = useRouter();
@@ -16,20 +17,6 @@ const IntroCharacterPage = () => {
 
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
-
-  const getRoomColor = (code: string) => {
-    const defaultValue = '#999999';
-    switch (code) {
-      case 'A':
-        return '#82AAFF';
-      case 'B':
-        return '#F07178';
-      case 'C':
-        return '#F9C66A';
-      default:
-        return defaultValue;
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
