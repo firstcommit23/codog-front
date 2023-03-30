@@ -9,10 +9,13 @@ const CommentList = () => {
   const COUNT = 3;
   const { data: footprintData } = useUserFootprintQuery('2022', '12');
 
-  const { data, fetchNextPage, isSuccess, hasNextPage, isFetchingNextPage } =
-    useInfiniteCommentsQuery(footprintData?.footprintId || 0, COUNT, {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteCommentsQuery(
+    footprintData?.footprintId || 0,
+    COUNT,
+    {
       enabled: !!footprintData?.footprintId,
-    });
+    }
+  );
 
   const handleLoadMore = () => {
     if (!isFetchingNextPage && hasNextPage) {

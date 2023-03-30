@@ -10,10 +10,7 @@ const useUserProfileQuery = (options?: UseQueryOptions<UserProfileType>) => {
     ...options,
   });
 
-  const itemCodes =
-    query?.data?.itemCodes && typeof query?.data?.itemCodes === 'string'
-      ? JSON.parse(query.data.itemCodes)[0]
-      : [];
+  const itemCodes = query?.data?.itemCodes || [];
 
   return {
     ...query,
