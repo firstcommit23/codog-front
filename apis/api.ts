@@ -81,3 +81,35 @@ export const getToken = () => {
     .then((res) => res.data.response);
   // .catch((error) => error.response);
 };
+
+export const getComments = ({
+  footprintId,
+  count,
+  id,
+  created_at,
+}: {
+  footprintId: number;
+  count: number;
+  id?: number;
+  created_at?: string;
+}) => {
+  return Instance.get(`comments`, {
+    params: {
+      footprintId,
+      count,
+      ...(id && { cursor_comment_id: id }),
+      ...(created_at && { cursor_created_at: created_at }),
+    },
+  }).then((res) => res.data.response);
+  // .catch((error) => error.response);
+};
+
+export const postComment = ({
+  footprintId,
+  contents,
+}: {
+  footprintId: number;
+  contents: string;
+}) => {
+  return Instance.post(`/comments`, { footprintId, contents }).then((res) => res.data.response);
+};

@@ -4,19 +4,27 @@ import { modalState } from '@/components/states';
 
 const Modal = () => {
   const [modal, setModal] = useRecoilState(modalState);
+  const { isShow, title, content, isCancleButton, onClick } = modal;
+
   const handleClose = () => {
-    modal.onClick && modal.onClick();
     setModal({ ...modal, isShow: false });
+  };
+  const handleConfirm = () => {
+    onClick && onClick();
+    handleClose();
   };
 
   return (
     <>
-      {modal.isShow && (
+      {isShow && (
         <Container>
           <ModalWrapper>
-            <Text>{modal.title}</Text>
-            <SubText>{modal.content}</SubText>
-            <ConfirmButton onClick={handleClose}>확인</ConfirmButton>
+            <Text>{title}</Text>
+            <SubText>{content}</SubText>
+            <ButtonWrapper>
+              <ConfirmButton onClick={handleConfirm}>확인</ConfirmButton>
+              {isCancleButton && <ConfirmButton onClick={handleClose}>취소</ConfirmButton>}
+            </ButtonWrapper>
           </ModalWrapper>
         </Container>
       )}
@@ -30,7 +38,7 @@ const Container = styled.div`
   background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   z-index: 100;
   display: flex;
   justify-content: center;
@@ -63,17 +71,22 @@ const SubText = styled.div`
   white-space: pre-wrap;
 `;
 
+const ButtonWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  width: 100%;
+  height: 45px;
+`;
+
 const ConfirmButton = styled.button`
   font-size: 16px;
   color: white;
+  width: inherit;
   background-color: #282828;
   border: 0;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 45px;
 
   &:hover {
     cursor: pointer;

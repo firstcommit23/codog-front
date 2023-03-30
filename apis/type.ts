@@ -50,3 +50,13 @@ export type FootprintType = {
   createdAt: string;
   today: number;
 };
+
+export type CommentType = {
+  contents: string;
+  footprintId: number;
+  writer: number;
+  nickname: string;
+  github_id: string;
+  created_at: string;
+  id: number;
+};
