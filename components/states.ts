@@ -14,6 +14,7 @@ type ModalType = {
   title: string;
   content: string;
   onClick?: any;
+  isCancleButton?: boolean;
 };
 
 const modalState = atom<ModalType>({
@@ -22,6 +23,7 @@ const modalState = atom<ModalType>({
     isShow: false,
     title: '',
     content: '',
+    isCancleButton: false,
   },
 });
 export { userState, modalState };

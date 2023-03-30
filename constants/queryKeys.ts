@@ -4,4 +4,5 @@ export const queryKeys = {
   USER_PROFILE_DATA: '/user/profile',
   USER_FOOTPRINT_DATA: '/user/footprint',
   TOTAL_ITEM_DATA: '/codes/item',
+  GET_COMMENT_LIST: '/comments',
 };

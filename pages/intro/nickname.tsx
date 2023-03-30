@@ -26,7 +26,7 @@ const IntroNicknamePage = () => {
   } = useIntroRandomNicknameQuery({ enabled: !user.nickname });
 
   useEffect(() => {
-    if (isSuccess && randomNickname) setNickname(randomNickname);
+    if (isSuccess && randomNickname) setNickname(randomNickname.nickname);
   }, [isSuccess, randomNickname]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -48,6 +48,20 @@ const IntroNicknamePage = () => {
         },
       }
     );
+  };
+
+  const getRoomColor = (code: string) => {
+    const defaultValue = '#999999';
+    switch (code) {
+      case 'A':
+        return '#82AAFF';
+      case 'B':
+        return '#F07178';
+      case 'C':
+        return '#F9C66A';
+      default:
+        return defaultValue;
+    }
   };
 
   return (
@@ -130,7 +144,7 @@ const StepNavigation = styled.div`
   span {
     display: inline-block;
     width: 0.8rem;
-    height:  0.8rem;
+    height: 0.8rem;
     border-radius: 50%;
     background: #d9d9d9;
     margin: 0.6rem;
@@ -141,14 +155,14 @@ const StepNavigation = styled.div`
   }
 
   @media screen and (max-width: 375px) {
-      padding-top: 2rem;
+    padding-top: 2rem;
 
-      span {
-        width: 0.7rem;
-        height:  0.7rem;
-        margin: 0.5rem;
-      }
+    span {
+      width: 0.7rem;
+      height: 0.7rem;
+      margin: 0.5rem;
     }
+  }
 `;
 
 export default IntroNicknamePage;

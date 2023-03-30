@@ -35,8 +35,8 @@ export const postSighupUser = (user: User) => {
   }).then((res) => res.data.response);
 };
 
-export const postDropOutUser = () => {
-  return Instance.post('/users/drop-out').then((res) => res.data.response);
+export const deleteDropOutUser = () => {
+  return Instance.delete('/users/drop-out').then((res) => res.data.response);
 };
 
 export const postAuthorizationMail = (email: string) => {
@@ -57,9 +57,8 @@ export const getTotalItems = () => {
     .catch((error) => error.response);
 };
 
-export const postProfileItem = (itemCodes: string[]) => {
-  console.log(itemCodes);
-  return Instance.post('/users/profile/item', {
+export const putProfileItem = (itemCodes: string[]) => {
+  return Instance.put('/users/profile/item', {
     itemCodes,
   }).then((res) => res.data.response);
 };
@@ -81,4 +80,36 @@ export const getToken = () => {
     })
     .then((res) => res.data.response);
   // .catch((error) => error.response);
+};
+
+export const getComments = ({
+  footprintId,
+  count,
+  id,
+  created_at,
+}: {
+  footprintId: number;
+  count: number;
+  id?: number;
+  created_at?: string;
+}) => {
+  return Instance.get(`comments`, {
+    params: {
+      footprintId,
+      count,
+      ...(id && { cursor_comment_id: id }),
+      ...(created_at && { cursor_created_at: created_at }),
+    },
+  }).then((res) => res.data.response);
+  // .catch((error) => error.response);
+};
+
+export const postComment = ({
+  footprintId,
+  contents,
+}: {
+  footprintId: number;
+  contents: string;
+}) => {
+  return Instance.post(`/comments`, { footprintId, contents }).then((res) => res.data.response);
 };

@@ -4,12 +4,12 @@ import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { modalState } from '@/components/states';
-import { postDropOutUser } from '@/apis/api';
+import { deleteDropOutUser } from '@/apis/api';
 import { useRouter } from 'next/router';
 
 const DropOutPage = () => {
   const router = useRouter();
-  const { mutate, isLoading } = useMutation(() => postDropOutUser());
+  const { mutate, isLoading } = useMutation(() => deleteDropOutUser());
   const [, setModal] = useRecoilState(modalState);
 
   const handleSuccess = () => {

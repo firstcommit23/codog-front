@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
 import moment from 'moment';
-import { postProfileItem } from '@/apis/api';
+import { putProfileItem } from '@/apis/api';
 import type { ItemType } from '@/apis/type';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
@@ -23,7 +23,7 @@ const ItemShopPage = () => {
     String(moment(today).year()),
     String(moment(today).month())
   );
-  const { mutate, isLoading } = useMutation((itemCodes: string[]) => postProfileItem(itemCodes));
+  const { mutate, isLoading } = useMutation((itemCodes: string[]) => putProfileItem(itemCodes));
 
   useEffect(() => {
     if (isSuccessUserData && userData && userData.itemCodes.length > 0) {
