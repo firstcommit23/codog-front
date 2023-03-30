@@ -30,7 +30,7 @@ export type UserProfileType = {
   email: string | null;
   isNewUser: 0 | 1;
   characterCode: CHARACTER_CODES;
-  itemCodes: [] | string;
+  itemCodes: [];
   createdAt: string;
   updatedAt: string;
   foodItem?: string;
@@ -49,4 +49,14 @@ export type FootprintType = {
   dayStamp: any[];
   createdAt: string;
   today: number;
+};
+
+export type CommentType = {
+  contents: string;
+  footprintId: number;
+  writer: number;
+  nickname: string;
+  github_id: string;
+  created_at: string;
+  id: number;
 };
