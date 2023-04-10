@@ -52,6 +52,7 @@ export const postAuthorizationMail = (email: string) => {
 };
 
 export const getFootprint = (year: string, month: string) => {
+  console.log(year, month);
   return Instance.get(`/footprints?year=${year}&month=${month}`)
     .then((res) => res.data.response)
     .catch((error) => error.response);
@@ -109,8 +110,8 @@ export const getComments = ({
     params: {
       footprintId,
       count,
-      ...(id && { cursor_comment_id: id }),
-      ...(created_at && { cursor_created_at: created_at }),
+      ...(id && { cursorCommentId: id }),
+      ...(created_at && { cursorCreatedAt: created_at }),
     },
   }).then((res) => res.data.response);
   // .catch((error) => error.response);

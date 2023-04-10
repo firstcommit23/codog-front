@@ -61,3 +61,8 @@ export type CommentType = {
   created_at: string;
   id: number;
 };
+
+export type CommentResponse = {
+  totalCount: number;
+  comments: CommentType[];
+};

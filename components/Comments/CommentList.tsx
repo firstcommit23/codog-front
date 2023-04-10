@@ -1,19 +1,16 @@
 import styled from '@emotion/styled';
 import moment from 'moment';
 import { button } from '@/styles/common';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import useInfiniteCommentsQuery from '@/hooks/query/useInfiniteCommentsQuery';
 import { CommentType } from '@/apis/type';
 
-const CommentList = () => {
+const CommentList = ({ footprintId }: { footprintId: number }) => {
   const COUNT = 3;
-  const { data: footprintData } = useUserFootprintQuery('2022', '12');
-
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteCommentsQuery(
-    footprintData?.footprintId || 0,
+    footprintId || 0,
     COUNT,
     {
-      enabled: !!footprintData?.footprintId,
+      enabled: !!footprintId,
     }
   );
 
@@ -23,11 +20,12 @@ const CommentList = () => {
     }
   };
 
-  const items = data?.pages?.flatMap((page) => page) ?? [];
+  const items = data?.pages?.flatMap((page) => page.comments) ?? [];
+  const totalCount = data?.pages[data?.pages.length - 1].totalCount || 0;
 
   return (
     <CommentListContainer>
-      {items ? (
+      {items && items.length > 0 ? (
         <>
           {items.map((item: CommentType) => {
             return (
@@ -46,7 +44,7 @@ const CommentList = () => {
               </CommentItemWapper>
             );
           })}
-          {hasNextPage && (
+          {totalCount > items.length && (
             <div>
               <MoreCommentButton onClick={handleLoadMore}>코멘트 더보기</MoreCommentButton>
             </div>
@@ -90,10 +88,12 @@ const CommentText = styled.div`
   font-size: 1.2rem;
   color: #282828;
   line-height: 1.8rem;
+  word-break: break-word;
 `;
 
 const CommentWriteDate = styled.div`
   color: #868686;
+  font-size: 1.2rem;
 `;
 
 const MoreCommentButton = styled.button`

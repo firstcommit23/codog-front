@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { useRecoilState } from 'recoil';
@@ -5,13 +6,22 @@ import { modalState, userState } from '@/components/states';
 import styled from '@emotion/styled';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 import { getRoomColor } from '@/utils/serviceUtils';
+import LocalStorage from '@/utils/LocalStorage';
 
 const IntroConfirmPage = () => {
   const router = useRouter();
-  const [user] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
   const [, setModal] = useRecoilState(modalState);
 
+  useEffect(() => {
+    const saveIntro = LocalStorage.get('saveIntro') || '';
+    if (saveIntro) {
+      setUser({ ...user, nickname: saveIntro.nickname, character: saveIntro.character });
+    }
+  }, []);
+
   const handleSubmit = async () => {
+    LocalStorage.set('saveIntro', {});
     setModal({
       isShow: true,
       title: '환영합니다 🐣',

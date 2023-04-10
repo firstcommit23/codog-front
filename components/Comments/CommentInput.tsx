@@ -4,24 +4,23 @@ import { useMutation } from '@tanstack/react-query';
 import { postComment } from '@/apis/api';
 import { useRecoilState } from 'recoil';
 import { modalState } from '@/components/states';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import { useRouter } from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/queryKeys';
 
-const CommentInput = () => {
-  const router = useRouter();
-  const queryClient = useQueryClient();
+const MAX_COMMENT_LENGHT = 300;
+
+const CommentInput = ({ footprintId }: { footprintId: number }) => {
   const [commentInput, setCommentInput] = useState('');
   const [isLogin, setIsLogin] = useState(false);
-  const MAX_COMMENT_LENGHT = 300;
+  const [, setModal] = useRecoilState(modalState);
+  const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { mutate, isLoading } = useMutation(
     ({ footprintId, contents }: { footprintId: number; contents: string }) =>
       postComment({ footprintId, contents })
   );
-  // userData에 footprintId 넣어주세여
-  const { data: footprintData } = useUserFootprintQuery('2022', '12');
-  const [, setModal] = useRecoilState(modalState);
 
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
@@ -35,10 +34,10 @@ const CommentInput = () => {
 
   const handleSubmit = async () => {
     if (!isAbleSubmitButton) return;
-    if (!footprintData?.footprintId) return;
+    if (!footprintId) return;
 
     mutate(
-      { footprintId: footprintData?.footprintId, contents: commentInput },
+      { footprintId: footprintId, contents: commentInput },
       {
         onSuccess: () => {
           setModal({
@@ -83,6 +82,7 @@ const CommentInput = () => {
             placeholder="코멘트를 남겨주세요!"
             value={commentInput}
             onChange={handleChangeComment}
+            maxLength={MAX_COMMENT_LENGHT}
             rows={6}
             {...notLoginTextareaObj}></CommentTextarea>
         </label>

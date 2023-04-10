@@ -1,13 +1,13 @@
 import { useInfiniteQuery, UseInfiniteQueryOptions } from '@tanstack/react-query';
 import { queryKeys } from '@/constants/queryKeys';
 import { getComments } from '@/apis/api';
-import type { CommentType } from '@/apis/type';
+import type { CommentResponse } from '@/apis/type';
 import moment from 'moment';
 
 const useInfiniteCommentsQuery = (
   footprintId: number,
   count: number = 3,
-  options?: UseInfiniteQueryOptions<CommentType[]>
+  options?: UseInfiniteQueryOptions<CommentResponse>
 ) => {
   const query = useInfiniteQuery({
     queryKey: [queryKeys.GET_COMMENT_LIST],
@@ -20,12 +20,12 @@ const useInfiniteCommentsQuery = (
       }),
     ...options,
     getNextPageParam: (lastPage) => {
-      return lastPage[lastPage.length - 1]
+      return lastPage.comments[lastPage.comments.length - 1]
         ? {
-            cursor_comment_id: lastPage[lastPage.length - 1].id,
-            cursor_created_at: moment(lastPage[lastPage.length - 1].created_at).format(
-              'YYYY-MM-DD HH:mm:ss'
-            ),
+            cursor_comment_id: lastPage.comments[lastPage.comments.length - 1].id,
+            cursor_created_at: moment(
+              lastPage.comments[lastPage.comments.length - 1].created_at
+            ).format('YYYY-MM-DD HH:mm:ss'),
           }
         : false;
     },
