@@ -66,7 +66,7 @@ const Home: NextPage = () => {
             <div className="pin"></div>
             <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
           </DdayBox>
-          <CheerButton cheer={userData.cheerCount} />
+          <CheerButton cheer={userData.cheerCount} disabled={false} />
         </Canvas>
         {/* 개인 달성 지표 */}
         <Achievements value={value} />

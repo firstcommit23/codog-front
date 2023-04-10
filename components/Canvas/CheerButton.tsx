@@ -5,9 +5,10 @@ import { useState, useEffect } from 'react';
 
 interface CheerProps {
   cheer?: number;
+  disabled?: boolean;
 }
 
-const CheerButton = ({ cheer }: CheerProps) => {
+const CheerButton = ({ cheer, disabled }: CheerProps) => {
   const [cheerCount, setCheerCount] = useState(cheer);
   const handleIncrease = () => {
     setCheerCount(cheerCount + 1);
@@ -24,13 +25,13 @@ const CheerButton = ({ cheer }: CheerProps) => {
     });
   }, [cheerCount]);
   return (
-    <CheerBtn onClick={handleIncrease}>
+    <CheerBtn onClick={handleIncrease} disabled={disabled}>
       <span>{cheerCount}</span>
     </CheerBtn>
   );
 };
 
-const CheerBtn = styled.button`
+const CheerBtn = styled.button<{ disabled: boolean }>`
   background-color: #fff5e3;
   padding: 0.6rem 1.2rem;
   border-radius: 5rem;
@@ -44,12 +45,16 @@ const CheerBtn = styled.button`
   color: #ff6f06;
   font-size: 1.6rem;
 
-  cursor: pointer;
-
-  &:active {
-    transform: scale(1.05);
-    transition: all ease 0.2s;
-  }
+  ${({ disabled }) =>
+    !disabled &&
+    ` 
+      cursor: pointer;
+      
+      &:active {
+        transform: scale(1.05);
+        transition: all ease 0.2s;
+      }
+    `}
 
   span {
     display: flex;
