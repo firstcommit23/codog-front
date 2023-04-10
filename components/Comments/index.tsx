@@ -3,16 +3,19 @@ import CommentInput from './CommentInput';
 import CommentList from './CommentList';
 
 interface CommentsProps {
+  footprintId: number | undefined;
   title: string;
   isShowCommentInput?: boolean;
 }
-const Comments = ({ title, isShowCommentInput = true }: CommentsProps) => {
+const Comments = ({ footprintId, title, isShowCommentInput = true }: CommentsProps) => {
+  if (!footprintId) return null;
+
   return (
     <CommentContainer>
       <CommentWrapper>
         <CommentTitle>{title}</CommentTitle>
-        {isShowCommentInput && <CommentInput />}
-        <CommentList />
+        {isShowCommentInput && <CommentInput footprintId={footprintId} />}
+        <CommentList footprintId={footprintId} />
       </CommentWrapper>
     </CommentContainer>
   );
