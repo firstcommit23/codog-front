@@ -6,7 +6,6 @@ import moment from 'moment';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import {
   Canvas,
   DogCharacter,
@@ -19,6 +18,7 @@ import { useRouter } from 'next/router';
 import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
+import RoundButton from '@/components/Canvas/RoundButton';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
@@ -48,9 +48,8 @@ const Home: NextPage = () => {
               코독하게 코딩해봅시다.
             </ProfileContent>
             <ProfileButtonArea>
-              <ShareButton>
-                <ShareIcon></ShareIcon>
-              </ShareButton>
+              <RoundButton route={`/mypage/itemshop`} iconUrl={`/images/home-edit.svg`} />
+              <RoundButton iconUrl={`/images/Share_Android.svg`} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
@@ -147,33 +146,6 @@ const DdayBox = styled.div`
     margin-top: -0.2rem;
   }
 `;
-
-const ShareButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  background-color: #585858;
-  border-radius: 5rem;
-  font-weight: 500;
-  font-size: 1.5rem;
-  border: none;
-
-  &:hover {
-    cursor: pointer;
-    background-color: #666666;
-    transition: all 0.2s ease;
-  }
-`;
-
-const ShareIcon = styled.div`
-  background: url('/images/Share_Android.svg') no-repeat;
-  width: 2.5rem;
-  height: 2rem;
-`;
-
 const HorizontalRule = styled.hr`
   height: 8px;
   background: #f5f5f5;
