@@ -24,7 +24,7 @@ export type ItemType = {
   questRequisite: number;
 };
 
-export type UserProfileType = {
+export type UserProfileDetailType = {
   id: string | null;
   nickname: string;
   email: string | null;
@@ -36,6 +36,7 @@ export type UserProfileType = {
   foodItem?: string;
   furnitureItem?: string;
   createDate?: Date;
+  cheerCount: number;
 };
 
 export type FootprintType = {

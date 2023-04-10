@@ -1,9 +1,31 @@
+import { putCheerCount } from '@/apis/api';
 import styled from '@emotion/styled';
+import { useMutation } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 
-const CheerButton = () => {
+interface CheerProps {
+  cheer?: number;
+}
+
+const CheerButton = ({ cheer }: CheerProps) => {
+  const [cheerCount, setCheerCount] = useState(cheer);
+  const handleIncrease = () => {
+    setCheerCount(cheerCount + 1);
+  };
+
+  const { mutate } = useMutation((cheerCount: number) => putCheerCount(cheerCount));
+  useEffect(() => {
+    mutate(cheerCount, {
+      onSuccess: () => {},
+      onError: (error: any) => {
+        const message = error?.response.data.error.message || '';
+        alert(message);
+      },
+    });
+  }, [cheerCount]);
   return (
-    <CheerBtn>
-      <span>10</span>
+    <CheerBtn onClick={handleIncrease}>
+      <span>{cheerCount}</span>
     </CheerBtn>
   );
 };
@@ -34,6 +56,7 @@ const CheerBtn = styled.button`
     align-items: center;
     font-weight: 500;
   }
+
   span::before {
     content: '';
     background: url('/images/cheer.svg') no-repeat;
