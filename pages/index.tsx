@@ -4,57 +4,28 @@ import { Common } from '@/styles/common';
 import axios from 'axios';
 import moment from 'moment';
 import styled from '@emotion/styled';
-import Calendar from 'react-calendar';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
-import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
+import {
+  Canvas,
+  DogCharacter,
+  Balloon,
+  FoodItem,
+  FurnitureItem,
+  CheerButton,
+} from '@/components/Canvas';
 import { useRouter } from 'next/router';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import ApexCharts from 'react-apexcharts';
-import dynamic from 'next/dynamic';
+import Comments from '@/components/Comments';
+import Calendars from '@/components/Calendars';
+import Achievements from '@/components/Achievements';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
   const router = useRouter();
 
-  const ApexCharts = dynamic(() => import('react-apexcharts'), { ssr: false });
-
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
-  const { data: footprintData } = useUserFootprintQuery(
-    String(moment(value).year()),
-    String(moment(value).month())
-  );
-
-  const dayStampValues = Object.values(footprintData?.dayStamp || []);
-  const dateIndex = footprintData?.today;
-  const recentFootprints = dateIndex ? dayStampValues.slice(dateIndex - 10, dateIndex) : [];
-
-  const chartState = {
-    options: {
-      chart: {
-        id: 'basic-bar',
-        toolbar: {
-          show: false,
-        },
-      },
-      xaxis: {},
-    },
-    series: [
-      {
-        name: 'series-1',
-        data: recentFootprints,
-      },
-    ],
-  };
-
-  const onActiveStartDateChangeHandler = ({ activeStartDate }: any) => {
-    onChange(activeStartDate);
-  };
-
-  const formatShortWeekday = (locale: any, date: any) =>
-    ['S', 'M', 'T', 'W', 'T', 'F', 'S'][date.getDay()];
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
@@ -64,21 +35,6 @@ const Home: NextPage = () => {
   //isLoading
   if (!isSuccessUserData) return null;
   if (userData.isNewUser) router.push('/login');
-
-  const CustomTooltips = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-  ))(({ theme }) => ({
-    [`& .${tooltipClasses.arrow}`]: {
-      color: '#303030',
-    },
-    [`& .${tooltipClasses.tooltip}`]: {
-      backgroundColor: '#303030',
-      color: 'white',
-      padding: '1rem 1.2rem',
-      fontSize: 15,
-      bottom: '3rem',
-    },
-  }));
 
   return (
     <DefaultLayout>
@@ -110,66 +66,16 @@ const Home: NextPage = () => {
             <div className="pin"></div>
             <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
           </DdayBox>
+          <CheerButton cheer={userData.cheerCount} disabled={false} />
         </Canvas>
         {/* 개인 달성 지표 */}
-        <AchievementContainer>
-          <div className="item total">
-            <div className="title">총</div>
-            <div className="content">{footprintData?.totalCount}</div>
-          </div>
-          <div className="item month">
-            <div className="title">이번달</div>
-            <div className="content">{footprintData?.thisMonthTotalCount}</div>
-          </div>
-          <div className="item continuous">
-            <div className="title">연속</div>
-            <div className="content">{footprintData?.continuousCount}</div>
-          </div>
-        </AchievementContainer>
+        <Achievements value={value} />
       </ProfileContainer>
-
       {/* 달력 */}
-      <CalendarWrapper>
-        <Calendar
-          onChange={onChange}
-          value={value}
-          minDetail="month"
-          maxDetail="month"
-          formatDay={(locale, date) => moment(date).format('D')}
-          formatShortWeekday={formatShortWeekday}
-          showNeighboringMonth={false}
-          onActiveStartDateChange={onActiveStartDateChangeHandler}
-          tileContent={({ date, view }) => {
-            const day = moment(date).format('D');
-            const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
-            let html = [];
-            let object = Object.entries(footprintData?.dayStamp || {});
-            if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 0)) {
-              return null;
-            }
-            if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 1 && x[1] < 3)) {
-              html.push(<FootPrintMarkLighten></FootPrintMarkLighten>);
-            }
-            if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 3)) {
-              html.push(<FootPrintMarkDarken></FootPrintMarkDarken>);
-            }
-            return (
-              <>
-                <CustomTooltips title={content} arrow placement="top">
-                  <div>{html}</div>
-                </CustomTooltips>
-              </>
-            );
-          }}
-        />
-      </CalendarWrapper>
+      <Calendars value={value} onChange={onChange} />
 
-      {/* 지난 10일 통계 */}
-      <WeekGraph>
-        <Title>지난 10일동안의 발자국 커밋은 🐾</Title>
-        <ApexCharts options={chartState?.options} series={chartState?.series} />
-      </WeekGraph>
-      <HorizontalRule></HorizontalRule>
+      <HorizontalRule />
+      <Comments title="코멘트 보기" isShowCommentInput={false} />
     </DefaultLayout>
   );
 };
@@ -268,227 +174,12 @@ const ShareIcon = styled.div`
   height: 2rem;
 `;
 
-const AchievementContainer = styled.div`
-  display: flex;
-  padding: 3rem 2rem 3rem 2rem;
-  gap: 2rem;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  background-color: white;
-
-  .item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 10rem;
-    border-radius: 1rem;
-  }
-  .item.total {
-    background-color: #eaf1ff;
-    color: #3274ff;
-    .title {
-      color: #3274ff;
-    }
-  }
-  .item.month {
-    background-color: #faf1ff;
-    color: #c871ff;
-    .title {
-      color: #c871ff;
-    }
-  }
-  .item.continuous {
-    background-color: #ffeef0;
-    color: #ff646c;
-    .title {
-      color: #ff646c;
-      display: flex;
-      align-items: center;
-    }
-    .title::after {
-      content: '';
-      background: url('/images/fire.png');
-      background-size: cover;
-      display: inline-block;
-      width: 1.5rem;
-      height: 1.5rem;
-      margin-left: 0.2rem;
-    }
-  }
-  .title {
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 18px;
-    color: #8c8c8c;
-    margin-bottom: 1.5rem;
-    div {
-      width: 40px;
-      text-align: center;
-    }
-  }
-  .content {
-    font-family: 'Fira Code', monospace;
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 30px;
-  }
-
-  .vertical {
-    height: 4rem;
-    border-right: 1px solid #d4d4d4;
-  }
-`;
-
 const HorizontalRule = styled.hr`
-  height: 5px;
+  height: 8px;
   background: #f5f5f5;
   border: none;
   width: 120%;
   margin-left: -30px;
-`;
-
-const CalendarWrapper = styled.div`
-  padding: 3rem 2rem 4rem 2rem;
-  border-bottom: 1px solid #f1f1f1;
-
-  .react-calendar button {
-    background-color: white;
-    border: none;
-  }
-  .react-calendar abbr[title] {
-    text-decoration: none;
-  }
-  .react-calendar__navigation {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4rem;
-    padding: 0 25px;
-  }
-
-  .react-calendar__navigation__label {
-    font-size: 2.2rem;
-    font-weight: 500;
-    font-family: 'Pretendar Variable', Pretendard !important;
-    color: ${Common.colors.black};
-    flex-grow: 0 !important;
-  }
-
-  .react-calendar__month-view__weekdays {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: ${Common.colors.black};
-  }
-
-  .react-calendar__tile.react-calendar__month-view__days__day {
-    padding: 1.8rem;
-    font-size: 1.4rem;
-    color: ${Common.colors.lightBlack};
-  }
-
-  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
-    rotate: -45deg;
-    color: white;
-    border-right: 1.5px solid #bfbfbf !important;
-    border-bottom: 1.5px solid #bfbfbf !important;
-    height: 15px;
-    width: 15px;
-  }
-
-  .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
-    rotate: 135deg;
-    color: white;
-    border-right: 1.5px solid #bfbfbf !important;
-    border-bottom: 1.5px solid #bfbfbf !important;
-    height: 15px;
-    width: 15px;
-  }
-
-  .react-calendar__navigation__arrow.react-calendar__navigation__next2-button {
-    display: none;
-  }
-  .react-calendar__navigation__arrow.react-calendar__navigation__prev2-button {
-    display: none;
-  }
-
-  .react-calendar__tile.react-calendar__month-view__days__day.react-calendar__month-view__days__day--neighboringMonth {
-    color: #c0bebe;
-  }
-
-  .react-calendar__month-view__days {
-    background-color: rgba(0, 0, 0, 0);
-  }
-  .react-calendar__month-view__days abbr {
-    font-size: 15px !important;
-    position: relative;
-    z-index: 2;
-    color: black;
-  }
-  .react-calendar__tile--now {
-    font-weight: 700 !important;
-    font-size: 18px !important;
-    background: url('/images/blue-circle.svg') no-repeat 50% 100%;
-    background-size: 12%;
-  }
-
-  .react-calendar__tile.react-calendar__month-view__days__day {
-    position: relative;
-  }
-`;
-
-const FootPrintMarkDarken = styled.div`
-  background: url('/images/paw-black.svg') no-repeat;
-  background-size: contain;
-  width: 4rem;
-  height: 4rem;
-  position: absolute;
-  top: 3%;
-  right: 15%;
-  transform: rotate(-5deg);
-
-  @media screen and (max-width: 480px) {
-    width: 3.5rem;
-    height: 3.5rem;
-    top: 8%;
-    right: 10%;
-  }
-`;
-
-const FootPrintMarkLighten = styled.div`
-  background: url('/images/paw-grey.svg') no-repeat;
-  background-size: contain;
-  width: 4rem;
-  height: 4rem;
-  position: absolute;
-  top: 3%;
-  right: 15%;
-  transform: rotate(20deg);
-
-  @media screen and (max-width: 480px) {
-    width: 3.5rem;
-    height: 3.5rem;
-    top: 8%;
-    right: 10%;
-  }
-
-  @media screen and (max-width: 375px) {
-    right: 5%;
-  }
-`;
-
-const WeekGraph = styled.div`
-  padding: 4rem 2.2rem;
-`;
-const Title = styled.div`
-  font-size: 2rem;
-  font-weight: 600;
-  text-align: left;
 `;
 
 export default Home;
