@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
@@ -7,6 +7,7 @@ import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
 import { getRoomColor } from '@/utils/serviceUtils';
+import LocalStorage from '@/utils/LocalStorage';
 
 const IntroCharacterPage = () => {
   const router = useRouter();
@@ -18,6 +19,13 @@ const IntroCharacterPage = () => {
   const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
+  useEffect(() => {
+    const saveIntro = LocalStorage.get('saveIntro') || '';
+    if (saveIntro && saveIntro.character) {
+      setCharacter(saveIntro.character);
+    }
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setCharacter(e.target.value);
     setErrorMessage('');
@@ -28,6 +36,8 @@ const IntroCharacterPage = () => {
       setErrorMessage('캐릭터를 선택해주세요!');
       return;
     }
+
+    LocalStorage.set('saveIntro', { character });
 
     setUser({ ...user, character });
     router.push('/intro/nickname');

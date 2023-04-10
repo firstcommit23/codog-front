@@ -9,7 +9,7 @@ import { userState } from '@/components/states';
 import { Canvas, DogCharacter } from '@/components/Canvas';
 import useIntroRandomNicknameQuery from '@/hooks/query/useIntroRandomNicknameQuery';
 import { User } from '@/apis/type';
-import { getRoomColor } from '@/utils/serviceUtils';
+import LocalStorage from '@/utils/LocalStorage';
 
 const IntroNicknamePage = () => {
   const router = useRouter();
@@ -23,7 +23,15 @@ const IntroNicknamePage = () => {
     data: randomNickname,
     refetch: refetchRandomNickname,
     isSuccess,
-  } = useIntroRandomNicknameQuery({ enabled: !user.nickname });
+  } = useIntroRandomNicknameQuery({ enabled: !user.nickname, refetchOnWindowFocus: false });
+
+  useEffect(() => {
+    const saveIntro = LocalStorage.get('saveIntro') || '';
+    if (saveIntro) {
+      setUser({ ...user, nickname: saveIntro.nickname, character: saveIntro.character });
+      setNickname(saveIntro.nickname);
+    }
+  }, []);
 
   useEffect(() => {
     if (isSuccess && randomNickname) setNickname(randomNickname.nickname);
@@ -35,6 +43,8 @@ const IntroNicknamePage = () => {
   };
 
   const handleSubmit = async () => {
+    LocalStorage.set('saveIntro', { character: user.character, nickname: nickname });
+
     mutate(
       { nickname: nickname, character: user.character },
       {
