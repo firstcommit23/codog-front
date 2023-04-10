@@ -7,7 +7,7 @@ interface FoodItemProps {
 }
 
 const getFoodInfo = (code: string) => {
-  const defaultValue = { right: '17%', bottom: '0' };
+  const defaultValue = { right: '22%', bottom: '0' };
   switch (code) {
     case 'A01':
     case 'A05':
@@ -19,7 +19,7 @@ const getFoodInfo = (code: string) => {
   }
 };
 const FoodItem = ({ food = '' }: FoodItemProps) => {
-  const foodImage = `/images/items/${food}.png`;
+  const foodImage = `/images/items/${food}.svg`;
 
   const { right, bottom } = getFoodInfo(food);
 

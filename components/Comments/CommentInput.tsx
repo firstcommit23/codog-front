@@ -147,7 +147,7 @@ const CommentTextCounter = styled.p`
   padding-left: 1rem;
 
   span {
-    vertical-align: middle;
+    /* vertical-align: center; */
     display: block;
     height: 100%;
     line-height: 5.4rem;

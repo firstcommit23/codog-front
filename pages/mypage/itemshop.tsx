@@ -36,7 +36,7 @@ const ItemShopPage = () => {
       onSuccess: () => {
         setModal({
           isShow: true,
-          title: '완료',
+          title: '🍪 아이템 변경 완료!',
           content: '저장되었습니다.',
         });
       },
@@ -95,7 +95,7 @@ const ItemShopPage = () => {
                 ? isSelectedItem
                   ? 'selected'
                   : ''
-                : 'commingsoon';
+                : 'comingsoon';
               const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
               return (
                 <CodogItem
@@ -105,9 +105,12 @@ const ItemShopPage = () => {
                   onClick={() => {
                     isAvailableItem && handleSelectItem(item.itemCode);
                   }}>
-                  <RequisiteCount>{item.questRequisite}</RequisiteCount>
+                  <RequisiteCount>
+                    <div>{item.questRequisite}</div>
+                  </RequisiteCount>
                   <ItemImage src={item.imageUrl || ''} />
-                  {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
+                  {!isAvailableItem && <ComingSoonText>Coming Soon</ComingSoonText>}
+                  <ItemTitle>{item.item}</ItemTitle>
                 </CodogItem>
               );
             })}
@@ -121,25 +124,39 @@ const ItemShopPage = () => {
 };
 
 const CodogItemList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-content: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
-  padding: 2rem;
+  padding: 3rem;
   overflow-y: auto;
 `;
 
 const RequisiteCount = styled.div`
   position: absolute;
   right: 1rem;
-  top: 0.4rem;
-  color: #ffffff;
-  font-weight: 800;
+  top: 1rem;
+  color: #191919;
+  font-weight: 600;
+  background-color: #f2f2f2;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2rem;
+  z-index: 100;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%);
 
-  :before {
-    content: url('/images/footprint_s_icon.svg');
-    position: absolute;
-    left: -1.3rem;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  div::before {
+    content: '';
+    background: url('/images/paw_black.svg');
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    background-size: contain;
+    margin-right: 0.2rem;
   }
 `;
 const ItemImage = styled.img`
@@ -152,11 +169,10 @@ const ItemImage = styled.img`
 const CodogItem = styled.div`
   display: flex;
   flex-flow: column wrap;
-  border-radius: 0.6rem;
+  border-radius: 1rem;
   position: relative;
-  width: 28%;
   height: 9rem;
-  overflow: hidden;
+  margin-bottom: 3rem;
   background-color: #3a3a3a;
   cursor: pointer;
 
@@ -175,16 +191,14 @@ const CodogItem = styled.div`
   &::after {
     content: '';
     position: absolute;
-    width: 120%;
-    left: -10%;
-    height: 100%;
-    top: 65%;
-    border-radius: 100rem;
-    background: linear-gradient(
-      180deg,
-      ${(props) => `${props.color ? props.color : '#ff646c'}`} 11.1%,
-      rgba(255, 86, 147, 0.97) 100%
-    );
+    width: 100%;
+    height: 3rem;
+    top: 66%;
+    background-color: #282828;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    /* ${(props) => `${props.color ? props.color : '#ff646c'}`} 11.1%,
+      rgba(255, 86, 147, 0.97) 100% */
   }
 
   &.commingsoon::after {
@@ -192,7 +206,17 @@ const CodogItem = styled.div`
   }
 `;
 
-const CommitSoonText = styled.div`
+const ItemTitle = styled.div`
+  position: absolute;
+  bottom: -2.5rem;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 1.4rem;
+  letter-spacing: 0;
+`;
+
+const ComingSoonText = styled.div`
   position: absolute;
   text-align: center;
   font-size: 2rem;
@@ -206,13 +230,17 @@ const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 450px;
   background: #494747;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
 `;
 
 const Title = styled.div`
   color: #fff;
   font-size: 2.2rem;
-  margin: 2rem;
+  margin: 4rem 3rem 1rem 3rem;
+  font-weight: 600;
 `;
 
 const FootprintCount = styled.div`
