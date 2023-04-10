@@ -7,7 +7,14 @@ import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
-import { Canvas, DogCharacter, Balloon, FoodItem, FurnitureItem } from '@/components/Canvas';
+import {
+  Canvas,
+  DogCharacter,
+  Balloon,
+  FoodItem,
+  FurnitureItem,
+  CheerButton,
+} from '@/components/Canvas';
 import { useRouter } from 'next/router';
 import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
@@ -59,6 +66,7 @@ const Home: NextPage = () => {
             <div className="pin"></div>
             <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
           </DdayBox>
+          <CheerButton></CheerButton>
         </Canvas>
         {/* 개인 달성 지표 */}
         <Achievements value={value} />
