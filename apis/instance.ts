@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import axiosRetry from 'axios-retry';
-import { checkToken } from '@/utils/serviceUtils';
 
 const Instance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CODOG_BACK_URL,
@@ -19,7 +18,7 @@ axiosRetry(Instance, {
 });
 
 Instance.interceptors.request.use(async (config) => {
-  const token = await checkToken(localStorage.getItem('accessToken') || '');
+  const token = localStorage.getItem('accessToken') || '';
 
   config.headers = {
     ...config.headers,
@@ -32,13 +31,42 @@ Instance.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    const err = error as AxiosError;
-    if (err.response?.status === 401) {
-      window.location.href = '/login';
+  async (error) => {
+    const originalRequest = error.config;
 
-      return new Promise(() => {});
+    // If the response is a 401 error and the request has not already been retried
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      // Get the saved refresh token
+      const refreshToken = localStorage.getItem('refreshToken');
+
+      try {
+        // Request a new access token using the refresh token
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/token`, {
+          headers: { Authorization: `Bearer ${refreshToken}` },
+        });
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+          response.data.response;
+        //console.log('new! ', newAccessToken, newRefreshToken);
+
+        // Save the new access token and refresh token
+        localStorage.setItem('accessToken', newAccessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
+
+        // Update the authorization header with the new access token
+        Instance.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+
+        // Retry the original request with the new access token
+        return Instance(originalRequest);
+      } catch (error) {
+        // If the refresh token is invalid, redirect to the login page
+        console.error(error);
+        window.location.href = '/login';
+      }
     }
+
+    // If the error is not a 401 error, return it as-is
     return Promise.reject(error);
   }
 );
