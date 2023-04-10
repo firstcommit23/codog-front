@@ -6,6 +6,7 @@ import moment from 'moment';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
+import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import {
   Canvas,
   DogCharacter,
@@ -26,6 +27,10 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
+  const { data: footprintData } = useUserFootprintQuery(
+    String(moment(value).year()),
+    String(moment(value).month())
+  );
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
@@ -74,7 +79,11 @@ const Home: NextPage = () => {
       <Calendars value={value} onChange={onChange} />
 
       <HorizontalRule />
-      <Comments title="코멘트 보기" isShowCommentInput={false} />
+      <Comments
+        title="코멘트 보기"
+        isShowCommentInput={false}
+        footprintId={footprintData?.footprintId}
+      />
     </DefaultLayout>
   );
 };
