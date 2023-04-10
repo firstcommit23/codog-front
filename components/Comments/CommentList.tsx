@@ -61,14 +61,14 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
                 <CommentFirstLine>
                   <CommentWriterArea>
                     <img src="/images/profileIcon.svg" />
-                    <CommentWriterNickname onClick={() => router.push(`/share/${item.github_id}`)}>
+                    <CommentWriterNickname onClick={() => router.push(`/share/${item.githubId}`)}>
                       {item.nickname}
                     </CommentWriterNickname>
                     {/* TODO: 내가 작성하거나, 내가 주인장일경우에만 삭제버튼 보여야 함 */}
                     <div onClick={() => handleDelete(item.id)}>🗑</div>
                   </CommentWriterArea>
                   <CommentWriteDate>
-                    {moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                    {moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </CommentWriteDate>
                 </CommentFirstLine>
                 <CommentText>{item.contents}</CommentText>

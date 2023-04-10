@@ -46,7 +46,7 @@ const CommentInput = ({ footprintId }: { footprintId: number }) => {
             content: '등록되었습니다.',
           });
           setCommentInput('');
-          queryClient.invalidateQueries([queryKeys.GET_COMMENT_LIST]);
+          queryClient.refetchQueries([queryKeys.GET_COMMENT_LIST]);
         },
         onError: (error: any) => {
           const message = error?.response.data.error.message || '';

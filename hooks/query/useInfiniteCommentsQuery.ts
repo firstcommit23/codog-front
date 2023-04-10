@@ -24,7 +24,7 @@ const useInfiniteCommentsQuery = (
         ? {
             cursor_comment_id: lastPage.comments[lastPage.comments.length - 1].id,
             cursor_created_at: moment(
-              lastPage.comments[lastPage.comments.length - 1].created_at
+              lastPage.comments[lastPage.comments.length - 1].createdAt
             ).format('YYYY-MM-DD HH:mm:ss'),
           }
         : false;
