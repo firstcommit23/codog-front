@@ -3,6 +3,12 @@ import Instance from './instance';
 import type { User } from './type';
 
 export const getUserProfile = () => {
+  return Instance.get('/users/profile')
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
+};
+
+export const getUserProfileDetail = () => {
   return Instance.get('/users/profile/detail')
     .then((res) => res.data.response)
     .catch((error) => error.response);
@@ -61,6 +67,12 @@ export const getTotalItems = () => {
 export const putProfileItem = (itemCodes: string[]) => {
   return Instance.put('/users/profile/item', {
     itemCodes,
+  }).then((res) => res.data.response);
+};
+
+export const putCheerCount = (cheerCount: number) => {
+  return Instance.put(`/users/profile/cheer-count`, {
+    cheerCount,
   }).then((res) => res.data.response);
 };
 
