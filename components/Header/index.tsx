@@ -106,7 +106,7 @@ const Container = styled.div`
 `;
 const HeaderBox = styled.div`
   position: fixed;
-  z-index: 10;
+  z-index: 500;
   width: 100%;
   max-width: 450px;
   height: 60px;
@@ -163,7 +163,7 @@ const MenuList = styled.div<{ isOpen: boolean }>`
   background-color: ${Common.colors.black};
   color: ${Common.colors.white};
   position: absolute;
-  z-index: 300;
+  z-index: 500;
   top: 60px;
   left: 0;
 
