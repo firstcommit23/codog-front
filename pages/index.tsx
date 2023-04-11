@@ -53,8 +53,8 @@ const Home: NextPage = () => {
               코독하게 코딩해봅시다.
             </ProfileContent>
             <ProfileButtonArea>
-              <RoundButton route={`/mypage/itemshop`} iconUrl={`/images/home-edit.svg`} />
-              <RoundButton iconUrl={`/images/Share_Android.svg`} />
+              <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
+              <RoundButton iconUrl={`Share_Android`} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
@@ -80,8 +80,8 @@ const Home: NextPage = () => {
 
       <HorizontalRule />
       <Comments
-        title="코멘트 보기"
-        isShowCommentInput={false}
+        title="코멘트 보기 💬"
+        isShowCommentInput={true}
         footprintId={footprintData?.footprintId}
       />
     </DefaultLayout>

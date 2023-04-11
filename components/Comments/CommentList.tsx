@@ -34,13 +34,13 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
                   <CommentWriterArea>
                     <img src="/images/profileIcon.svg" />
                     <CommentWriterNickname>{item.nickname}</CommentWriterNickname>
-                    <div>🗑</div>
                   </CommentWriterArea>
                   <CommentWriteDate>
                     {moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}
                   </CommentWriteDate>
                 </CommentFirstLine>
                 <CommentText>{item.contents}</CommentText>
+                <DeleteBtn></DeleteBtn>
               </CommentItemWapper>
             );
           })}
@@ -63,7 +63,8 @@ const CommentListContainer = styled.div``;
 const CommentItemWapper = styled.div`
   background-color: #f5f5f5;
   border-radius: 1rem;
-  margin: 1rem 0;
+  margin-bottom: 1.5rem;
+  position: relative;
 `;
 
 const CommentFirstLine = styled.div`
@@ -71,33 +72,63 @@ const CommentFirstLine = styled.div`
   justify-content: space-between;
   line-height: 2.5rem;
   padding: 1.3rem 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 `;
 
 const CommentWriterArea = styled.div`
   display: flex;
   gap: 0.3rem;
+
+  img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 `;
 
 const CommentWriterNickname = styled.div`
-  font-size: 1.4rem;
-  color: #282828;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #666666;
+  margin-left: 0.5rem;
 `;
 
 const CommentText = styled.div`
-  padding: 0 2rem 2rem 2rem;
-  font-size: 1.2rem;
-  color: #282828;
-  line-height: 1.8rem;
-  word-break: break-word;
+  padding: 2rem 4rem 3rem 2.5rem;
+  font-size: 1.6rem;
+  line-height: 1.8;
+  word-break: keep-all;
+  color: #333333;
+`;
+
+const DeleteBtn = styled.button`
+  background: url('/images/icon/trash.svg') no-repeat;
+  background-position: 50% 50%;
+  background-size: 1.6rem 1.6rem;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 20rem;
+
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: all ease 0.3s;
+  }
 `;
 
 const CommentWriteDate = styled.div`
   color: #868686;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 `;
 
 const MoreCommentButton = styled.button`
   ${button}
+  font-size: 1.6rem;
+  font-weight: 600;
   background-color: white;
   border: 1px solid #cbcbcb;
   color: #6d6d6d;

@@ -74,7 +74,7 @@ const CommentInput = ({ footprintId }: { footprintId: number }) => {
     : {};
 
   return (
-    <CommentInputWrraper>
+    <CommentInputWrapper>
       <CommentTextareaArea>
         <label htmlFor="commentText">
           <CommentTextarea
@@ -83,7 +83,7 @@ const CommentInput = ({ footprintId }: { footprintId: number }) => {
             value={commentInput}
             onChange={handleChangeComment}
             maxLength={MAX_COMMENT_LENGHT}
-            rows={6}
+            rows={3}
             {...notLoginTextareaObj}></CommentTextarea>
         </label>
       </CommentTextareaArea>
@@ -99,18 +99,17 @@ const CommentInput = ({ footprintId }: { footprintId: number }) => {
           </CommentSubmitButton>
         </CommentSubmitButtonWrapper>
       </CommentToolbar>
-    </CommentInputWrraper>
+    </CommentInputWrapper>
   );
 };
 
-const CommentInputWrraper = styled.div`
+const CommentInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #ddd;
+  border: 1px solid #b2b2b2;
   border-radius: 12px;
-  min-height: 20rem;
   width: 100%;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%);
+  /* box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%); */
 `;
 
 const CommentTextareaArea = styled.div`
@@ -127,6 +126,10 @@ const CommentTextarea = styled.textarea`
   width: 95%;
   resize: none;
   outline: none;
+  font-size: 1.6rem;
+  line-height: 1.8;
+  font-family: 'Pretendar Variable', Pretendard;
+  color: #282828;
 `;
 
 const CommentToolbar = styled.div`
@@ -144,7 +147,7 @@ const CommentTextCounter = styled.p`
   color: #bbb;
   font-size: 1.4rem;
   line-height: 1.5rem;
-  padding-left: 1rem;
+  padding-left: 2rem;
 
   span {
     /* vertical-align: center; */
@@ -166,7 +169,7 @@ const CommentSubmitButton = styled.button`
   border-radius: 0.5rem;
   height: 3.4rem;
   padding: 0.5rem 1.4rem;
-  margin: 0 1rem;
+  margin: 0 1.5rem;
   color: #fff;
 
   &:disabled {
