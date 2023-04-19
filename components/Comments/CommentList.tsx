@@ -52,7 +52,9 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
         </>
       ) : (
         <CommentItemWapper>
-          <div style={{ padding: '2rem', fontSize: '1.4rem' }}>등록된 코멘트가 없습니다.</div>
+          <div style={{ padding: '3rem 2rem', fontSize: '1.4rem', color: '#666666' }}>
+            등록된 코멘트가 없습니다.
+          </div>
         </CommentItemWapper>
       )}
     </CommentListContainer>
@@ -65,6 +67,7 @@ const CommentItemWapper = styled.div`
   border-radius: 1rem;
   margin-bottom: 1.5rem;
   position: relative;
+  text-align: center;
 `;
 
 const CommentFirstLine = styled.div`
