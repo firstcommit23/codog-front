@@ -1,18 +1,24 @@
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
+import { useRecoilState } from 'recoil';
+import { useMutation } from '@tanstack/react-query';
 import moment from 'moment';
-import { button } from '@/styles/common';
 import useInfiniteCommentsQuery from '@/hooks/query/useInfiniteCommentsQuery';
 import { CommentType } from '@/apis/type';
+import { deleteComment } from '@/apis/api';
+import { modalState } from '@/components/states';
+import { button } from '@/styles/common';
 
 const CommentList = ({ footprintId }: { footprintId: number }) => {
   const COUNT = 3;
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteCommentsQuery(
-    footprintId || 0,
-    COUNT,
-    {
+  const router = useRouter();
+  const [, setModal] = useRecoilState(modalState);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useInfiniteCommentsQuery(footprintId || 0, COUNT, {
       enabled: !!footprintId,
-    }
-  );
+    });
+
+  const { mutate, isLoading } = useMutation((commentId: number) => deleteComment(commentId));
 
   const handleLoadMore = () => {
     if (!isFetchingNextPage && hasNextPage) {
@@ -20,6 +26,28 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
     }
   };
 
+  const handleDelete = (commentId: number) => {
+    setModal({
+      isShow: true,
+      title: '확인',
+      content: '코멘트 삭제하시겠습니까?',
+      isCancleButton: true,
+      onClick: () => deleteCommentAction(commentId),
+    });
+  };
+
+  const deleteCommentAction = (commentId: number) => {
+    mutate(commentId, {
+      onSuccess: () => {
+        setModal({ isShow: true, title: '삭제완료', content: '삭제 완료 했습니다.' });
+        refetch();
+      },
+      onError: (error: any) => {
+        const message = error?.response.data.error.message || '';
+        alert(message);
+      },
+    });
+  };
   const items = data?.pages?.flatMap((page) => page.comments) ?? [];
   const totalCount = data?.pages[data?.pages.length - 1].totalCount || 0;
 
@@ -33,10 +61,18 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
                 <CommentFirstLine>
                   <CommentWriterArea>
                     <img src="/images/profileIcon.svg" />
+<<<<<<< HEAD
                     <CommentWriterNickname>{item.nickname}</CommentWriterNickname>
+=======
+                    <CommentWriterNickname onClick={() => router.push(`/share/${item.githubId}`)}>
+                      {item.nickname}
+                    </CommentWriterNickname>
+                    {/* TODO: 내가 작성하거나, 내가 주인장일경우에만 삭제버튼 보여야 함 */}
+                    <div onClick={() => handleDelete(item.id)}>🗑</div>
+>>>>>>> 0a93b0b2ce3e155c60322f3b9795de699b88ac55
                   </CommentWriterArea>
                   <CommentWriteDate>
-                    {moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}
+                    {moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </CommentWriteDate>
                 </CommentFirstLine>
                 <CommentText>{item.contents}</CommentText>
@@ -89,10 +125,16 @@ const CommentWriterArea = styled.div`
 `;
 
 const CommentWriterNickname = styled.div`
+<<<<<<< HEAD
   font-size: 1.5rem;
   font-weight: 600;
   color: #666666;
   margin-left: 0.5rem;
+=======
+  font-size: 1.4rem;
+  color: #282828;
+  cursor: pointer;
+>>>>>>> 0a93b0b2ce3e155c60322f3b9795de699b88ac55
 `;
 
 const CommentText = styled.div`

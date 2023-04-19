@@ -6,7 +6,20 @@ import { RecoilRoot } from 'recoil';
 import { GlobalStyles } from '@/styles/global-styles';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 300000,
+      },
+      mutations: {
+        onError: (err, variables, recover) => {
+          console.log('An error occurred:', err);
+          // recover();
+        },
+      },
+    },
+  });
   return (
     <>
       <Head>

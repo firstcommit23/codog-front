@@ -57,8 +57,8 @@ export type CommentType = {
   footprintId: number;
   writer: number;
   nickname: string;
-  github_id: string;
-  created_at: string;
+  githubId: string;
+  createdAt: string;
   id: number;
 };
 
