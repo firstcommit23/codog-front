@@ -61,15 +61,11 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
                 <CommentFirstLine>
                   <CommentWriterArea>
                     <img src="/images/profileIcon.svg" />
-<<<<<<< HEAD
-                    <CommentWriterNickname>{item.nickname}</CommentWriterNickname>
-=======
                     <CommentWriterNickname onClick={() => router.push(`/share/${item.githubId}`)}>
                       {item.nickname}
                     </CommentWriterNickname>
                     {/* TODO: 내가 작성하거나, 내가 주인장일경우에만 삭제버튼 보여야 함 */}
                     <div onClick={() => handleDelete(item.id)}>🗑</div>
->>>>>>> 0a93b0b2ce3e155c60322f3b9795de699b88ac55
                   </CommentWriterArea>
                   <CommentWriteDate>
                     {moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
@@ -125,16 +121,10 @@ const CommentWriterArea = styled.div`
 `;
 
 const CommentWriterNickname = styled.div`
-<<<<<<< HEAD
   font-size: 1.5rem;
   font-weight: 600;
   color: #666666;
   margin-left: 0.5rem;
-=======
-  font-size: 1.4rem;
-  color: #282828;
-  cursor: pointer;
->>>>>>> 0a93b0b2ce3e155c60322f3b9795de699b88ac55
 `;
 
 const CommentText = styled.div`
