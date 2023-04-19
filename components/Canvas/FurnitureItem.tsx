@@ -18,7 +18,7 @@ const getFurnitureInfo = (code: string) => {
 };
 
 const FurnitureItem = ({ furniture = '' }: FurnitureItemProps) => {
-  const furnitureImage = `/images/items/${furniture}.png`;
+  const furnitureImage = `/images/items/${furniture}.svg`;
 
   const { left, bottom } = getFurnitureInfo(furniture);
 

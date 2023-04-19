@@ -28,13 +28,14 @@ const CommentContainer = styled.div`
 const CommentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
   padding: 3rem 2rem;
 `;
 
 const CommentTitle = styled.div`
   padding-left: 0.8rem;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 600;
 `;
 
 export default Comments;

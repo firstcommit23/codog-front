@@ -36,7 +36,7 @@ const ItemShopPage = () => {
       onSuccess: () => {
         setModal({
           isShow: true,
-          title: '완료',
+          title: '🍪 아이템 변경 완료!',
           content: '저장되었습니다.',
         });
       },
@@ -91,11 +91,7 @@ const ItemShopPage = () => {
             itemsData?.map((item: ItemType) => {
               const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
               const isSelectedItem = selectedItem?.includes(item.itemCode);
-              const itemClassName = isAvailableItem
-                ? isSelectedItem
-                  ? 'selected'
-                  : ''
-                : 'commingsoon';
+              const itemClassName = isAvailableItem ? (isSelectedItem ? 'selected' : '') : 'locked';
               const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
               return (
                 <CodogItem
@@ -105,9 +101,19 @@ const ItemShopPage = () => {
                   onClick={() => {
                     isAvailableItem && handleSelectItem(item.itemCode);
                   }}>
-                  <RequisiteCount>{item.questRequisite}</RequisiteCount>
                   <ItemImage src={item.imageUrl || ''} />
-                  {!isAvailableItem && <CommitSoonText>comming soon </CommitSoonText>}
+                  {!isAvailableItem && (
+                    <LockedItemDiv>
+                      <img src="/images/lock.svg"></img>
+                      <div>발자국이 더 필요해요!</div>
+                    </LockedItemDiv>
+                  )}
+                  <InfoWrapper>
+                    <RequisiteCount>
+                      <div>{item.questRequisite}</div>
+                    </RequisiteCount>
+                    <ItemTitle className={'title'}>{item.item}</ItemTitle>
+                  </InfoWrapper>
                 </CodogItem>
               );
             })}
@@ -121,27 +127,13 @@ const ItemShopPage = () => {
 };
 
 const CodogItemList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  align-content: stretch;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
-  padding: 2rem;
+  padding: 3rem;
   overflow-y: auto;
 `;
 
-const RequisiteCount = styled.div`
-  position: absolute;
-  right: 1rem;
-  top: 0.4rem;
-  color: #ffffff;
-  font-weight: 800;
-
-  :before {
-    content: url('/images/footprint_s_icon.svg');
-    position: absolute;
-    left: -1.3rem;
-  }
-`;
 const ItemImage = styled.img`
   display: block;
   object-fit: none;
@@ -152,11 +144,10 @@ const ItemImage = styled.img`
 const CodogItem = styled.div`
   display: flex;
   flex-flow: column wrap;
-  border-radius: 0.6rem;
+  border-radius: 1rem;
   position: relative;
-  width: 28%;
   height: 9rem;
-  overflow: hidden;
+  margin-bottom: 3rem;
   background-color: #3a3a3a;
   cursor: pointer;
 
@@ -165,26 +156,25 @@ const CodogItem = styled.div`
     border: 2px solid ${(props) => `${props.color ? props.color : '#ff646c'}`};
   }
 
-  &.commingsoon {
+  /* &.locked {
     cursor: not-allowed;
-    img {
-      opacity: 0.2;
-    }
+  } */
+
+  &.locked .title {
+    opacity: 0.3;
   }
 
   &::after {
     content: '';
     position: absolute;
-    width: 120%;
-    left: -10%;
-    height: 100%;
-    top: 65%;
-    border-radius: 100rem;
-    background: linear-gradient(
-      180deg,
-      ${(props) => `${props.color ? props.color : '#ff646c'}`} 11.1%,
-      rgba(255, 86, 147, 0.97) 100%
-    );
+    width: 100%;
+    height: 3rem;
+    top: 66%;
+    background-color: #282828;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    /* ${(props) => `${props.color ? props.color : '#ff646c'}`} 11.1%,
+      rgba(255, 86, 147, 0.97) 100% */
   }
 
   &.commingsoon::after {
@@ -192,27 +182,101 @@ const CodogItem = styled.div`
   }
 `;
 
-const CommitSoonText = styled.div`
+const InfoWrapper = styled.div`
+  position: absolute;
+  bottom: -2.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  max-width: 11.5rem;
+  width: 100%;
+`;
+
+const RequisiteCount = styled.div`
+  color: #191919;
+  font-weight: 600;
+  background-color: #f2f2f2;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2rem;
+  z-index: 300;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%);
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  div::before {
+    content: '';
+    background: url('/images/paw_black.svg');
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    background-size: contain;
+    margin-right: 0.2rem;
+  }
+`;
+
+const ItemTitle = styled.div`
+  width: 100%;
+  color: white;
+  font-size: 1.4rem;
+  letter-spacing: 0;
+  margin-left: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+`;
+
+const LockedItemDiv = styled.div`
   position: absolute;
   text-align: center;
-  font-size: 2rem;
+  font-size: 1.6rem;
   color: #ffffff;
-  top: 30%;
-  z-index: 9;
+  background-color: rgba(32, 32, 32, 0.85);
+  height: 100%;
+  width: 100%;
+  border-radius: 1rem;
+  z-index: 200;
   opacity: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  img {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  div {
+    max-width: 6rem;
+    word-break: keep-all;
+    line-height: 1.4;
+    font-size: 1.2rem;
+    color: #bbbbbb;
+  }
 `;
 
 const ItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 450px;
   background: #494747;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
 `;
 
 const Title = styled.div`
   color: #fff;
   font-size: 2.2rem;
-  margin: 2rem;
+  margin: 4rem 3rem 1rem 3rem;
+  font-weight: 600;
 `;
 
 const FootprintCount = styled.div`

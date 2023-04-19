@@ -10,7 +10,7 @@ const RoundButton = ({ iconUrl, backgroundColor, route }: RoundBtnProps) => {
   const router = useRouter();
   return (
     <StyledButton onClick={() => router.push(`${route}`)} backgroundColor={backgroundColor}>
-      <IconDiv iconUrl={iconUrl}></IconDiv>
+      <IconDiv iconUrl={`/images/icon/${iconUrl}.svg`}></IconDiv>
     </StyledButton>
   );
 };

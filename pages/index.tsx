@@ -20,6 +20,7 @@ import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
 import RoundButton from '@/components/Canvas/RoundButton';
+import ScrollToTopBtn from '@/components/ScrollButton/ScrollToTopBtn';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
@@ -53,8 +54,8 @@ const Home: NextPage = () => {
               코독하게 코딩해봅시다.
             </ProfileContent>
             <ProfileButtonArea>
-              <RoundButton route={`/mypage/itemshop`} iconUrl={`/images/home-edit.svg`} />
-              <RoundButton iconUrl={`/images/Share_Android.svg`} />
+              <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
+              <RoundButton iconUrl={`Share_Android`} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
@@ -80,10 +81,11 @@ const Home: NextPage = () => {
 
       <HorizontalRule />
       <Comments
-        title="코멘트 보기"
+        title="코멘트 보기 💬"
         isShowCommentInput={false}
         footprintId={footprintData?.footprintId}
       />
+      <ScrollToTopBtn />
     </DefaultLayout>
   );
 };
@@ -159,8 +161,7 @@ const HorizontalRule = styled.hr`
   height: 8px;
   background: #f5f5f5;
   border: none;
-  width: 120%;
-  margin-left: -30px;
+  width: 100%;
 `;
 
 export default Home;
