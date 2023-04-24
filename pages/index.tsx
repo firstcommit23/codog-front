@@ -55,7 +55,7 @@ const Home: NextPage = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <RoundButton iconUrl={`Share_Android`} />
+              <RoundButton iconUrl={`Share_Android`} marginLeft={`-2px`} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>

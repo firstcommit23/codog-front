@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
