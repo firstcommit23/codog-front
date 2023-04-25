@@ -126,12 +126,26 @@ const ItemShopPage = () => {
   );
 };
 
+const ItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #494747;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  width: 100%;
+`;
+
 const CodogItemList = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
   padding: 3rem;
   overflow-y: auto;
+
+  @media screen and (max-width: 480px) {
+    gap: 1rem;
+  }
 `;
 
 const ItemImage = styled.img`
@@ -260,16 +274,6 @@ const LockedItemDiv = styled.div`
     font-size: 1.2rem;
     color: #bbbbbb;
   }
-`;
-
-const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 450px;
-  background: #494747;
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
 `;
 
 const Title = styled.div`

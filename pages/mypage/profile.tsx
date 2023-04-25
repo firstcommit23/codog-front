@@ -71,8 +71,7 @@ const ProfilePage = () => {
           </Canvas>
           <ProfileWrapper>
             <UserProfileTable>
-              <div className="nickname">
-                {userData?.nickname}</div>
+              <div className="nickname">{userData?.nickname}</div>
               {/* <div>
                 {characters?.map((item: CharacterType, index: number) => {
                   return (
@@ -111,17 +110,20 @@ const ProfilePage = () => {
               </HouseUpdateButton>
             </BtnWrapper>
             <BtnWrapper>
-              <LogOutButton  
-              onClick={() => {
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
-                    router.push('/login');
-                  }}
-                >로그아웃 하기</LogOutButton>
+              <LogOutButton
+                onClick={() => {
+                  localStorage.removeItem('accessToken');
+                  localStorage.removeItem('refreshToken');
+                  router.push('/login');
+                }}>
+                로그아웃 하기
+              </LogOutButton>
             </BtnWrapper>
             <UserDropOut>
-              코독 회원 탈퇴를 원하신다면 
-              <span onClick={()=>router.push('/mypage/dropout')}className="link">여기</span>
+              코독 회원 탈퇴를 원하신다면
+              <span onClick={() => router.push('/mypage/dropout')} className="link">
+                여기
+              </span>
               를 클릭하세요.
             </UserDropOut>
           </ProfileWrapper>
@@ -213,15 +215,15 @@ const NameUpdateButton = styled.button`
     background-color: #eeeeee;
   }
 
-  span::before{
-    content: "";
+  span::before {
+    content: '';
     background: url('/images/pencil.svg') no-repeat;
     background-size: cover;
     display: inline-block;
     width: 1.5rem;
     height: 1.5rem;
     margin-bottom: -0.3rem;
-    margin-right : 1.5rem;
+    margin-right: 0.8rem;
   }
 `;
 const HouseUpdateButton = styled.button`
@@ -243,15 +245,15 @@ const HouseUpdateButton = styled.button`
     background-color: #eeeeee;
   }
 
-  span::before{
-    content: "";
-    background: url('/images/house.svg') no-repeat;
+  span::before {
+    content: '';
+    background: url('/images/home.svg') no-repeat;
     background-size: cover;
     display: inline-block;
-    width: 1.5rem;
+    width: 2rem;
     height: 1.5rem;
     margin-bottom: -0.1rem;
-    margin-right : 1.2rem;
+    margin-right: 0.5rem;
   }
 `;
 
@@ -361,17 +363,17 @@ const LogOutButton = styled.button`
 
 const UserDropOut = styled.div`
   font-size: 1.4rem;
-  color: #A1A1A1;
+  color: #a1a1a1;
   margin: 2rem;
 
-  span{
+  span {
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 2px;
     margin: 0 0.4rem;
   }
 
-  span:hover{
+  span:hover {
     color: #666666;
   }
 `;
