@@ -18,10 +18,13 @@ const ItemShopPage = () => {
   const [, setModal] = useRecoilState(modalState);
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
-  const { data: itemsData, isSuccess: isSuccessItemsData } = useItemListQuery();
+  const { data: itemsData, isSuccess: isSuccessItemsData } = useItemListQuery({
+    enabled: isSuccessUserData,
+  });
   const { data: footprintData } = useUserFootprintQuery(
-    String(moment(today).year()),
-    String(moment(today).month())
+    moment(today).format('YYYY'),
+    moment(today).format('MM'),
+    { enabled: isSuccessItemsData }
   );
   const { mutate, isLoading } = useMutation((itemCodes: string[]) => putProfileItem(itemCodes));
 

@@ -12,8 +12,8 @@ interface IProps {
 
 const Calendars = ({ value, onChange }: IProps) => {
   const { data: footprintData } = useUserFootprintQuery(
-    String(moment(value).year()),
-    String(moment(value).month())
+    moment(value).format('YYYY'),
+    moment(value).format('MM')
   );
 
   const onActiveStartDateChangeHandler = ({ activeStartDate }: any) => {

@@ -28,10 +28,15 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
-  const { data: footprintData } = useUserFootprintQuery(
-    String(moment(value).year()),
-    String(moment(value).month())
+  const { data: footprintData, refetch } = useUserFootprintQuery(
+    moment(value).format('YYYY'),
+    moment(value).format('MM'),
+    { enabled: isSuccessUserData }
   );
+
+  useEffect(() => {
+    isSuccessUserData && refetch();
+  }, [isSuccessUserData, value]);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);

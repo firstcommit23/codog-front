@@ -9,7 +9,7 @@ interface IProps {
 const Achievements = ({ value }: IProps) => {
   const { data: footprintData } = useUserFootprintQuery(
     String(moment(value).year()),
-    String(moment(value).month())
+    moment(value).format('MM')
   );
 
   return (
