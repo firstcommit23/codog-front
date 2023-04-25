@@ -39,7 +39,7 @@ const Container = styled.div`
   width: 100%;
   height: 100%;
   position: fixed;
-  z-index: 100;
+  z-index: 500;
   display: flex;
   justify-content: center;
 `;
