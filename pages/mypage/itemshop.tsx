@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useRecoilState } from 'recoil';
 import styled from '@emotion/styled';
@@ -129,12 +129,27 @@ const ItemShopPage = () => {
   );
 };
 
+const ItemContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: #494747;
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  width: 100%;
+`;
+
 const CodogItemList = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 2rem;
   padding: 3rem;
   overflow-y: auto;
+
+  @media screen and (max-width: 480px) {
+    gap: 1rem;
+    padding: 2.2rem;
+  }
 `;
 
 const ItemImage = styled.img`
@@ -265,16 +280,6 @@ const LockedItemDiv = styled.div`
   }
 `;
 
-const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 450px;
-  background: #494747;
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
-`;
-
 const Title = styled.div`
   color: #fff;
   font-size: 2.2rem;
@@ -325,6 +330,9 @@ const ButtonSubmit = styled.button`
   font-size: 18px;
   color: #ffffff;
   line-height: 19px;
+  position: fixed;
+  bottom: 0;
+  z-index: 400;
 
   &:hover {
     background-color: #585858;

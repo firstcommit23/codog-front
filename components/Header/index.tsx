@@ -34,15 +34,15 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                   <Image
                     src="/images/close.svg"
                     alt="close"
-                    width="18px"
-                    height="18px"
+                    width="18"
+                    height="18"
                     onClick={toggleMenu}
                   />
                 ) : (
                   <Image
                     src="/images/menu.svg"
-                    width="25px"
-                    height="18px"
+                    width="25"
+                    height="18"
                     alt="menu"
                     onClick={toggleMenu}
                   />

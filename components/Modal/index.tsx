@@ -42,6 +42,7 @@ const Container = styled.div`
   z-index: 500;
   display: flex;
   justify-content: center;
+  z-index: 1000;
 `;
 
 const ModalWrapper = styled.div`
