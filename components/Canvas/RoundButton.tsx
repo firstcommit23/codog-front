@@ -1,21 +1,23 @@
 import styled from '@emotion/styled';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 interface RoundBtnProps {
   iconUrl?: string;
+  marginLeft?: string;
   backgroundColor?: string;
   route?: string;
 }
 
-const RoundButton = ({ iconUrl, backgroundColor, route }: RoundBtnProps) => {
-  const router = useRouter();
+const RoundButton = ({ iconUrl, marginLeft, backgroundColor, route }: RoundBtnProps) => {
   return (
-    <StyledButton onClick={() => router.push(`${route}`)} backgroundColor={backgroundColor}>
-      <IconDiv iconUrl={`/images/icon/${iconUrl}.svg`}></IconDiv>
-    </StyledButton>
+    <Link href={`${route}`} prefetch={true}>
+      <StyledButton backgroundColor={backgroundColor}>
+        <IconDiv iconUrl={`/images/icon/${iconUrl}.svg`} marginLeft={marginLeft}></IconDiv>
+      </StyledButton>
+    </Link>
   );
 };
 
-const StyledButton = styled.button<{ backgroundColor: string }>`
+const StyledButton = styled.a<{ backgroundColor: string }>`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -35,12 +37,12 @@ const StyledButton = styled.button<{ backgroundColor: string }>`
   }
 `;
 
-const IconDiv = styled.div<{ iconUrl: string }>`
+const IconDiv = styled.div<{ iconUrl: string; marginLeft: string }>`
   background: url(${(props) => `${props.iconUrl}`}) no-repeat;
   background-size: contain;
-  background-position: 50% 50%;
-  width: 2.5rem;
+  width: 2rem;
   height: 2rem;
+  margin-left: ${(props) => (props.marginLeft ? props.marginLeft : 0)};
 `;
 
 export default RoundButton;

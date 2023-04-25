@@ -55,7 +55,7 @@ const Home: NextPage = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <RoundButton iconUrl={`Share_Android`} />
+              <RoundButton iconUrl={`Share_Android`} marginLeft={`-2px`} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
@@ -95,7 +95,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   width: 100%;
   padding-top: 7rem;
-  background-color: #282828;
+  background: linear-gradient(#282828 80%, #fff 10%);
 `;
 const ProfileBox = styled.div`
   width: 100%;
