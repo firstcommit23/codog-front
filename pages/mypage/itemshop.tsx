@@ -145,6 +145,7 @@ const CodogItemList = styled.div`
 
   @media screen and (max-width: 480px) {
     gap: 1rem;
+    padding: 2.2rem;
   }
 `;
 
@@ -326,6 +327,9 @@ const ButtonSubmit = styled.button`
   font-size: 18px;
   color: #ffffff;
   line-height: 19px;
+  position: fixed;
+  bottom: 0;
+  z-index: 400;
 
   &:hover {
     background-color: #585858;
