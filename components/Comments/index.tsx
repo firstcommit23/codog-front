@@ -6,8 +6,14 @@ interface CommentsProps {
   footprintId: number | undefined;
   title: string;
   isShowCommentInput?: boolean;
+  isOwner: boolean;
 }
-const Comments = ({ footprintId, title, isShowCommentInput = true }: CommentsProps) => {
+const Comments = ({
+  footprintId,
+  title,
+  isShowCommentInput = true,
+  isOwner = false,
+}: CommentsProps) => {
   if (!footprintId) return null;
 
   return (
@@ -15,7 +21,7 @@ const Comments = ({ footprintId, title, isShowCommentInput = true }: CommentsPro
       <CommentWrapper>
         <CommentTitle>{title}</CommentTitle>
         {isShowCommentInput && <CommentInput footprintId={footprintId} />}
-        <CommentList footprintId={footprintId} />
+        <CommentList footprintId={footprintId} isOwner={isOwner} />
       </CommentWrapper>
     </CommentContainer>
   );

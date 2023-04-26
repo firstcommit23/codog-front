@@ -74,7 +74,11 @@ const SharePage: NextPage = ({ githubId }: SharePageProps) => {
       <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
 
       <HorizontalRule />
-      <Comments title="코멘트 남기기 ✍️" footprintId={shareData.footPrintData?.footprintId} />
+      <Comments
+        title="코멘트 남기기 ✍️"
+        footprintId={shareData.footPrintData?.footprintId}
+        isOwner={shareData.isOwner}
+      />
     </DefaultLayout>
   );
 };

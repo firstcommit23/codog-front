@@ -89,6 +89,7 @@ const Home: NextPage = () => {
         title="코멘트 보기 💬"
         isShowCommentInput={false}
         footprintId={footprintData?.footprintId}
+        isOwner={true}
       />
       <ScrollToTopBtn />
     </DefaultLayout>
