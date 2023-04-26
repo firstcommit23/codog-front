@@ -61,7 +61,7 @@ const Home: NextPage = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <ShareButton nickname={userData.nickname} githubId={footprintData.githubId} />
+              <ShareButton nickname={userData.nickname} githubId={footprintData?.githubId} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
