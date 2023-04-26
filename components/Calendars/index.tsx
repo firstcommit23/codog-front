@@ -1,21 +1,17 @@
 import styled from '@emotion/styled';
 import Calendar from 'react-calendar';
 import moment from 'moment';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { Common } from '@/styles/common';
+import type { FootprintType } from '@/apis/type';
 
 interface IProps {
   value: Date;
   onChange?: React.Dispatch<React.SetStateAction<Date>>;
+  footprintData: FootprintType;
 }
 
-const Calendars = ({ value, onChange }: IProps) => {
-  const { data: footprintData } = useUserFootprintQuery(
-    moment(value).format('YYYY'),
-    moment(value).format('MM')
-  );
-
+const Calendars = ({ value, onChange, footprintData }: IProps) => {
   const onActiveStartDateChangeHandler = ({ activeStartDate }: any) => {
     onChange(activeStartDate);
   };

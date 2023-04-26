@@ -66,3 +66,8 @@ export type CommentResponse = {
   totalCount: number;
   comments: CommentType[];
 };
+
+export type ShareUserDataType = UserProfileDetailType & {
+  footPrintData: FootprintType;
+  isOwner: boolean;
+};

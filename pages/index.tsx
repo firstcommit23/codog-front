@@ -21,6 +21,7 @@ import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
 import RoundButton from '@/components/Canvas/RoundButton';
 import ScrollToTopBtn from '@/components/ScrollButton/ScrollToTopBtn';
+import ShareButton from '@/components/ShareButton';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
@@ -30,8 +31,8 @@ const Home: NextPage = () => {
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData, refetch } = useUserFootprintQuery(
     moment(value).format('YYYY'),
-    moment(value).format('MM'),
-    { enabled: isSuccessUserData }
+    moment(value).format('MM')
+    // { enabled: isSuccessUserData }
   );
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const Home: NextPage = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <RoundButton iconUrl={`Share_Android`} marginLeft={`-2px`} />
+              <ShareButton nickname={userData.nickname} githubId={footprintData?.githubId} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
@@ -79,16 +80,17 @@ const Home: NextPage = () => {
           <CheerButton cheer={userData.cheerCount} disabled={false} />
         </Canvas>
         {/* 개인 달성 지표 */}
-        <Achievements value={value} />
+        <Achievements footprintData={footprintData} />
       </ProfileContainer>
       {/* 달력 */}
-      <Calendars value={value} onChange={onChange} />
+      <Calendars value={value} onChange={onChange} footprintData={footprintData} />
 
       <HorizontalRule />
       <Comments
         title="코멘트 보기 💬"
         isShowCommentInput={false}
         footprintId={footprintData?.footprintId}
+        isOwner={true}
       />
       <ScrollToTopBtn />
     </DefaultLayout>

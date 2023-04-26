@@ -9,7 +9,7 @@ import { deleteComment } from '@/apis/api';
 import { modalState } from '@/components/states';
 import { button } from '@/styles/common';
 
-const CommentList = ({ footprintId }: { footprintId: number }) => {
+const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: boolean }) => {
   const COUNT = 3;
   const router = useRouter();
   const [, setModal] = useRecoilState(modalState);
@@ -64,15 +64,13 @@ const CommentList = ({ footprintId }: { footprintId: number }) => {
                     <CommentWriterNickname onClick={() => router.push(`/share/${item.githubId}`)}>
                       {item.nickname}
                     </CommentWriterNickname>
-                    {/* TODO: 내가 작성하거나, 내가 주인장일경우에만 삭제버튼 보여야 함 */}
-                    <div onClick={() => handleDelete(item.id)}>🗑</div>
                   </CommentWriterArea>
                   <CommentWriteDate>
                     {moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </CommentWriteDate>
                 </CommentFirstLine>
                 <CommentText>{item.contents}</CommentText>
-                <DeleteBtn></DeleteBtn>
+                {isOwner && <DeleteBtn onClick={() => handleDelete(item.id)} />}
               </CommentItemWapper>
             );
           })}
@@ -121,6 +119,7 @@ const CommentWriterArea = styled.div`
 `;
 
 const CommentWriterNickname = styled.div`
+  cursor: pointer;
   font-size: 1.5rem;
   font-weight: 600;
   color: #666666;
