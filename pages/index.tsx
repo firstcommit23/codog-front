@@ -30,8 +30,8 @@ const Home: NextPage = () => {
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: footprintData, refetch } = useUserFootprintQuery(
     moment(value).format('YYYY'),
-    moment(value).format('MM'),
-    { enabled: isSuccessUserData }
+    moment(value).format('MM')
+    // { enabled: isSuccessUserData }
   );
 
   useEffect(() => {
@@ -79,10 +79,10 @@ const Home: NextPage = () => {
           <CheerButton cheer={userData.cheerCount} disabled={false} />
         </Canvas>
         {/* 개인 달성 지표 */}
-        <Achievements value={value} />
+        <Achievements footprintData={footprintData} />
       </ProfileContainer>
       {/* 달력 */}
-      <Calendars value={value} onChange={onChange} />
+      <Calendars value={value} onChange={onChange} footprintData={footprintData} />
 
       <HorizontalRule />
       <Comments
