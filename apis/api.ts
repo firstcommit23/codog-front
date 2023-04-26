@@ -130,3 +130,8 @@ export const postComment = ({
 export const deleteComment = (commentId: number) => {
   return Instance.delete(`/comments/${commentId}`).then((res) => res.data.response);
 };
+
+export const getShare = (githubId: string) => {
+  return Instance.get(`/users/share-house/${githubId}`, {}).then((res) => res.data.response);
+  // .catch((error) => error.response);
+};

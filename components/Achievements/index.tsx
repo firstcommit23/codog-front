@@ -1,17 +1,11 @@
 import styled from '@emotion/styled';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
-import moment from 'moment';
+import type { FootprintType } from '@/apis/type';
 
 interface IProps {
-  value: Date;
+  footprintData: FootprintType;
 }
 
-const Achievements = ({ value }: IProps) => {
-  const { data: footprintData } = useUserFootprintQuery(
-    String(moment(value).year()),
-    moment(value).format('MM')
-  );
-
+const Achievements = ({ footprintData }: IProps) => {
   return (
     <AchievementWrapper>
       <div className="item total">

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { NextPage } from 'next';
+import React, { useState } from 'react';
+import { GetServerSideProps, NextPage } from 'next';
 import moment from 'moment';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
-import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import {
   Canvas,
   DogCharacter,
@@ -13,24 +11,22 @@ import {
   FurnitureItem,
   CheerButton,
 } from '@/components/Canvas';
-import { useRouter } from 'next/router';
 import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
 import RoundButton from '@/components/Canvas/RoundButton';
+import useUserShareQuery from '@/hooks/query/useUserShareQuery';
+import axios from 'axios';
 
-const SharePage: NextPage = () => {
+interface SharePageProps {
+  githubId?: string;
+}
+
+const SharePage: NextPage = ({ githubId }: SharePageProps) => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
-  const router = useRouter();
 
-  //TODO: 이부분을 공유하기 API로 변경 필요
-  const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
-  const { data: footprintData, refetch } = useUserFootprintQuery(
-    moment(value).format('YYYY'),
-    moment(value).format('MM'),
-    { enabled: !!userData }
-  );
+  const { data: shareData, isSuccess } = useUserShareQuery(githubId);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
@@ -38,12 +34,7 @@ const SharePage: NextPage = () => {
     return a.diff(b, 'days');
   };
 
-  useEffect(() => {
-    refetch();
-  }, [value]);
-
-  //isLoading
-  if (!isSuccessUserData) return null;
+  if (!isSuccess) return null;
 
   return (
     <DefaultLayout>
@@ -53,7 +44,7 @@ const SharePage: NextPage = () => {
         <ProfileBox>
           <ProfileWrapper>
             <ProfileContent>
-              <span className="nickname">{userData?.nickname}</span>님의 <br />
+              <span className="nickname">{shareData?.nickname}</span>님의 <br />
               코독하우스에 오신 것을 환영합니다!
             </ProfileContent>
             <ProfileButtonArea>
@@ -64,28 +55,62 @@ const SharePage: NextPage = () => {
         </ProfileBox>
         {/* 코독 하우스 */}
         <Canvas>
-          <DogCharacter character={userData?.characterCode} />
+          <DogCharacter character={shareData?.characterCode} />
           <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
             열코딩중!!
           </Balloon>
-          <FoodItem food={userData.foodItem} />
-          <FurnitureItem furniture={userData.furnitureItem} />
+          <FoodItem food={shareData.foodItem} />
+          <FurnitureItem furniture={shareData.furnitureItem} />
           <DdayBox>
             <div className="pin"></div>
-            <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
+            <span className="Dday">D+{getDday(today, shareData?.createDate)}</span>
           </DdayBox>
-          <CheerButton cheer={userData.cheerCount} disabled={false} />
+          <CheerButton cheer={shareData.cheerCount} disabled={false} />
         </Canvas>
         {/* 개인 달성 지표 */}
-        <Achievements value={value} />
+        <Achievements footprintData={shareData.footPrintData} />
       </ProfileContainer>
       {/* 달력 */}
-      <Calendars value={value} onChange={onChange} />
+      <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
 
       <HorizontalRule />
-      <Comments title="코멘트 남기기 ✍️" footprintId={footprintData?.footprintId} />
+      <Comments title="코멘트 남기기 ✍️" footprintId={shareData.footPrintData?.footprintId} />
     </DefaultLayout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<SharePageProps> = async (context) => {
+  const { githubId } = context.params;
+
+  if (!githubId || typeof githubId !== 'string' || Array.isArray(githubId)) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
+  // github Id 유효성 체크
+  const response = await axios
+    .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/share-house/${githubId}`)
+    .then((res) => res.data.response)
+    .catch(() => false);
+
+  if (!response) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      githubId,
+    },
+  };
 };
 
 const ProfileContainer = styled.div`
