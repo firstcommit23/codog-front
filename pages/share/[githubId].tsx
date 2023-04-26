@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
-import moment from 'moment';
+import Head from 'next/head';
+import axios from 'axios';
 import styled from '@emotion/styled';
+import moment from 'moment';
+import useUserShareQuery from '@/hooks/query/useUserShareQuery';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import {
   Canvas,
@@ -15,8 +18,7 @@ import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
 import RoundButton from '@/components/Canvas/RoundButton';
-import useUserShareQuery from '@/hooks/query/useUserShareQuery';
-import axios from 'axios';
+import ShareButton from '@/components/ShareButton';
 
 interface SharePageProps {
   githubId?: string;
@@ -37,49 +39,62 @@ const SharePage: NextPage = ({ githubId }: SharePageProps) => {
   if (!isSuccess) return null;
 
   return (
-    <DefaultLayout>
-      {/* 프로필 */}
-      <ProfileContainer>
-        {/* 닉네임, 공유 버튼 */}
-        <ProfileBox>
-          <ProfileWrapper>
-            <ProfileContent>
-              <span className="nickname">{shareData?.nickname}</span>님의 <br />
-              코독하우스에 오신 것을 환영합니다!
-            </ProfileContent>
-            <ProfileButtonArea>
-              <RoundButton route={`/mypage/itemshop`} iconUrl={`/images/home-edit.svg`} />
-              <RoundButton iconUrl={`/images/Share_Android.svg`} />
-            </ProfileButtonArea>
-          </ProfileWrapper>
-        </ProfileBox>
-        {/* 코독 하우스 */}
-        <Canvas>
-          <DogCharacter character={shareData?.characterCode} />
-          <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
-            열코딩중!!
-          </Balloon>
-          <FoodItem food={shareData.foodItem} />
-          <FurnitureItem furniture={shareData.furnitureItem} />
-          <DdayBox>
-            <div className="pin"></div>
-            <span className="Dday">D+{getDday(today, shareData?.createDate)}</span>
-          </DdayBox>
-          <CheerButton cheer={shareData.cheerCount} disabled={false} />
-        </Canvas>
-        {/* 개인 달성 지표 */}
-        <Achievements footprintData={shareData.footPrintData} />
-      </ProfileContainer>
-      {/* 달력 */}
-      <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
+    <>
+      <Head>
+        <title>{shareData?.nickname}님의 코독하우스</title>
+        <meta property="og:title" content={`${shareData?.nickname}님의 코독하우스`} />
+        <meta property="og:site_name" content="Codog" />
+        <meta property="og:description" content="코독한 개발자의 발자국을 확인하세요!" />
+        <meta property="og:image" content="/images/dosg/dog1.png" />
+        <meta
+          property="og:url"
+          content={`${process.env.NEXT_PUBLIC_CODOG_FRONT_URL}/share/${githubId}`}
+        />
+      </Head>
+      <DefaultLayout>
+        {/* 프로필 */}
+        <ProfileContainer>
+          {/* 닉네임, 공유 버튼 */}
+          <ProfileBox>
+            <ProfileWrapper>
+              <ProfileContent>
+                <span className="nickname">{shareData?.nickname}</span>님의 <br />
+                코독하우스에 오신 것을 환영합니다!
+              </ProfileContent>
+              <ProfileButtonArea>
+                <RoundButton route={`/mypage/itemshop`} iconUrl={`/images/home-edit.svg`} />
+                <ShareButton nickname={shareData.nickname} githubId={githubId} />
+              </ProfileButtonArea>
+            </ProfileWrapper>
+          </ProfileBox>
+          {/* 코독 하우스 */}
+          <Canvas>
+            <DogCharacter character={shareData?.characterCode} />
+            <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
+              열코딩중!!
+            </Balloon>
+            <FoodItem food={shareData.foodItem} />
+            <FurnitureItem furniture={shareData.furnitureItem} />
+            <DdayBox>
+              <div className="pin"></div>
+              <span className="Dday">D+{getDday(today, shareData?.createDate)}</span>
+            </DdayBox>
+            <CheerButton cheer={shareData.cheerCount} disabled={false} />
+          </Canvas>
+          {/* 개인 달성 지표 */}
+          <Achievements footprintData={shareData.footPrintData} />
+        </ProfileContainer>
+        {/* 달력 */}
+        <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
 
-      <HorizontalRule />
-      <Comments
-        title="코멘트 남기기 ✍️"
-        footprintId={shareData.footPrintData?.footprintId}
-        isOwner={shareData.isOwner}
-      />
-    </DefaultLayout>
+        <HorizontalRule />
+        <Comments
+          title="코멘트 남기기 ✍️"
+          footprintId={shareData.footPrintData?.footprintId}
+          isOwner={shareData.isOwner}
+        />
+      </DefaultLayout>
+    </>
   );
 };
 

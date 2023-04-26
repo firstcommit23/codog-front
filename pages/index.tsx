@@ -21,6 +21,7 @@ import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
 import RoundButton from '@/components/Canvas/RoundButton';
 import ScrollToTopBtn from '@/components/ScrollButton/ScrollToTopBtn';
+import ShareButton from '@/components/ShareButton';
 
 const Home: NextPage = () => {
   const [value, onChange] = useState(new Date());
@@ -60,7 +61,7 @@ const Home: NextPage = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <RoundButton iconUrl={`Share_Android`} marginLeft={`-2px`} />
+              <ShareButton nickname={userData.nickname} githubId={footprintData.githubId} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
