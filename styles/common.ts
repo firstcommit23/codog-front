@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
 export const Common = {
   colors: {
@@ -37,4 +37,16 @@ export const button = css`
   padding: 1.5rem;
   margin-top: 2rem;
   cursor: pointer;
+`;
+
+export const skeletonGradient = keyframes`
+  0% {
+    background-color: rgba(165, 165, 165, 0.1);
+  }
+  50% {
+    background-color: rgba(165, 165, 165, 0.3);
+  }
+  100% {
+    background-color: rgba(165, 165, 165, 0.1);
+  }
 `;
