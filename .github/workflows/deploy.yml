@@ -21,6 +21,4 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd /home/front
-            git pull
-            npm install
             pm2 reload codog-front
