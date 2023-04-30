@@ -16,7 +16,7 @@ const IntroCharacterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [character, setCharacter] = useState(user.character);
 
-  const colorList = ['#82AAFF', '#F07178', '#F9C66A'];
+  const colorList = ['#82AAFF', '#F07178', '#F9C66A', '#C590E6'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
   useEffect(() => {

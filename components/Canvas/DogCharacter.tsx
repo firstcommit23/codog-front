@@ -20,6 +20,8 @@ const getInfo = (code: string) => {
       return { ...defaultValue, width: '94px', height: '129px' };
     case 'C':
       return { ...defaultValue, width: '111px', height: '128px' };
+    case 'D':
+      return { ...defaultValue, width: '116px', height: '143px' };
     default:
       return defaultValue;
   }
@@ -61,8 +63,7 @@ const DogCharacterDiv = styled.div<{
   height?: string;
   width?: string;
 }>`
-  background-image: url(${(props) =>
-    `${props.img ? props.img : '/images/dogs/A/Default_Default.svg'}`});
+  background-image: url(${(props) => props.img});
   position: absolute;
   left: 53%;
   transform: translate(-50%, 0%);
@@ -72,7 +73,7 @@ const DogCharacterDiv = styled.div<{
   bottom: -0.5rem;
   cursor: pointer;
   width: ${(props) => `${props.width ? props.width : '100px'}`};
-  height: ${(props) => `${props.height ? props.height : '100px'}`}; ;
+  height: ${(props) => `${props.height ? props.height : '100px'}`};
 `;
 
 const Laptop = styled.div<{ left?: string }>`

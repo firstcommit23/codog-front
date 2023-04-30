@@ -4,7 +4,7 @@ export type User = {
 };
 
 export type CHARACTER_CODES = 'A' | 'B' | 'C' | 'D';
-export type CHARACTER_NAMES = '시고르자브종' | '닥스훈트' | '푸들';
+export type CHARACTER_NAMES = '시고르자브종' | '닥스훈트' | '푸들' | '바둑이';
 
 export type CharacterType = {
   id: number;

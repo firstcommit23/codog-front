@@ -36,6 +36,8 @@ export const getRoomColor = (code: string) => {
       return '#F07178';
     case 'C':
       return '#F9C66A';
+    case 'D':
+      return '#C590E6';
     default:
       return defaultValue;
   }

@@ -338,6 +338,7 @@ const TotalCount = styled.span`
 
 const ButtonSubmit = styled.button`
   width: 100%;
+  max-width: 450px;
   background: #282828;
   border-radius: 5px;
   border: 0;
