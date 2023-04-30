@@ -11,6 +11,7 @@ import useItemListQuery from '@/hooks/query/useItemListQuery';
 import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
+import { skeletonGradient } from '@/styles/common';
 
 const ItemShopPage = () => {
   const today = new Date();
@@ -19,7 +20,7 @@ const ItemShopPage = () => {
 
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
   const { data: itemsData, isSuccess: isSuccessItemsData } = useItemListQuery();
-  const { data: footprintData } = useUserFootprintQuery(
+  const { data: footprintData, isLoading: isFootprintLoading } = useUserFootprintQuery(
     moment(today).format('YYYY'),
     moment(today).format('MM')
   );
@@ -75,7 +76,11 @@ const ItemShopPage = () => {
           <Canvas paddingTop="5rem">
             <FootprintCount>
               <div>내 발자국 수</div>
-              <TotalCount>{footprintData?.totalCount}</TotalCount>
+              {!isFootprintLoading ? (
+                <TotalCount>{footprintData?.totalCount}</TotalCount>
+              ) : (
+                <SkeletonTotalCount>0</SkeletonTotalCount>
+              )}
             </FootprintCount>
             <DogCharacter character={userData.characterCode} />
             <FoodItem food={selectedFoodItem} />
@@ -87,7 +92,7 @@ const ItemShopPage = () => {
       <ItemContainer>
         <Title>코독 하우스 아이템</Title>
         <CodogItemList>
-          {isSuccessItemsData &&
+          {!isFootprintLoading ? (
             itemsData?.map((item: ItemType) => {
               const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
               const isSelectedItem = selectedItem?.includes(item.itemCode);
@@ -116,7 +121,20 @@ const ItemShopPage = () => {
                   </InfoWrapper>
                 </CodogItem>
               );
-            })}
+            })
+          ) : (
+            <>
+              {new Array(12).fill('').map((_, i) => (
+                <SkeletonCodogItem key={`skeletonItem${i}`}>
+                  <SkeletonInfoWrapper>
+                    <SkeletonRequisiteCount>
+                      <div></div>
+                    </SkeletonRequisiteCount>
+                  </SkeletonInfoWrapper>
+                </SkeletonCodogItem>
+              ))}
+            </>
+          )}
         </CodogItemList>
       </ItemContainer>
       <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
@@ -338,6 +356,61 @@ const ButtonSubmit = styled.button`
   &:disabled {
     background-color: #eeeeee;
   }
+`;
+
+const SkeletonTotalCount = styled(TotalCount)`
+  background: #3a3a3a;
+  color: #3a3a3a;
+  &:before {
+    content: '';
+    position: absolute;
+    border-radius: 900rem;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    animation: ${skeletonGradient} 1.5s infinite ease-in-out;
+  }
+`;
+
+const SkeletonCodogItem = styled(CodogItem)`
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
+    animation: ${skeletonGradient} 1.5s infinite ease-in-out;
+  }
+`;
+
+const SkeletonInfoWrapper = styled(InfoWrapper)`
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
+    animation: ${skeletonGradient} 1.5s infinite ease-in-out;
+  }
+`;
+
+const SkeletonRequisiteCount = styled.div`
+  width: 100%;
+  border-radius: 1rem;
+  height: 1.4rem;
+  background-color: #3a3a3a;
+  animation: ${skeletonGradient} 1.5s infinite ease-in-out;
 `;
 
 export default ItemShopPage;

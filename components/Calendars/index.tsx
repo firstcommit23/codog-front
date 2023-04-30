@@ -48,8 +48,8 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
         tileContent={({ date, view }) => {
           const day = moment(date).format('D');
           const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
-          let html = [];
-          let object = Object.entries(footprintData?.dayStamp || {});
+          const html = [];
+          const object = Object.entries(footprintData?.dayStamp || {});
           if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 0)) {
             return null;
           }
