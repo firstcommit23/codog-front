@@ -3,29 +3,35 @@ import { NextPageContext } from 'next';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 
-const errorPage = ({ statusCode, errorMessage }: { statusCode: string , errorMessage: string }) => {
-
+const ErrorPage = ({ statusCode, errorMessage }: { statusCode: string; errorMessage: string }) => {
   const router = useRouter();
 
   return (
-    <DefaultLayout isShowMenu={false} backgroundColor="#282828" height='100vh'>
+    <DefaultLayout isShowMenu={false} backgroundColor="#282828" height="100vh">
       <HeightCenter>
         <StatusCode>{statusCode}</StatusCode>
         <ErrorMessage>{errorMessage}</ErrorMessage>
         <ErrorImage></ErrorImage>
-        <DefaultMessage>페이지가 존재하지 않거나, <br/> 사용할 수 없는 페이지입니다.</DefaultMessage>
-        <HomeButton onClick={()=>{router.push('/')}}>홈으로 가기</HomeButton>
+        <DefaultMessage>
+          페이지가 존재하지 않거나, <br /> 사용할 수 없는 페이지입니다.
+        </DefaultMessage>
+        <HomeButton
+          onClick={() => {
+            router.push('/');
+          }}>
+          홈으로 가기
+        </HomeButton>
       </HeightCenter>
     </DefaultLayout>
   );
 };
-errorPage.getInitialProps = (ctx: NextPageContext) => {
+ErrorPage.getInitialProps = (ctx: NextPageContext) => {
   const { res, err } = ctx;
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   const errorMessage = err ? err.message : 'Page Not Found';
   return { statusCode, errorMessage };
 };
-export default errorPage;
+export default ErrorPage;
 
 const HeightCenter = styled.div`
   height: 100vh;
@@ -36,7 +42,7 @@ const HeightCenter = styled.div`
 `;
 
 const StatusCode = styled.div`
-  color: #96B4FF;
+  color: #96b4ff;
   font-size: 4.5rem;
   font-family: 'Fira Code', monospace;
   padding-bottom: 1rem;
@@ -65,24 +71,24 @@ const DefaultMessage = styled.div`
 `;
 
 const HomeButton = styled.button`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    align-self: center;
-    justify-content: center;
-    background: white;
-    color: #282828;
-    border: 0;
-    border-radius: 5px;
-    font-weight: 600;
-    font-size: 1.8rem;
-    line-height: 2.2rem;
-    width: 100%;
-    padding: 1.4rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  background: white;
+  color: #282828;
+  border: 0;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  width: 100%;
+  padding: 1.4rem;
 
-    &:hover {
-      cursor: pointer;
-      background-color: #e0e0e0;
-      transition: all 0.3s ease;
-    }
+  &:hover {
+    cursor: pointer;
+    background-color: #e0e0e0;
+    transition: all 0.3s ease;
+  }
 `;

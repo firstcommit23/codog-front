@@ -17,7 +17,6 @@ const CheerButton = ({ cheer, disabled }: CheerProps) => {
   const { mutate } = useMutation((cheerCount: number) => putCheerCount(cheerCount));
   useEffect(() => {
     mutate(cheerCount, {
-      onSuccess: () => {},
       onError: (error: any) => {
         const message = error?.response.data.error.message || '';
         alert(message);
