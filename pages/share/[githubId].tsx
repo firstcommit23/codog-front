@@ -17,7 +17,6 @@ import {
 import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
-import RoundButton from '@/components/Canvas/RoundButton';
 import ShareButton from '@/components/ShareButton';
 
 interface SharePageProps {
@@ -62,7 +61,6 @@ const SharePage: NextPage = ({ githubId }: SharePageProps) => {
                 코독하우스에 오신 것을 환영합니다!
               </ProfileContent>
               <ProfileButtonArea>
-                <RoundButton route={`/mypage/itemshop`} iconUrl={`/images/home-edit.svg`} />
                 <ShareButton nickname={shareData.nickname} githubId={githubId} />
               </ProfileButtonArea>
             </ProfileWrapper>

@@ -23,4 +23,5 @@ jobs:
           script: |
             whoami
             cd /home/front
+            ls -al
             echo 'test'
