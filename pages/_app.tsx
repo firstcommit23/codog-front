@@ -20,6 +20,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       },
     },
   });
+
   return (
     <>
       <Head>
@@ -32,7 +33,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <RecoilRoot>
           <Component {...pageProps} />
         </RecoilRoot>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools initialIsOpen={false} />}
       </QueryClientProvider>
     </>
   );

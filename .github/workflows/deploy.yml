@@ -1,7 +1,7 @@
 name: deploy
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -19,6 +19,8 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
+            whoami
             cd /home/front
-            pm2 reload codog-front
+            echo 'test'
