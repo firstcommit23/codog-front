@@ -24,7 +24,7 @@ jobs:
             whoami
             cd /home/front
             ls -al
-            echo 'test'
             git pull ${{secrets.GIT_TOKEN}}@github.com/footprint-for-coding/front.git
+            npm install
             npm run build
             pm2 reload codog-front
