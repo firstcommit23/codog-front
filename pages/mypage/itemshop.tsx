@@ -71,24 +71,19 @@ const ItemShopPage = () => {
 
   return (
     <DefaultLayout backgroundColor="#282828">
-      {isSuccessUserData && (
-        <>
-          <Canvas paddingTop="5rem">
-            <FootprintCount>
-              <div>내 발자국 수</div>
-              {!isFootprintLoading ? (
-                <TotalCount>{footprintData?.totalCount}</TotalCount>
-              ) : (
-                <SkeletonTotalCount>0</SkeletonTotalCount>
-              )}
-            </FootprintCount>
-            <DogCharacter character={userData.characterCode} />
-            <FoodItem food={selectedFoodItem} />
-            <FurnitureItem furniture={selectedFurnitureItem} />
-          </Canvas>
-        </>
-      )}
-
+      <Canvas paddingTop="5rem">
+        <FootprintCount>
+          <div>내 발자국 수</div>
+          {!isFootprintLoading ? (
+            <TotalCount>{footprintData?.totalCount}</TotalCount>
+          ) : (
+            <SkeletonTotalCount>0</SkeletonTotalCount>
+          )}
+        </FootprintCount>
+        <DogCharacter character={userData.characterCode} />
+        <FoodItem food={selectedFoodItem} />
+        <FurnitureItem furniture={selectedFurnitureItem} />
+      </Canvas>
       <ItemContainer>
         <Title>코독 하우스 아이템</Title>
         <CodogItemList>
@@ -152,6 +147,7 @@ const ItemContainer = styled.div`
   border-top-left-radius: 2rem;
   border-top-right-radius: 2rem;
   width: 100%;
+  margin-bottom: 5rem;
 `;
 
 const CodogItemList = styled.div`

@@ -11,6 +11,7 @@ const DropOutPage = () => {
   const router = useRouter();
   const { mutate, isLoading } = useMutation(() => deleteDropOutUser());
   const [, setModal] = useRecoilState(modalState);
+  const [agree, setAgree] = useState(false);
 
   const handleSuccess = () => {
     localStorage.removeItem('accessToken');
@@ -18,7 +19,7 @@ const DropOutPage = () => {
     router.push('/login');
   };
 
-  const handleSubmit = () => {
+  const dropoutUser = () => {
     mutate(undefined, {
       onSuccess: () => {
         setModal({
@@ -32,6 +33,24 @@ const DropOutPage = () => {
         const message = error?.response.data.error.message || '';
         alert(message);
       },
+    });
+  };
+
+  const handleSubmit = () => {
+    if (!agree) {
+      setModal({
+        isShow: true,
+        title: '안내사항에 동의해주세요.',
+        content: '',
+      });
+      return;
+    }
+    setModal({
+      isShow: true,
+      title: '탈퇴하시겠습니까?',
+      content: '',
+      isCancleButton: true,
+      onClick: dropoutUser,
     });
   };
 
@@ -49,7 +68,7 @@ const DropOutPage = () => {
           </li>
         </DropoutDescriptionList>
         <AgreementBoxArea>
-          <input type="checkbox" id="agreement" />
+          <input type="checkbox" id="agreement" checked={agree} onChange={() => setAgree(!agree)} />
           <label htmlFor="agreement">안내 사항을 확인하였으며, 이에 동의합니다.</label>
         </AgreementBoxArea>
         <HrLine />
