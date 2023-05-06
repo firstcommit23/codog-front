@@ -130,7 +130,7 @@ const CommentText = styled.div`
   padding: 2rem 4rem 3rem 2.5rem;
   font-size: 1.6rem;
   line-height: 1.8;
-  word-break: keep-all;
+  // word-break: keep-all;
   color: #333333;
 `;
 

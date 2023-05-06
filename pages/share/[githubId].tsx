@@ -135,7 +135,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   width: 100%;
   padding-top: 7rem;
-  background-color: #282828;
+  background: linear-gradient(#282828 80%, #fff 10%);
 `;
 const ProfileBox = styled.div`
   width: 100%;
@@ -201,8 +201,7 @@ const HorizontalRule = styled.hr`
   height: 8px;
   background: #f5f5f5;
   border: none;
-  width: 120%;
-  margin-left: -30px;
+  width: 100%;
 `;
 
 export default SharePage;
