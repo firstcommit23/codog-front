@@ -64,15 +64,12 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                 </div>
                 <div
                   onClick={() => {
-                    router.push('/');
+                    window.open(
+                      'https://www.notion.so/codog/Coding-with-dog-CODOG-559a37bc54c64cc295dafa4d3b27571e',
+                      '_blank'
+                    );
                   }}>
                   코독에 대하여...
-                </div>
-                <div
-                  onClick={() => {
-                    router.push('/');
-                  }}>
-                  공지사항
                 </div>
                 {isLogin ? (
                   <div
