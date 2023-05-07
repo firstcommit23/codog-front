@@ -8,6 +8,7 @@ import type { ItemType } from '@/apis/type';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import useItemListQuery from '@/hooks/query/useItemListQuery';
+import { getRoomColor } from '@/utils/serviceUtils';
 import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
@@ -71,7 +72,7 @@ const ItemShopPage = () => {
 
   return (
     <DefaultLayout backgroundColor="#282828">
-      <Canvas paddingTop="5rem">
+      <Canvas paddingTop="5rem" roomColor={getRoomColor(userData.characterCode)}>
         <FootprintCount>
           <div>내 발자국 수</div>
           {!isFootprintLoading ? (

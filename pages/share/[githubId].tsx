@@ -5,6 +5,7 @@ import axios from 'axios';
 import styled from '@emotion/styled';
 import moment from 'moment';
 import useUserShareQuery from '@/hooks/query/useUserShareQuery';
+import { getRoomColor } from '@/utils/serviceUtils';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import {
   Canvas,
@@ -66,7 +67,7 @@ const SharePage: NextPage = ({ githubId }: SharePageProps) => {
             </ProfileWrapper>
           </ProfileBox>
           {/* 코독 하우스 */}
-          <Canvas>
+          <Canvas roomColor={getRoomColor(shareData?.characterCode)}>
             <DogCharacter character={shareData?.characterCode} />
             <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
               열코딩중!!
