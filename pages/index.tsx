@@ -16,6 +16,7 @@ import {
   CheerButton,
 } from '@/components/Canvas';
 import { useRouter } from 'next/router';
+import { getRoomColor } from '@/utils/serviceUtils';
 import Comments from '@/components/Comments';
 import Calendars from '@/components/Calendars';
 import Achievements from '@/components/Achievements';
@@ -24,7 +25,9 @@ import ScrollToTopBtn from '@/components/ScrollButton/ScrollToTopBtn';
 import ShareButton from '@/components/ShareButton';
 
 const Home: NextPage = () => {
+  const ThinkList = ['오늘 머먹지', '앗! 금지', '200!', '404...', '나는 코딩왕이 될테야'];
   const [value, onChange] = useState(new Date());
+  const [random] = useState(Math.floor(Math.random() * (ThinkList.length - 1 + 1)));
   const today = new Date();
   const router = useRouter();
 
@@ -32,7 +35,6 @@ const Home: NextPage = () => {
   const { data: footprintData, refetch } = useUserFootprintQuery(
     moment(value).format('YYYY'),
     moment(value).format('MM')
-    // { enabled: isSuccessUserData }
   );
 
   useEffect(() => {
@@ -42,6 +44,8 @@ const Home: NextPage = () => {
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
     const b = moment(createdDate);
+    console.log(moment(createdDate).format('YYYYMMDD'));
+    console.log(moment(new Date()).format('YYYYMMDD'));
     return a.diff(b, 'days');
   };
   //isLoading
@@ -66,10 +70,10 @@ const Home: NextPage = () => {
           </ProfileWrapper>
         </ProfileBox>
         {/* 코독 하우스 */}
-        <Canvas>
+        <Canvas roomColor={getRoomColor(userData?.characterCode)}>
           <DogCharacter character={userData?.characterCode} />
           <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
-            밥머먹지
+            {ThinkList[random]}
           </Balloon>
           <FoodItem food={userData.foodItem} />
           <FurnitureItem furniture={userData.furnitureItem} />

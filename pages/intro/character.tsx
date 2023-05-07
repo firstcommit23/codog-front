@@ -16,7 +16,6 @@ const IntroCharacterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [character, setCharacter] = useState(user.character);
 
-  const colorList = ['#82AAFF', '#F07178', '#F9C66A', '#C590E6'];
   const { data: characters, isSuccess } = useIntroCharacterListQuery();
 
   useEffect(() => {
@@ -63,7 +62,7 @@ const IntroCharacterPage = () => {
         {isSuccess &&
           characters?.map((item: any, index: number) => {
             return (
-              <CharacterItem key={item.code} color={colorList[index]}>
+              <CharacterItem key={item.code} color={getRoomColor(item.code)}>
                 <input
                   type="radio"
                   id={item.code}

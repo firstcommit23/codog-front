@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import moment from 'moment';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
+import { getRoomColor } from '@/utils/serviceUtils';
 import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
@@ -64,7 +65,7 @@ const ProfilePage = () => {
     <DefaultLayout backgroundColor="white" height="100vh">
       {isSuccessUserData && (
         <>
-          <Canvas paddingTop="5rem">
+          <Canvas paddingTop="5rem" roomColor={getRoomColor(userData?.characterCode)}>
             <DogCharacter character={userData?.characterCode} />
             <FoodItem food={userData.foodItem} />
             <FurnitureItem furniture={userData.furnitureItem} />
@@ -72,7 +73,7 @@ const ProfilePage = () => {
           <ProfileWrapper>
             <UserProfileTable>
               <div className="nickname">{userData?.nickname}</div>
-              {/* <div>
+              <div>
                 {characters?.map((item: CharacterType, index: number) => {
                   return (
                     <span key={item.code}>
@@ -89,9 +90,9 @@ const ProfilePage = () => {
                     </span>
                   );
                 })}
-              </div> */}
+              </div>
               {/* <div className="email">{userData.email}</div> */}
-              <div className="email">junandkang@gmail.com</div>
+              {/* <div className="email">junandkang@gmail.com</div> */}
             </UserProfileTable>
             <BtnWrapper>
               <NameUpdateButton
