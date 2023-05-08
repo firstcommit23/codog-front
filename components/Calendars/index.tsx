@@ -54,17 +54,17 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
             return null;
           }
           if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 1 && x[1] < 3)) {
-            html.push(<FootPrintMarkLighten></FootPrintMarkLighten>);
+            html.push(
+              <FootPrintMarkLighten key={`footprint${date}-${view}`}></FootPrintMarkLighten>
+            );
           }
           if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 3)) {
-            html.push(<FootPrintMarkDarken></FootPrintMarkDarken>);
+            html.push(<FootPrintMarkDarken key={`footprint${date}-${view}`}></FootPrintMarkDarken>);
           }
           return (
-            <>
-              <CustomTooltips title={content} arrow placement="top">
-                <div>{html}</div>
-              </CustomTooltips>
-            </>
+            <CustomTooltips title={content} arrow placement="top">
+              <div key={`day${date}-${view}`}>{html}</div>
+            </CustomTooltips>
           );
         }}
       />

@@ -17,7 +17,7 @@ const RoundButton = ({ iconUrl, marginLeft, backgroundColor, route }: RoundBtnPr
   );
 };
 
-const StyledButton = styled.a<{ backgroundColor: string }>`
+const StyledButton = styled.span<{ backgroundColor: string }>`
   display: flex;
   flex-direction: row;
   justify-content: center;
