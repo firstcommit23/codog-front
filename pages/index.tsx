@@ -72,7 +72,7 @@ const Home: NextPage = () => {
         {/* 코독 하우스 */}
         <Canvas roomColor={getRoomColor(userData?.characterCode)}>
           <DogCharacter character={userData?.characterCode} />
-          <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
+          <Balloon type="Think" color="#282828" fontSize="1.4rem">
             {ThinkList[random]}
           </Balloon>
           <FoodItem food={userData.foodItem} />
