@@ -29,8 +29,8 @@ const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: b
   const handleDelete = (commentId: number) => {
     setModal({
       isShow: true,
-      title: '확인',
-      content: '코멘트 삭제하시겠습니까?',
+      title: '코멘트를 삭제하시겠습니까?',
+      content: '',
       isCancleButton: true,
       onClick: () => deleteCommentAction(commentId),
     });
@@ -130,7 +130,8 @@ const CommentText = styled.div`
   padding: 2rem 4rem 3rem 2.5rem;
   font-size: 1.6rem;
   line-height: 1.8;
-  // word-break: keep-all;
+  text-align: start;
+  word-break: keep-all;
   color: #333333;
 `;
 
