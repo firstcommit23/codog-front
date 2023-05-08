@@ -91,7 +91,7 @@ const ProfilePage = () => {
                   );
                 })}
               </div>
-              {/* <div className="email">{userData.email}</div> */}
+              <div className="email">{userData.email}</div>
               {/* <div className="email">junandkang@gmail.com</div> */}
             </UserProfileTable>
             <BtnWrapper>
