@@ -76,7 +76,14 @@ const DropOutPage = () => {
           Codog 이용 중 불편한 점이 있으셨나요?
           <br /> 회원님의 소중한 의견으로 더 나은 서비스를 만들겠습니다.
           <br />
-          <span>의견 남기기</span>
+          <span
+            onClick={() =>
+              window.open(
+                'https://docs.google.com/forms/d/17HV5klzJyMmku0TYucZ1rOjH3QKcEpqkRqIQk6r5m6Y/viewform?edit_requested=true'
+              )
+            }>
+            의견 남기기
+          </span>
         </OpinionArea>
         <BtnWrapper>
           <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>

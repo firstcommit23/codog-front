@@ -65,7 +65,7 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
                 <div
                   onClick={() => {
                     window.open(
-                      'https://www.notion.so/codog/Coding-with-dog-CODOG-559a37bc54c64cc295dafa4d3b27571e',
+                      'https://codog.notion.site/Coding-with-dog-CODOG-559a37bc54c64cc295dafa4d3b27571e',
                       '_blank'
                     );
                   }}>
