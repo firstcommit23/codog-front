@@ -39,6 +39,7 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
       <Calendar
         onChange={onChange}
         value={value}
+        locale="ko"
         minDetail="month"
         maxDetail="month"
         formatDay={(locale, date) => moment(date).format('D')}
