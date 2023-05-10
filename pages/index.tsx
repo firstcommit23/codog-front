@@ -25,9 +25,9 @@ import ScrollToTopBtn from '@/components/ScrollButton/ScrollToTopBtn';
 import ShareButton from '@/components/ShareButton';
 
 const Home: NextPage = () => {
-  const ThinkList = ['오늘 머먹지', '앗! 금지', '200!', '404...', '나는 코딩왕이 될테야'];
+  const THINK_LIST = ['오늘 머먹지', '앗! 금지', '200!', '나는 코딩왕이 될테야'];
+  const [talk, setTalk] = useState('');
   const [value, onChange] = useState(new Date());
-  const [random] = useState(Math.floor(Math.random() * (ThinkList.length - 1 + 1)));
   const today = new Date();
   const router = useRouter();
 
@@ -38,18 +38,20 @@ const Home: NextPage = () => {
   );
 
   useEffect(() => {
+    setTalk(THINK_LIST[Math.floor(Math.random() * (THINK_LIST.length - 1 + 1))]);
+  }, []);
+
+  useEffect(() => {
     isSuccessUserData && refetch();
   }, [isSuccessUserData, value]);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
     const b = moment(createdDate);
-    console.log(moment(createdDate).format('YYYYMMDD'));
-    console.log(moment(new Date()).format('YYYYMMDD'));
-    return a.diff(b, 'days');
+    return isNaN(a.diff(b, 'days')) ? 0 : a.diff(b, 'days');
   };
-  //isLoading
-  if (!isSuccessUserData) return null;
+
+  // if (!isSuccessUserData) return null;
   if (userData.isNewUser) router.push('/login');
 
   return (
@@ -57,6 +59,7 @@ const Home: NextPage = () => {
       {/* 프로필 */}
       <ProfileContainer>
         {/* 닉네임, 공유 버튼 */}
+
         <ProfileBox>
           <ProfileWrapper>
             <ProfileContent>
@@ -65,23 +68,25 @@ const Home: NextPage = () => {
             </ProfileContent>
             <ProfileButtonArea>
               <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <ShareButton nickname={userData.nickname} githubId={footprintData?.githubId} />
+              <ShareButton nickname={userData?.nickname} githubId={footprintData?.githubId} />
             </ProfileButtonArea>
           </ProfileWrapper>
         </ProfileBox>
         {/* 코독 하우스 */}
         <Canvas roomColor={getRoomColor(userData?.characterCode)}>
           <DogCharacter character={userData?.characterCode} />
-          <Balloon type="Think" color="#282828" fontSize="1.4rem">
-            {ThinkList[random]}
-          </Balloon>
-          <FoodItem food={userData.foodItem} />
-          <FurnitureItem furniture={userData.furnitureItem} />
+          {talk && (
+            <Balloon type="Think" color="#282828" fontSize="1.4rem">
+              {talk}
+            </Balloon>
+          )}
+          <FoodItem food={userData?.foodItem} />
+          <FurnitureItem furniture={userData?.furnitureItem} />
           <DdayBox>
             <div className="pin"></div>
             <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
           </DdayBox>
-          <CheerButton cheer={userData.cheerCount} disabled={false} />
+          <CheerButton cheer={userData?.cheerCount} disabled={false} />
         </Canvas>
         {/* 개인 달성 지표 */}
         <Achievements footprintData={footprintData} />

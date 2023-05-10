@@ -89,7 +89,8 @@ const AchievementWrapper = styled.div`
     font-family: 'Fira Code', monospace;
     font-weight: 600;
     font-size: 32px;
-    line-height: 30px;
+    line-height: 32px;
+    height: 32px;
   }
 
   .vertical {

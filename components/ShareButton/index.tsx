@@ -10,9 +10,10 @@ interface ShareButtonProps {
 }
 const ShareButton = ({ nickname, githubId }: ShareButtonProps) => {
   const [, setModal] = useRecoilState(modalState);
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  );
+  const isMobile =
+    typeof window !== 'undefined'
+      ? /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      : false;
   const shareTitle = `${nickname}님의 코독하우스`;
   const shareText = '코독한 개발자의 발자국을 확인하세요!';
   const shareUrl = `${process.env.NEXT_PUBLIC_CODOG_FRONT_URL}/share/${githubId}`;

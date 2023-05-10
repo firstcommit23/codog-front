@@ -9,7 +9,7 @@ interface RoundBtnProps {
 
 const RoundButton = ({ iconUrl, marginLeft, backgroundColor, route }: RoundBtnProps) => {
   return (
-    <Link href={`${route}`} prefetch={true}>
+    <Link href={`${route}`}>
       <StyledButton backgroundColor={backgroundColor}>
         <IconDiv iconUrl={`/images/icon/${iconUrl}.svg`} marginLeft={marginLeft}></IconDiv>
       </StyledButton>
@@ -17,7 +17,7 @@ const RoundButton = ({ iconUrl, marginLeft, backgroundColor, route }: RoundBtnPr
   );
 };
 
-const StyledButton = styled.a<{ backgroundColor: string }>`
+const StyledButton = styled.span<{ backgroundColor: string }>`
   display: flex;
   flex-direction: row;
   justify-content: center;

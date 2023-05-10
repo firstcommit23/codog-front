@@ -52,7 +52,6 @@ export const postAuthorizationMail = (email: string) => {
 };
 
 export const getFootprint = (year: string, month: string) => {
-  console.log(year, month);
   return Instance.get(`/footprints?year=${year}&month=${month}`)
     .then((res) => res.data.response)
     .catch((error) => error.response);
