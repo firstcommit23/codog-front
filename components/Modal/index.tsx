@@ -23,7 +23,7 @@ const Modal = () => {
             <SubText>{content}</SubText>
             <ButtonWrapper>
               <ConfirmButton onClick={handleConfirm}>확인</ConfirmButton>
-              {isCancleButton && <ConfirmButton onClick={handleClose}>취소</ConfirmButton>}
+              {isCancleButton && <CancelButton onClick={handleClose}>취소</CancelButton>}
             </ButtonWrapper>
           </ModalWrapper>
         </Container>
@@ -78,6 +78,9 @@ const ButtonWrapper = styled.div`
   bottom: 0;
   width: 100%;
   height: 45px;
+  background-color: #282828;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 `;
 
 const ConfirmButton = styled.button`
@@ -87,6 +90,18 @@ const ConfirmButton = styled.button`
   background-color: #282828;
   border: 0;
   border-bottom-left-radius: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const CancelButton = styled.button`
+  font-size: 16px;
+  color: white;
+  width: inherit;
+  background-color: #999999;
+  border: 0;
   border-bottom-right-radius: 5px;
 
   &:hover {

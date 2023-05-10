@@ -5,8 +5,8 @@ interface BalloonProps {
   type?: 'Speech' | 'Think';
   color?: string;
   fontSize?: string;
-  top? : string;
-  right? : string;
+  top?: string;
+  right?: string;
 }
 
 const Balloon = ({ children, type = 'Speech', color, fontSize, top, right }: BalloonProps) => {
@@ -17,10 +17,14 @@ const Balloon = ({ children, type = 'Speech', color, fontSize, top, right }: Bal
   );
 };
 
-const BalloonDiv = styled.div<{ fontSize: string | undefined, top: string | undefined , right: string | undefined}>`
+const BalloonDiv = styled.div<{
+  fontSize: string | undefined;
+  top: string | undefined;
+  right: string | undefined;
+}>`
   position: absolute;
-  top: ${(props)=>`${props.top ? props.top : '9rem'}`};
-  right: ${(props)=>`${props.right ? props.right : '60%'}`};
+  top: ${(props) => `${props.top ? props.top : '7rem'}`};
+  right: ${(props) => `${props.right ? props.right : '50%'}`};
   padding: 1rem 1.2rem;
   background: #ffffff;
   border-radius: 1rem;
@@ -45,7 +49,7 @@ const BalloonDiv = styled.div<{ fontSize: string | undefined, top: string | unde
     content: '';
     position: absolute;
     top: 4rem;
-    right: 0;
+    right: 50%;
     width: 2.3rem;
     height: 2.8rem;
     background: url('/images/ThinkBalloon.svg') no-repeat;

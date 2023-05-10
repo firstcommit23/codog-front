@@ -76,7 +76,7 @@ const Home: NextPage = () => {
         <Canvas roomColor={getRoomColor(userData?.characterCode)}>
           <DogCharacter character={userData?.characterCode} />
           {talk && (
-            <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
+            <Balloon type="Think" color="#282828" fontSize="1.4rem">
               {talk}
             </Balloon>
           )}
