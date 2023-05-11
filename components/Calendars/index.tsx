@@ -109,6 +109,7 @@ const CalendarWrapper = styled.div`
   }
 
   .react-calendar__tile.react-calendar__month-view__days__day {
+    margin: 0;
     padding: 1.8rem;
     font-size: 1.4rem;
     color: ${Common.colors.lightBlack};
