@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { NextPage } from 'next';
-import { Common } from '@/styles/common';
-import axios from 'axios';
 import moment from 'moment';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
@@ -28,14 +26,12 @@ const Home: NextPage = () => {
   const THINK_LIST = ['오늘 머먹지', '앗! 금지', '200!', '나는 코딩왕이 될테야'];
   const [talk, setTalk] = useState('');
   const [value, onChange] = useState(new Date());
+  const year = moment(value).format('YYYY');
+  const month = moment(value).format('MM');
   const today = new Date();
   const router = useRouter();
-
   const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
-  const { data: footprintData, refetch } = useUserFootprintQuery(
-    moment(value).format('YYYY'),
-    moment(value).format('MM')
-  );
+  const { data: footprintData, refetch } = useUserFootprintQuery(year, month);
 
   useEffect(() => {
     setTalk(THINK_LIST[Math.floor(Math.random() * (THINK_LIST.length - 1 + 1))]);
@@ -43,7 +39,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     isSuccessUserData && refetch();
-  }, [isSuccessUserData, value]);
+  }, [isSuccessUserData, year, month]);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
