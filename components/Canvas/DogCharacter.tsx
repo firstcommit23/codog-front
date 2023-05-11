@@ -34,6 +34,7 @@ const DogCharacter = ({
   onClick,
   left,
 }: DogCharacterProps) => {
+  if (!character) return null;
   const dogImage = `/images/dogs/${character}/${clothes}_${pose}.svg`;
   const { height, width } = getInfo(character);
   function AnimatedDogCharacter({ img }: { img: string }) {
