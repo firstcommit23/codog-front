@@ -7,6 +7,7 @@ import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
 import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
 import {
   Canvas,
+  SkeletonCanvas,
   DogCharacter,
   Balloon,
   FoodItem,
@@ -30,7 +31,7 @@ const Home: NextPage = () => {
   const month = moment(value).format('MM');
   const today = new Date();
   const router = useRouter();
-  const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
+  const { data: userData, isSuccess: isSuccessUserData, isError } = useUserProfileQuery();
   const { data: footprintData, refetch } = useUserFootprintQuery(year, month);
 
   useEffect(() => {
@@ -47,46 +48,64 @@ const Home: NextPage = () => {
     return isNaN(a.diff(b, 'days')) ? 0 : a.diff(b, 'days');
   };
 
-  // if (!isSuccessUserData) return null;
+  if (isError) {
+    router.push('/error?statusCode=500&errorMessage=API 통신오류');
+  }
   if (userData.isNewUser) router.push('/login');
 
   return (
     <DefaultLayout>
       {/* 프로필 */}
-      <ProfileContainer>
-        {/* 닉네임, 공유 버튼 */}
+      {!isSuccessUserData ? (
+        <ProfileContainer>
+          <ProfileBox>
+            <ProfileWrapper>
+              <ProfileContent className="hidden">
+                <span className="nickname">{userData?.nickname}</span>님, <br />
+                코독하게 코딩해봅시다.
+              </ProfileContent>
+            </ProfileWrapper>
+          </ProfileBox>
+          <SkeletonCanvas />
+          {/* 개인 달성 지표 */}
+          <Achievements footprintData={footprintData} />
+        </ProfileContainer>
+      ) : (
+        <ProfileContainer>
+          {/* 닉네임, 공유 버튼 */}
+          <ProfileBox>
+            <ProfileWrapper>
+              <ProfileContent>
+                <span className="nickname">{userData?.nickname}</span>님, <br />
+                코독하게 코딩해봅시다.
+              </ProfileContent>
+              <ProfileButtonArea>
+                <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
+                <ShareButton nickname={userData?.nickname} githubId={footprintData?.githubId} />
+              </ProfileButtonArea>
+            </ProfileWrapper>
+          </ProfileBox>
+          {/* 코독 하우스 */}
+          <Canvas roomColor={getRoomColor(userData?.characterCode)}>
+            <DogCharacter character={userData?.characterCode} />
+            {talk && (
+              <Balloon type="Think" color="#282828" fontSize="1.4rem">
+                {talk}
+              </Balloon>
+            )}
+            <FoodItem food={userData?.foodItem} />
+            <FurnitureItem furniture={userData?.furnitureItem} />
+            <DdayBox>
+              <div className="pin"></div>
+              <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
+            </DdayBox>
+            <CheerButton cheer={userData?.cheerCount} disabled={false} />
+          </Canvas>
+          {/* 개인 달성 지표 */}
+          <Achievements footprintData={footprintData} />
+        </ProfileContainer>
+      )}
 
-        <ProfileBox>
-          <ProfileWrapper>
-            <ProfileContent>
-              <span className="nickname">{userData?.nickname}</span>님, <br />
-              코독하게 코딩해봅시다.
-            </ProfileContent>
-            <ProfileButtonArea>
-              <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-              <ShareButton nickname={userData?.nickname} githubId={footprintData?.githubId} />
-            </ProfileButtonArea>
-          </ProfileWrapper>
-        </ProfileBox>
-        {/* 코독 하우스 */}
-        <Canvas roomColor={getRoomColor(userData?.characterCode)}>
-          <DogCharacter character={userData?.characterCode} />
-          {talk && (
-            <Balloon type="Think" color="#282828" fontSize="1.4rem">
-              {talk}
-            </Balloon>
-          )}
-          <FoodItem food={userData?.foodItem} />
-          <FurnitureItem furniture={userData?.furnitureItem} />
-          <DdayBox>
-            <div className="pin"></div>
-            <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
-          </DdayBox>
-          <CheerButton cheer={userData?.cheerCount} disabled={false} />
-        </Canvas>
-        {/* 개인 달성 지표 */}
-        <Achievements footprintData={footprintData} />
-      </ProfileContainer>
       {/* 달력 */}
       <Calendars value={value} onChange={onChange} footprintData={footprintData} />
 
@@ -127,6 +146,9 @@ const ProfileContent = styled.div`
   line-height: 3rem;
   color: #ffffff;
 
+  &.hidden {
+    visibility: hidden;
+  }
   .nickname {
     font-size: 2rem;
     font-weight: 600;
