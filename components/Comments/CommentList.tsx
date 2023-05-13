@@ -18,7 +18,6 @@ const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: b
       enabled: !!footprintId,
     });
 
-  console.log('comment ID ,', footprintId);
   const { mutate, isLoading } = useMutation((commentId: number) => deleteComment(commentId));
 
   const handleLoadMore = () => {

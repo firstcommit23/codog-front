@@ -13,7 +13,7 @@ const getFoodInfo = (code: string) => {
     case 'A05':
       return { ...defaultValue, bottom: '-1.4rem' };
     case 'A06':
-      return { ...defaultValue, bottom: '-.7rem' };
+      return { ...defaultValue, bottom: '-.7rem', right: '19%' };
     default:
       return defaultValue;
   }

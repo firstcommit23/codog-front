@@ -47,6 +47,7 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
         showNeighboringMonth={false}
         onActiveStartDateChange={onActiveStartDateChangeHandler}
         tileContent={({ date, view }) => {
+          if (footprintData?.month !== moment(date).format('MM')) return null;
           const day = moment(date).format('D');
           const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
           const html = [];
