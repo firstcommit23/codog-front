@@ -49,7 +49,8 @@ const IntroConfirmPage = () => {
         <strong>개발자국 찍기</strong>를 시작합니다!
         <ul>
           <li>Github에 커밋을 하면, 발자국이 찍혀요!</li>
-          <li>매일 저녁 9시에 체크돼요.</li>
+          <li>발자국을 모으면 귀여운 아이템을 장착할 수 있어요.</li>
+          <li>공유하기를 통해 친구에게 보여줄 수 있어요.</li>
         </ul>
       </ContentMessage>
       <ButtonSubmit onClick={handleSubmit}>홈으로 가기</ButtonSubmit>
