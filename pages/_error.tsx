@@ -27,8 +27,8 @@ const ErrorPage = ({ statusCode, errorMessage }: { statusCode: string; errorMess
 };
 ErrorPage.getInitialProps = (ctx: NextPageContext) => {
   const { res, err } = ctx;
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-  const errorMessage = err ? err.message : 'Page Not Found';
+  const { statusCode = '404', errorMessage = 'Page Not Found' } = ctx.query;
+
   return { statusCode, errorMessage };
 };
 export default ErrorPage;
