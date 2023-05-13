@@ -43,6 +43,10 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProp
     return a.diff(b, 'days');
   };
 
+  const foodItem = shareData.itemCodes?.filter((item: any) => item.includes('A')).join('') || '';
+  const furnitureItem =
+    shareData.itemCodes?.filter((item: any) => item.includes('B')).join('') || '';
+
   return (
     <>
       <Head>
@@ -77,8 +81,8 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProp
             <Balloon type="Think" color="#3274FF" fontSize="1.4rem">
               열코딩중!!
             </Balloon>
-            <FoodItem food={shareData.foodItem} />
-            <FurnitureItem furniture={shareData.furnitureItem} />
+            <FoodItem food={foodItem} />
+            <FurnitureItem furniture={furnitureItem} />
             <DdayBox>
               <div className="pin"></div>
               <span className="Dday">D+{getDday(today, shareData?.createdAt)}</span>
