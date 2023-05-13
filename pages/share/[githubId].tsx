@@ -4,7 +4,7 @@ import Head from 'next/head';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import moment from 'moment';
-import useUserShareQuery from '@/hooks/query/useUserShareQuery';
+// import useUserShareQuery from '@/hooks/query/useUserShareQuery';
 import { getRoomColor } from '@/utils/serviceUtils';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import {
@@ -22,9 +22,10 @@ import ShareButton from '@/components/ShareButton';
 
 interface SharePageProps {
   githubId: string;
+  shareData: any;
 }
 
-const SharePage: NextPage<SharePageProps> = ({ githubId: githubIdProps }) => {
+const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProps }) => {
   const [value, onChange] = useState(new Date());
   const [githubId, setGithubId] = useState(githubIdProps);
 
@@ -34,7 +35,7 @@ const SharePage: NextPage<SharePageProps> = ({ githubId: githubIdProps }) => {
 
   const today = new Date();
 
-  const { data: shareData } = useUserShareQuery(githubId);
+  // const { data: shareData } = useUserShareQuery(githubId);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
@@ -80,7 +81,7 @@ const SharePage: NextPage<SharePageProps> = ({ githubId: githubIdProps }) => {
             <FurnitureItem furniture={shareData.furnitureItem} />
             <DdayBox>
               <div className="pin"></div>
-              <span className="Dday">D+{getDday(today, shareData?.createDate)}</span>
+              <span className="Dday">D+{getDday(today, shareData?.createdAt)}</span>
             </DdayBox>
             <CheerButton cheer={shareData.cheerCount} disabled={false} />
           </Canvas>

@@ -18,6 +18,7 @@ const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: b
       enabled: !!footprintId,
     });
 
+  console.log('comment ID ,', footprintId);
   const { mutate, isLoading } = useMutation((commentId: number) => deleteComment(commentId));
 
   const handleLoadMore = () => {
@@ -61,7 +62,8 @@ const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: b
                 <CommentFirstLine>
                   <CommentWriterArea>
                     <img src="/images/profileIcon.svg" />
-                    <CommentWriterNickname onClick={() => router.push(`/share/${item.githubId}`)}>
+                    <CommentWriterNickname
+                      onClick={() => (location.href = `/share/${item.githubId}`)}>
                       {item.nickname}
                     </CommentWriterNickname>
                   </CommentWriterArea>
