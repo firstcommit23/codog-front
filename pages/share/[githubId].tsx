@@ -21,23 +21,21 @@ import Achievements from '@/components/Achievements';
 import ShareButton from '@/components/ShareButton';
 
 interface SharePageProps {
-  githubId?: string;
+  shareData: any;
+  githubId: string;
 }
 
-const SharePage: NextPage = ({ githubId }: SharePageProps) => {
+const SharePage: NextPage<SharePageProps> = ({ shareData, githubId }) => {
   const [value, onChange] = useState(new Date());
   const today = new Date();
 
-  const { data: shareData, isSuccess } = useUserShareQuery(githubId);
+  // const { data: shareData, isSuccess } = useUserShareQuery(githubId);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
     const b = moment(createdDate);
     return a.diff(b, 'days');
   };
-
-  if (!isSuccess) return null;
-
   return (
     <>
       <Head>
@@ -103,32 +101,44 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
   if (!githubId || typeof githubId !== 'string' || Array.isArray(githubId)) {
     return {
       redirect: {
-        destination: '/404',
+        destination: '/error',
         permanent: false,
       },
     };
   }
 
-  // github Id 유효성 체크
-  const response = await axios
-    .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/share-house/${githubId}`)
-    .then((res) => res.data.response)
-    .catch(() => false);
+  try {
+    // github Id 유효성 체크
+    const response = await axios
+      .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/share-house/${githubId}`, {
+        timeout: 3000,
+      })
+      .then((res) => res.data.response)
+      .catch(() => false);
 
-  if (!response) {
+    if (!response) {
+      return {
+        redirect: {
+          destination: '/error?statusCode=500&errorMessage=존재하지 않는 유저입니다',
+          permanent: false,
+        },
+      };
+    }
+
+    return {
+      props: {
+        shareData: response,
+        githubId: githubId,
+      },
+    };
+  } catch (error) {
     return {
       redirect: {
-        destination: '/404',
+        destination: '/error?statusCode=500&errorMessage=API 통신 오류',
         permanent: false,
       },
     };
   }
-
-  return {
-    props: {
-      githubId,
-    },
-  };
 };
 
 const ProfileContainer = styled.div`
