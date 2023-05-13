@@ -21,11 +21,10 @@ import Achievements from '@/components/Achievements';
 import ShareButton from '@/components/ShareButton';
 
 interface SharePageProps {
-  shareData: any;
   githubId: string;
 }
 
-const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProps }) => {
+const SharePage: NextPage<SharePageProps> = ({ githubId: githubIdProps }) => {
   const [value, onChange] = useState(new Date());
   const [githubId, setGithubId] = useState(githubIdProps);
 
@@ -35,7 +34,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProp
 
   const today = new Date();
 
-  // const { data: shareData, isSuccess } = useUserShareQuery(githubId);
+  const { data: shareData } = useUserShareQuery(githubId);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
