@@ -6,12 +6,14 @@ interface FurnitureItemProps {
 }
 
 const getFurnitureInfo = (code: string) => {
-  const defaultValue = { left: '-4%', bottom: '-1.2rem' };
+  const defaultValue = { left: '-4%', bottom: '-1.7rem' };
   switch (code) {
     case 'B02':
-      return { ...defaultValue, left: '4rem', bottom: '8rem' };
+      return { ...defaultValue, left: '4rem', bottom: '12rem' };
     case 'B03':
-      return { ...defaultValue, left: '2rem', bottom: '0' };
+      return { ...defaultValue, left: '3rem', bottom: '0' };
+    case 'B04':
+      return { ...defaultValue, left: '3rem', bottom: '0' };
     default:
       return defaultValue;
   }
