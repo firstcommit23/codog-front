@@ -3,15 +3,13 @@ import Instance from './instance';
 import type { User } from './type';
 
 export const getUserProfile = () => {
-  return Instance.get('/users/profile')
-    .then((res) => res.data.response)
-    .catch((error) => error.response);
+  return Instance.get('/users/profile').then((res) => res.data.response);
+  // .catch((error) => error.response);
 };
 
 export const getUserProfileDetail = () => {
-  return Instance.get('/users/profile/detail')
-    .then((res) => res.data.response)
-    .catch((error) => error.response);
+  return Instance.get('/users/profile/detail').then((res) => res.data.response);
+  // .catch((error) => error.response);
 };
 
 export const postSiginupGithubid = (githubId: string) => {

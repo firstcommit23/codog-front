@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import axios from 'axios';
@@ -25,8 +25,14 @@ interface SharePageProps {
   githubId: string;
 }
 
-const SharePage: NextPage<SharePageProps> = ({ shareData, githubId }) => {
+const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProps }) => {
   const [value, onChange] = useState(new Date());
+  const [githubId, setGithubId] = useState(githubIdProps);
+
+  useEffect(() => {
+    setGithubId(githubIdProps);
+  }, [githubIdProps]);
+
   const today = new Date();
 
   // const { data: shareData, isSuccess } = useUserShareQuery(githubId);
@@ -36,6 +42,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId }) => {
     const b = moment(createdDate);
     return a.diff(b, 'days');
   };
+
   return (
     <>
       <Head>
@@ -81,6 +88,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId }) => {
           {/* 개인 달성 지표 */}
           <Achievements footprintData={shareData.footPrintData} />
         </ProfileContainer>
+
         {/* 달력 */}
         <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
 
