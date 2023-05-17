@@ -27,6 +27,7 @@ export type ItemType = {
 export type UserProfileDetailType = {
   id: string | null;
   nickname: string;
+  github_id: string | null;
   email: string | null;
   isNewUser: 0 | 1;
   characterCode: CHARACTER_CODES;

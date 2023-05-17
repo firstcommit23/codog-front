@@ -10,6 +10,7 @@ import { Canvas, DogCharacter } from '@/components/Canvas';
 import useIntroRandomNicknameQuery from '@/hooks/query/useIntroRandomNicknameQuery';
 import { User } from '@/apis/type';
 import LocalStorage from '@/utils/LocalStorage';
+import { getRoomColor } from '@/utils/serviceUtils';
 
 const IntroNicknamePage = () => {
   const router = useRouter();
@@ -58,20 +59,6 @@ const IntroNicknamePage = () => {
         },
       }
     );
-  };
-
-  const getRoomColor = (code: string) => {
-    const defaultValue = '#999999';
-    switch (code) {
-      case 'A':
-        return '#82AAFF';
-      case 'B':
-        return '#F07178';
-      case 'C':
-        return '#F9C66A';
-      default:
-        return defaultValue;
-    }
   };
 
   return (

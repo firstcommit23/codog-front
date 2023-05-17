@@ -73,25 +73,7 @@ const ProfilePage = () => {
           <ProfileWrapper>
             <UserProfileTable>
               <div className="nickname">{userData?.nickname}</div>
-              <div>
-                {characters?.map((item: CharacterType, index: number) => {
-                  return (
-                    <span key={item.code}>
-                      <img src={item.image_url || ''} width="30px" height="30px" />
-                      {item.name}
-                      <input
-                        type="radio"
-                        id="character"
-                        name="character"
-                        value={item.code}
-                        onChange={handleChange}
-                        checked={item.code === profileUpdateData.character ? true : false}
-                      />
-                    </span>
-                  );
-                })}
-              </div>
-              <div className="email">{userData.email}</div>
+              <div className="githubId">{userData?.github_id}</div>
               {/* <div className="email">junandkang@gmail.com</div> */}
             </UserProfileTable>
             <BtnWrapper>
@@ -172,14 +154,15 @@ const UserProfileTable = styled.div`
   .nickname {
     font-weight: 600;
   }
-  .email {
+  .githubId {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-size: 1.6rem;
     margin-top: 1.5rem;
     color: #504f4f;
   }
-  .email::before {
+  .githubId::before {
     content: '';
     background: url('/images/github-logo.svg');
     background-size: cover;
