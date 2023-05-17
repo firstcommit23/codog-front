@@ -94,8 +94,9 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProp
         </ProfileContainer>
 
         {/* 달력 */}
-        <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
-
+        <CalendarWrapper>
+          <Calendars value={value} onChange={onChange} footprintData={shareData.footPrintData} />
+        </CalendarWrapper>
         <HorizontalRule />
         <Comments
           title="코멘트 남기기 ✍️"
@@ -225,6 +226,18 @@ const HorizontalRule = styled.hr`
   background: #f5f5f5;
   border: none;
   width: 100%;
+`;
+
+const CalendarWrapper = styled.div`
+  .react-calendar__navigation__arrow.react-calendar__navigation__next-button {
+    display: none;
+  }
+  .react-calendar__navigation__arrow.react-calendar__navigation__prev-button {
+    display: none;
+  }
+  .react-calendar__navigation {
+    justify-content: center !important;
+  }
 `;
 
 export default SharePage;
