@@ -4,8 +4,7 @@ import Head from 'next/head';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import moment from 'moment';
-// import useUserShareQuery from '@/hooks/query/useUserShareQuery';
-import { getRoomColor } from '@/utils/serviceUtils';
+import { getRoomColor, getUserId } from '@/utils/serviceUtils';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import {
   Canvas,
@@ -23,19 +22,24 @@ import ShareButton from '@/components/ShareButton';
 interface SharePageProps {
   githubId: string;
   shareData: any;
+  title: string;
 }
 
-const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProps }) => {
+const SharePage: NextPage<SharePageProps> = ({ shareData, githubId, title }) => {
   const [value, onChange] = useState(new Date());
-  const [githubId, setGithubId] = useState(githubIdProps);
+  const [loginUserId, setLoginUserId] = useState(-1);
 
   useEffect(() => {
-    setGithubId(githubIdProps);
-  }, [githubIdProps]);
+    // login한 경우, loginUserId 조회하기
+    const accessToken = localStorage.getItem('accessToken') || '';
+
+    if (accessToken && accessToken !== '') {
+      const userId = getUserId(accessToken);
+      setLoginUserId(userId);
+    }
+  }, []);
 
   const today = new Date();
-
-  // const { data: shareData } = useUserShareQuery(githubId);
 
   const getDday = (today: Date, createdDate: Date) => {
     const a = moment(today);
@@ -50,7 +54,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProp
   return (
     <>
       <Head>
-        <title>{shareData?.nickname}님의 코독하우스</title>
+        <title>{title}</title>
         <meta property="og:title" content={`${shareData?.nickname}님의 코독하우스`} />
         <meta property="og:site_name" content="Codog" />
         <meta property="og:description" content="코독한 개발자의 발자국을 확인하세요!" />
@@ -102,6 +106,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId: githubIdProp
           title="코멘트 남기기 ✍️"
           footprintId={shareData.footPrintData?.footprintId}
           isOwner={shareData.isOwner}
+          loginUserId={loginUserId}
         />
       </DefaultLayout>
     </>
@@ -142,6 +147,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
       props: {
         shareData: response,
         githubId: githubId,
+        title: `${response.nickname}님의 코독하우스`,
       },
     };
   } catch (error) {
