@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import { useRecoilState } from 'recoil';
 import { useMutation } from '@tanstack/react-query';
@@ -9,9 +8,16 @@ import { deleteComment } from '@/apis/api';
 import { modalState } from '@/components/states';
 import { button } from '@/styles/common';
 
-const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: boolean }) => {
+const CommentList = ({
+  footprintId,
+  isOwner,
+  loginUserId = -1,
+}: {
+  footprintId: number;
+  isOwner: boolean;
+  loginUserId?: number;
+}) => {
   const COUNT = 3;
-  const router = useRouter();
   const [, setModal] = useRecoilState(modalState);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteCommentsQuery(footprintId || 0, COUNT, {
@@ -56,6 +62,8 @@ const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: b
       {items && items.length > 0 ? (
         <>
           {items.map((item: CommentType) => {
+            const isDeletable = isOwner || loginUserId === item.writer || false;
+
             return (
               <CommentItemWapper key={item.id}>
                 <CommentFirstLine>
@@ -71,7 +79,7 @@ const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: b
                   </CommentWriteDate>
                 </CommentFirstLine>
                 <CommentText>{item.contents}</CommentText>
-                {isOwner && <DeleteBtn onClick={() => handleDelete(item.id)} />}
+                {isDeletable && <DeleteBtn onClick={() => handleDelete(item.id)} />}
               </CommentItemWapper>
             );
           })}

@@ -1,11 +1,21 @@
 import jwt_decode from 'jwt-decode';
 import { getToken } from '@/apis/api';
+import { idText } from 'typescript';
 
 export const loginCheck = () => {
   const accessToken = localStorage.getItem('accessToken');
   if (!accessToken) {
     location.href = '/login';
   }
+};
+
+export const getUserId = (token: string) => {
+  if (token) {
+    const decodeToken: { id: number; exp: number; iat: number } = jwt_decode(token);
+
+    return decodeToken.id;
+  }
+  return -1;
 };
 
 export const checkToken = async (token: string) => {
