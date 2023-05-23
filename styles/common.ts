@@ -50,3 +50,24 @@ export const skeletonGradient = keyframes`
     background-color: rgba(165, 165, 165, 0.1);
   }
 `;
+
+export const defaultStamp = css`
+  background-size: contain;
+  width: 4rem;
+  height: 4rem;
+  position: absolute;
+  top: 3%;
+  right: 15%;
+  transform: rotate(20deg);
+
+  @media screen and (max-width: 480px) {
+    width: 3.5rem;
+    height: 3.5rem;
+    top: 8%;
+    right: 10%;
+  }
+
+  @media screen and (max-width: 375px) {
+    right: 5%;
+  }
+`;

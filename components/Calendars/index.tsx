@@ -4,6 +4,7 @@ import moment from 'moment';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { Common } from '@/styles/common';
 import type { FootprintType } from '@/apis/type';
+import { defaultStamp } from '@/styles/common';
 
 interface IProps {
   value: Date;
@@ -61,13 +62,17 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
           if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 0)) {
             return null;
           }
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 1 && x[1] < 3)) {
-            html.push(
-              <FootPrintMarkLighten key={`footprint${date}-${view}`}></FootPrintMarkLighten>
-            );
+          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 1)) {
+            html.push(<FootPrintMark1 key={`footprint${date}-${view}`}></FootPrintMark1>);
           }
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 3)) {
-            html.push(<FootPrintMarkDarken key={`footprint${date}-${view}`}></FootPrintMarkDarken>);
+          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 2)) {
+            html.push(<FootPrintMark2 key={`footprint${date}-${view}`}></FootPrintMark2>);
+          }
+          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 3)) {
+            html.push(<FootPrintMark3 key={`footprint${date}-${view}`}></FootPrintMark3>);
+          }
+          if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 4)) {
+            html.push(<FootPrintMark4 key={`footprint${date}-${view}`}></FootPrintMark4>);
           }
           return (
             <CustomTooltips title={content} arrow placement="top">
@@ -172,43 +177,23 @@ const CalendarWrapper = styled.div`
   }
 `;
 
-const FootPrintMarkDarken = styled.div`
-  background: url('/images/paw-black.svg') no-repeat;
-  background-size: contain;
-  width: 4rem;
-  height: 4rem;
-  position: absolute;
-  top: 3%;
-  right: 15%;
-  transform: rotate(-5deg);
-
-  @media screen and (max-width: 480px) {
-    width: 3.5rem;
-    height: 3.5rem;
-    top: 8%;
-    right: 10%;
-  }
+const FootPrintMark1 = styled.div`
+  background: url('/images/paw-1.svg') no-repeat;
+  ${defaultStamp};
 `;
 
-const FootPrintMarkLighten = styled.div`
-  background: url('/images/paw-grey.svg') no-repeat;
-  background-size: contain;
-  width: 4rem;
-  height: 4rem;
-  position: absolute;
-  top: 3%;
-  right: 15%;
-  transform: rotate(20deg);
+const FootPrintMark2 = styled.div`
+  background: url('/images/paw-2.svg') no-repeat;
+  ${defaultStamp};
+`;
 
-  @media screen and (max-width: 480px) {
-    width: 3.5rem;
-    height: 3.5rem;
-    top: 8%;
-    right: 10%;
-  }
+const FootPrintMark3 = styled.div`
+  background: url('/images/paw-3.svg') no-repeat;
+  ${defaultStamp};
+`;
 
-  @media screen and (max-width: 375px) {
-    right: 5%;
-  }
+const FootPrintMark4 = styled.div`
+  background: url('/images/paw-4.svg') no-repeat;
+  ${defaultStamp};
 `;
 export default Calendars;
