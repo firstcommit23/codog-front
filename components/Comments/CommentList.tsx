@@ -62,7 +62,7 @@ const CommentList = ({
       {items && items.length > 0 ? (
         <>
           {items.map((item: CommentType) => {
-            const isDeletable = isOwner || loginUserId === item.writer || false;
+            const isDeletable = isOwner || item.isWriter || false;
 
             return (
               <CommentItemWapper key={item.id}>

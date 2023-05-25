@@ -61,6 +61,7 @@ export type CommentType = {
   githubId: string;
   createdAt: string;
   id: number;
+  isWriter: number;
 };
 
 export type CommentResponse = {
