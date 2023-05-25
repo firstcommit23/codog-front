@@ -13,6 +13,12 @@ const DropOutPage = () => {
   const [, setModal] = useRecoilState(modalState);
   const [agree, setAgree] = useState(false);
 
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      router.push('/login');
+    }
+  }, []);
+
   const handleSuccess = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');

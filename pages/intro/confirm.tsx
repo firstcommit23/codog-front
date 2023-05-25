@@ -15,8 +15,10 @@ const IntroConfirmPage = () => {
 
   useEffect(() => {
     const saveIntro = LocalStorage.get('saveIntro') || '';
-    if (saveIntro) {
+    if (saveIntro && JSON.stringify(saveIntro) !== '{}') {
       setUser({ ...user, nickname: saveIntro.nickname, character: saveIntro.character });
+    } else {
+      router.push('/');
     }
   }, []);
 
