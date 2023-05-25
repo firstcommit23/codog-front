@@ -91,7 +91,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId, title }) => 
               <div className="pin"></div>
               <span className="Dday">D+{getDday(today, shareData?.createdAt)}</span>
             </DdayBox>
-            <CheerButton cheer={shareData.cheerCount} disabled={false} />
+            <CheerButton cheer={shareData.cheerCount} disabled={false} githubId={githubId} />
           </Canvas>
           {/* 개인 달성 지표 */}
           <Achievements footprintData={shareData.footPrintData} />
@@ -137,7 +137,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
     if (!response) {
       return {
         redirect: {
-          destination: '/error?statusCode=500&errorMessage=존재하지 않는 유저입니다',
+          destination: `/error?errorMessage=${encodeURIComponent('존재하지않는 유저입니다.')}`,
           permanent: false,
         },
       };
@@ -153,7 +153,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
   } catch (error) {
     return {
       redirect: {
-        destination: '/error?statusCode=500&errorMessage=API 통신 오류',
+        destination: `/error?errorMessage=${encodeURIComponent('API 통신 오류')}`,
         permanent: false,
       },
     };

@@ -67,9 +67,10 @@ export const putProfileItem = (itemCodes: string[]) => {
   }).then((res) => res.data.response);
 };
 
-export const putCheerCount = (cheerCount: number) => {
+export const putCheerCount = (cheerCount: number, githubId?: string) => {
   return Instance.put(`/users/profile/cheer-count`, {
     cheerCount,
+    githubId: githubId || null,
   }).then((res) => res.data.response);
 };
 

@@ -5,24 +5,24 @@ import { useState, useEffect } from 'react';
 
 interface CheerProps {
   cheer?: number;
+  githubId?: string;
   disabled?: boolean;
 }
 
-const CheerButton = ({ cheer, disabled }: CheerProps) => {
+const CheerButton = ({ cheer, disabled, githubId }: CheerProps) => {
   const [cheerCount, setCheerCount] = useState(cheer);
-  const handleIncrease = () => {
-    setCheerCount(cheerCount + 1);
-  };
+  const { mutate } = useMutation((cheerCount: number) => putCheerCount(cheerCount, githubId));
 
-  const { mutate } = useMutation((cheerCount: number) => putCheerCount(cheerCount));
-  useEffect(() => {
+  const handleIncrease = () => {
     mutate(cheerCount, {
+      onSuccess: () => setCheerCount(cheerCount + 1),
       onError: (error: any) => {
         const message = error?.response.data.error.message || '';
         alert(message);
       },
     });
-  }, [cheerCount]);
+  };
+
   return (
     <CheerBtn onClick={handleIncrease} disabled={disabled}>
       <span>{cheerCount}</span>
