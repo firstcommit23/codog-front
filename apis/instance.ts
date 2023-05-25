@@ -63,6 +63,8 @@ Instance.interceptors.response.use(
       } catch (error) {
         // If the refresh token is invalid, redirect to the login page
         console.error(error);
+        localStorage.setItem('accessToken', '');
+        localStorage.setItem('refreshToken', '');
         window.location.href = '/login';
       }
     }

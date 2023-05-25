@@ -49,8 +49,9 @@ const Home: NextPage = () => {
   };
 
   if (isError) {
-    router.push('/error?statusCode=500&errorMessage=API 통신오류');
+    router.push(`/error?statusCode=500&errorMessage=${encodeURIComponent('API 통신 오류')}`);
   }
+
   if (userData.isNewUser) router.push('/login');
 
   return (
