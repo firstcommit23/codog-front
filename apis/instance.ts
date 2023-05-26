@@ -3,12 +3,12 @@ import axiosRetry from 'axios-retry';
 
 const Instance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CODOG_BACK_URL,
-  timeout: 3000,
+  timeout: 1000,
 });
 
 // Rate Limiter
 axiosRetry(Instance, {
-  retries: 5,
+  retries: 3,
   retryDelay: (retry) => {
     const delay = Math.pow(2, retry) * 100;
     const jitter = delay * 0.1 * Math.random();
@@ -63,6 +63,8 @@ Instance.interceptors.response.use(
       } catch (error) {
         // If the refresh token is invalid, redirect to the login page
         console.error(error);
+        localStorage.setItem('accessToken', '');
+        localStorage.setItem('refreshToken', '');
         window.location.href = '/login';
       }
     }

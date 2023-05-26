@@ -13,6 +13,12 @@ const DropOutPage = () => {
   const [, setModal] = useRecoilState(modalState);
   const [agree, setAgree] = useState(false);
 
+  useEffect(() => {
+    if (!localStorage.getItem('accessToken')) {
+      router.push('/login');
+    }
+  }, []);
+
   const handleSuccess = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
@@ -30,7 +36,7 @@ const DropOutPage = () => {
         });
       },
       onError: (error: any) => {
-        const message = error?.response.data.error.message || '';
+        const message = error?.response.data.error.message || '알 수 없는 오류가 발생하였습니다.';
         alert(message);
       },
     });

@@ -7,22 +7,24 @@ import { CommentType } from '@/apis/type';
 import { deleteComment } from '@/apis/api';
 import { modalState } from '@/components/states';
 import { button } from '@/styles/common';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { flexCenter } from '@/styles/common';
 
-const CommentList = ({
-  footprintId,
-  isOwner,
-  loginUserId = -1,
-}: {
-  footprintId: number;
-  isOwner: boolean;
-  loginUserId?: number;
-}) => {
+const CommentList = ({ footprintId, isOwner }: { footprintId: number; isOwner: boolean }) => {
   const COUNT = 3;
   const [, setModal] = useRecoilState(modalState);
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
-    useInfiniteCommentsQuery(footprintId || 0, COUNT, {
-      enabled: !!footprintId,
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    isLoading: isLoadingComments,
+    isSuccess: isSuccessComments,
+    isError: isErrorComments,
+  } = useInfiniteCommentsQuery(footprintId || 0, COUNT, {
+    enabled: !!footprintId,
+  });
 
   const { mutate, isLoading } = useMutation((commentId: number) => deleteComment(commentId));
 
@@ -49,7 +51,7 @@ const CommentList = ({
         refetch();
       },
       onError: (error: any) => {
-        const message = error?.response.data.error.message || '';
+        const message = error?.response.data.error.message || '알 수 없는 오류가 발생하였습니다.';
         alert(message);
       },
     });
@@ -59,42 +61,63 @@ const CommentList = ({
 
   return (
     <CommentListContainer>
-      {items && items.length > 0 ? (
+      {isLoadingComments && (
+        <FlexCenter>
+          <ClipLoader size={35} aria-label="Loading Spinner" data-testid="loader" />
+        </FlexCenter>
+      )}
+      {isErrorComments && (
+        <FlexCenter>
+          😱 조회 중 오류가 발생하였습니다.
+          <br /> 잠시후 다시 시도해 주세요!
+        </FlexCenter>
+      )}
+      {isSuccessComments && (
         <>
-          {items.map((item: CommentType) => {
-            const isDeletable = isOwner || loginUserId === item.writer || false;
+          {items && items.length > 0 ? (
+            <>
+              {items.map((item: CommentType) => {
+                const isDeletable = isOwner || item.isWriter || false;
 
-            return (
-              <CommentItemWapper key={item.id}>
-                <CommentFirstLine>
-                  <CommentWriterArea>
-                    <img src="/images/profileIcon.svg" />
-                    <CommentWriterNickname
-                      onClick={() => (location.href = `/share/${item.githubId}`)}>
-                      {item.nickname}
-                    </CommentWriterNickname>
-                  </CommentWriterArea>
-                  <CommentWriteDate>
-                    {moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
-                  </CommentWriteDate>
-                </CommentFirstLine>
-                <CommentText>{item.contents}</CommentText>
-                {isDeletable && <DeleteBtn onClick={() => handleDelete(item.id)} />}
-              </CommentItemWapper>
-            );
-          })}
-          {totalCount > items.length && (
-            <div>
-              <MoreCommentButton onClick={handleLoadMore}>코멘트 더보기</MoreCommentButton>
-            </div>
+                return (
+                  <CommentItemWapper key={item.id}>
+                    <CommentFirstLine>
+                      <CommentWriterArea>
+                        <img src="/images/profileIcon.svg" />
+                        {item.nickname ? (
+                          <CommentWriterNickname
+                            onClick={() => (location.href = `/share/${item.githubId}`)}>
+                            {item.nickname}
+                          </CommentWriterNickname>
+                        ) : (
+                          <CommentWriterNickname style={{ color: '#e3e3e3' }}>
+                            탈퇴한 사용자입니다.
+                          </CommentWriterNickname>
+                        )}
+                      </CommentWriterArea>
+                      <CommentWriteDate>
+                        {moment(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                      </CommentWriteDate>
+                    </CommentFirstLine>
+                    <CommentText>{item.contents}</CommentText>
+                    {isDeletable && <DeleteBtn onClick={() => handleDelete(item.id)} />}
+                  </CommentItemWapper>
+                );
+              })}
+              {totalCount > items.length && (
+                <div>
+                  <MoreCommentButton onClick={handleLoadMore}>코멘트 더보기</MoreCommentButton>
+                </div>
+              )}
+            </>
+          ) : (
+            <CommentItemWapper>
+              <div style={{ padding: '3rem 2rem', fontSize: '1.4rem', color: '#666666' }}>
+                등록된 코멘트가 없습니다.
+              </div>
+            </CommentItemWapper>
           )}
         </>
-      ) : (
-        <CommentItemWapper>
-          <div style={{ padding: '3rem 2rem', fontSize: '1.4rem', color: '#666666' }}>
-            등록된 코멘트가 없습니다.
-          </div>
-        </CommentItemWapper>
       )}
     </CommentListContainer>
   );
@@ -177,6 +200,15 @@ const MoreCommentButton = styled.button`
   border: 1px solid #cbcbcb;
   color: #6d6d6d;
   margin-top: 0;
+`;
+
+const FlexCenter = styled.div`
+  ${flexCenter};
+  height: 10rem;
+  font-size: 1.5rem;
+  width: 100%;
+  text-align: center;
+  line-height: 3.5rem;
 `;
 
 export default CommentList;

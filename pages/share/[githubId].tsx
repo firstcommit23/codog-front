@@ -91,7 +91,7 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId, title }) => 
               <div className="pin"></div>
               <span className="Dday">D+{getDday(today, shareData?.createdAt)}</span>
             </DdayBox>
-            <CheerButton cheer={shareData.cheerCount} disabled={false} />
+            <CheerButton cheer={shareData.cheerCount} disabled={false} githubId={githubId} />
           </Canvas>
           {/* 개인 달성 지표 */}
           <Achievements footprintData={shareData.footPrintData} />
@@ -106,7 +106,6 @@ const SharePage: NextPage<SharePageProps> = ({ shareData, githubId, title }) => 
           title="코멘트 남기기 ✍️"
           footprintId={shareData.footPrintData?.footprintId}
           isOwner={shareData.isOwner}
-          loginUserId={loginUserId}
         />
       </DefaultLayout>
     </>
@@ -129,19 +128,15 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
     // github Id 유효성 체크
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/share-house/${githubId}`, {
-        timeout: 3000,
+        timeout: 500,
       })
       .then((res) => res.data.response)
-      .catch(() => false);
-
-    if (!response) {
-      return {
-        redirect: {
-          destination: '/error?statusCode=500&errorMessage=존재하지 않는 유저입니다',
-          permanent: false,
-        },
-      };
-    }
+      .catch((error) => {
+        if (error.response.status === 400) {
+          throw new Error('존재하지않는 유저입니다.');
+        }
+        throw new Error('API 통신 오류');
+      });
 
     return {
       props: {
@@ -153,7 +148,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
   } catch (error) {
     return {
       redirect: {
-        destination: '/error?statusCode=500&errorMessage=API 통신 오류',
+        destination: `/error?errorMessage=${encodeURIComponent(error)}`,
         permanent: false,
       },
     };

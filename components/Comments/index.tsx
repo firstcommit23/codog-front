@@ -7,14 +7,12 @@ interface CommentsProps {
   title: string;
   isShowCommentInput?: boolean;
   isOwner: boolean;
-  loginUserId?: number;
 }
 const Comments = ({
   footprintId,
   title,
   isShowCommentInput = true,
   isOwner = false,
-  loginUserId = -1,
 }: CommentsProps) => {
   if (!footprintId) return null;
 
@@ -23,7 +21,7 @@ const Comments = ({
       <CommentWrapper>
         <CommentTitle>{title}</CommentTitle>
         {isShowCommentInput && <CommentInput footprintId={footprintId} />}
-        <CommentList footprintId={footprintId} isOwner={isOwner} loginUserId={loginUserId} />
+        <CommentList footprintId={footprintId} isOwner={isOwner} />
       </CommentWrapper>
     </CommentContainer>
   );

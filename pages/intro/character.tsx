@@ -8,6 +8,8 @@ import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
 import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
 import { getRoomColor } from '@/utils/serviceUtils';
 import LocalStorage from '@/utils/LocalStorage';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { flexCenter } from '@/styles/common';
 
 const IntroCharacterPage = () => {
   const router = useRouter();
@@ -16,7 +18,12 @@ const IntroCharacterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [character, setCharacter] = useState(user.character);
 
-  const { data: characters, isSuccess } = useIntroCharacterListQuery();
+  const {
+    data: characters,
+    isSuccess,
+    isError,
+    isLoading,
+  } = useIntroCharacterListQuery({ retry: 0 });
 
   useEffect(() => {
     const saveIntro = LocalStorage.get('saveIntro') || '';
@@ -58,6 +65,17 @@ const IntroCharacterPage = () => {
         <span></span>
       </StepNavigation>
       <ContentMessage>함께할 코독 개발자를 골라주세요!</ContentMessage>
+      {isLoading && (
+        <FlexCenter>
+          <ClipLoader size={15} aria-label="Loading Spinner" data-testid="loader" />
+        </FlexCenter>
+      )}
+      {isError && (
+        <FlexCenter style={{ padding: '3rem 2rem', fontSize: '1.5rem', color: '#666666' }}>
+          😱 조회 중 오류가 발생하였습니다.
+          <br /> 잠시후 다시 시도해 주세요!
+        </FlexCenter>
+      )}
       <CharacterList>
         {isSuccess &&
           characters?.map((item: any, index: number) => {
@@ -270,6 +288,14 @@ const StepNavigation = styled.div`
       margin: 0.5rem;
     }
   }
+`;
+
+const FlexCenter = styled.div`
+  ${flexCenter}
+  width: 100%;
+  padding-top: 4rem;
+  text-align: center;
+  line-height: 3.5rem;
 `;
 
 export default IntroCharacterPage;

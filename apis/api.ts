@@ -17,9 +17,8 @@ export const postSiginupGithubid = (githubId: string) => {
 };
 
 export const getCharacter = () => {
-  return Instance.get('/codes/character')
-    .then((res) => res.data.response)
-    .catch((error) => error.response);
+  return Instance.get('/codes/character').then((res) => res.data.response);
+  // .catch((error) => error.response);
 };
 
 export const getRandomNickname = () => {
@@ -50,15 +49,13 @@ export const postAuthorizationMail = (email: string) => {
 };
 
 export const getFootprint = (year: string, month: string) => {
-  return Instance.get(`/footprints?year=${year}&month=${month}`)
-    .then((res) => res.data.response)
-    .catch((error) => error.response);
+  return Instance.get(`/footprints?year=${year}&month=${month}`).then((res) => res.data.response);
+  // .catch((error) => error.response);
 };
 
 export const getTotalItems = () => {
-  return Instance.get(`/codes/item`)
-    .then((res) => res.data.response)
-    .catch((error) => error.response);
+  return Instance.get(`/codes/item`).then((res) => res.data.response);
+  // .catch((error) => error.response);
 };
 
 export const putProfileItem = (itemCodes: string[]) => {
@@ -67,9 +64,10 @@ export const putProfileItem = (itemCodes: string[]) => {
   }).then((res) => res.data.response);
 };
 
-export const putCheerCount = (cheerCount: number) => {
+export const putCheerCount = (cheerCount: number, githubId?: string) => {
   return Instance.put(`/users/profile/cheer-count`, {
     cheerCount,
+    githubId: githubId || null,
   }).then((res) => res.data.response);
 };
 

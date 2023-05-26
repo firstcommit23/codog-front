@@ -54,7 +54,7 @@ const IntroNicknamePage = () => {
           router.push('/intro/confirm');
         },
         onError: (error: any) => {
-          const message = error?.response.data.error.message || '';
+          const message = error?.response.data.error.message || '알 수 없는 오류가 발생하였습니다.';
           setNicknameError(message);
         },
       }

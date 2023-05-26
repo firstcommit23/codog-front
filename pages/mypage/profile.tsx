@@ -1,30 +1,28 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
 import { useMutation } from '@tanstack/react-query';
 import styled from '@emotion/styled';
-import moment from 'moment';
 import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
-import useIntroCharacterListQuery from '@/hooks/query/useIntroCharacterListQuery';
 import { getRoomColor } from '@/utils/serviceUtils';
-import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
 import { postSighupUser } from '@/apis/api';
-import type { CharacterType, User } from '@/apis/type';
+import type { User } from '@/apis/type';
 import { useRouter } from 'next/router';
+import ClipLoader from 'react-spinners/ClipLoader';
+import { flexCenter } from '@/styles/common';
 
 const ProfilePage = () => {
   const {
     data: userData,
     isSuccess: isSuccessUserData,
+    isLoading,
+    isError,
     refetch: refetchUserData,
   } = useUserProfileQuery();
-  const { data: characters, isSuccess } = useIntroCharacterListQuery();
-  const { mutate, isLoading } = useMutation((user: User) => postSighupUser(user));
+  const { mutate } = useMutation((user: User) => postSighupUser(user));
 
   const [profileUpdateData, setProfileUpdateData] = useState<User>({ nickname: '', character: '' });
   const [updateModal, setUpdateModal] = useState(false);
-  const [, setModal] = useRecoilState(modalState);
   const [error, setError] = useState('');
 
   const router = useRouter();
@@ -54,7 +52,7 @@ const ProfilePage = () => {
           refetchUserData();
         },
         onError: (error: any) => {
-          const message = error?.response.data.error.message || '';
+          const message = error?.response.data.error.message || '알 수 없는 오류가 발생하였습니다.';
           setError(message);
         },
       }
@@ -63,80 +61,93 @@ const ProfilePage = () => {
 
   return (
     <DefaultLayout backgroundColor="white" height="100vh">
-      {isSuccessUserData && (
-        <>
-          <Canvas paddingTop="5rem" roomColor={getRoomColor(userData?.characterCode)}>
-            <DogCharacter character={userData?.characterCode} />
-            <FoodItem food={userData.foodItem} />
-            <FurnitureItem furniture={userData.furnitureItem} />
-          </Canvas>
-          <ProfileWrapper>
-            <UserProfileTable>
-              <div className="nickname">{userData?.nickname}</div>
-              <div className="githubId">{userData?.github_id}</div>
-              {/* <div className="email">junandkang@gmail.com</div> */}
-            </UserProfileTable>
-            <BtnWrapper>
-              <NameUpdateButton
-                onClick={() => {
-                  setUpdateModal(true);
-                }}
-                color="#DCDCDC">
-                <span>이름 수정하기</span>
-              </NameUpdateButton>
-              <HouseUpdateButton
-                onClick={() => {
-                  router.push('/mypage/itemshop');
-                }}
-                color="#DCDCDC">
-                <span>코독하우스 편집</span>
-              </HouseUpdateButton>
-            </BtnWrapper>
-            <BtnWrapper>
-              <LogOutButton
-                onClick={() => {
-                  localStorage.removeItem('accessToken');
-                  localStorage.removeItem('refreshToken');
-                  router.push('/login');
-                }}>
-                로그아웃 하기
-              </LogOutButton>
-            </BtnWrapper>
-            <UserDropOut>
-              코독 회원 탈퇴를 원하신다면
-              <span onClick={() => router.push('/mypage/dropout')} className="link">
-                여기
-              </span>
-              를 클릭하세요.
-            </UserDropOut>
-          </ProfileWrapper>
-
-          {/* 업데이트 모달*/}
-          {updateModal && (
-            <UpdateModal>
-              <Container>
-                <div className="title">코독 이름</div>
-                <input
-                  type="text"
-                  name="nickname"
-                  value={profileUpdateData.nickname}
-                  onChange={handleChange}
-                />
-                <ErrorMessage>{error}</ErrorMessage>
-                <ModalBtnWrapper>
-                  <CancelButton
-                    onClick={() => {
-                      setUpdateModal(false);
-                    }}>
-                    취소
-                  </CancelButton>
-                  <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
-                </ModalBtnWrapper>
-              </Container>
-            </UpdateModal>
+      <>
+        <Canvas paddingTop="5rem" roomColor={getRoomColor(userData?.characterCode)}>
+          <DogCharacter character={userData?.characterCode} />
+          <FoodItem food={userData.foodItem} />
+          <FurnitureItem furniture={userData.furnitureItem} />
+        </Canvas>
+        <ProfileWrapper>
+          {isSuccessUserData && (
+            <>
+              <UserProfileTable>
+                <div className="nickname">{userData?.nickname}</div>
+                <div className="githubId">{userData?.github_id}</div>
+                {/* <div className="email">junandkang@gmail.com</div> */}
+              </UserProfileTable>
+              <BtnWrapper>
+                <NameUpdateButton
+                  onClick={() => {
+                    setUpdateModal(true);
+                  }}
+                  color="#DCDCDC">
+                  <span>이름 수정하기</span>
+                </NameUpdateButton>
+                <HouseUpdateButton
+                  onClick={() => {
+                    router.push('/mypage/itemshop');
+                  }}
+                  color="#DCDCDC">
+                  <span>코독하우스 편집</span>
+                </HouseUpdateButton>
+              </BtnWrapper>
+              <BtnWrapper>
+                <LogOutButton
+                  onClick={() => {
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    router.push('/login');
+                  }}>
+                  로그아웃 하기
+                </LogOutButton>
+              </BtnWrapper>
+              <UserDropOut>
+                코독 회원 탈퇴를 원하신다면
+                <span onClick={() => router.push('/mypage/dropout')} className="link">
+                  여기
+                </span>
+                를 클릭하세요.
+              </UserDropOut>
+            </>
           )}
-        </>
-      )}
+          {isLoading && (
+            <FlexCenter>
+              <ClipLoader size={35} aria-label="Loading Spinner" data-testid="loader" />
+            </FlexCenter>
+          )}
+          {isError && (
+            <FlexCenter>
+              😱 조회 중 오류가 발생하였습니다.
+              <br /> 잠시후 다시 시도해 주세요!
+            </FlexCenter>
+          )}
+        </ProfileWrapper>
+
+        {/* 업데이트 모달*/}
+        {updateModal && (
+          <UpdateModal>
+            <Container>
+              <div className="title">코독 이름</div>
+              <input
+                type="text"
+                name="nickname"
+                value={profileUpdateData.nickname}
+                onChange={handleChange}
+              />
+              <ErrorMessage>{error}</ErrorMessage>
+              <ModalBtnWrapper>
+                <CancelButton
+                  onClick={() => {
+                    setUpdateModal(false);
+                  }}>
+                  취소
+                </CancelButton>
+                <ConfirmButton onClick={handleSubmit}>수정</ConfirmButton>
+              </ModalBtnWrapper>
+            </Container>
+          </UpdateModal>
+        )}
+      </>
     </DefaultLayout>
   );
 };
@@ -360,6 +371,15 @@ const UserDropOut = styled.div`
   span:hover {
     color: #666666;
   }
+`;
+
+const FlexCenter = styled.div`
+  ${flexCenter};
+  height: 100%;
+  font-size: 1.5rem;
+  color: red;
+  text-align: center;
+  line-height: 3.5rem;
 `;
 
 export default ProfilePage;

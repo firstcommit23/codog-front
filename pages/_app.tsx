@@ -11,6 +11,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       queries: {
         refetchOnWindowFocus: false,
         staleTime: 300000,
+        retry: 0,
       },
       mutations: {
         onError: (err, variables, recover) => {
