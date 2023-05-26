@@ -14,7 +14,7 @@ const Callback: NextPage<{
 
   useEffect(() => {
     if (!accessToken) {
-      alert('비정상적인 접근 입니다!');
+      alert('로그인 중 오류가 발생했습니다. 잠시후 다시 시도해주세요!');
       router.push('/login');
       return;
     } else {

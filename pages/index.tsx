@@ -32,7 +32,12 @@ const Home: NextPage = () => {
   const today = new Date();
   const router = useRouter();
   const { data: userData, isSuccess: isSuccessUserData, isError } = useUserProfileQuery();
-  const { data: footprintData, refetch } = useUserFootprintQuery(year, month);
+  const {
+    data: footprintData,
+    refetch,
+    isError: isFootprintError,
+    isSuccess: isSuccessFootprintData,
+  } = useUserFootprintQuery(year, month);
 
   useEffect(() => {
     setTalk(THINK_LIST[Math.floor(Math.random() * (THINK_LIST.length - 1 + 1))]);
@@ -48,21 +53,23 @@ const Home: NextPage = () => {
     return isNaN(a.diff(b, 'days')) ? 0 : a.diff(b, 'days');
   };
 
-  if (isError) {
+  if (isError || isFootprintError) {
     router.push(`/error?statusCode=500&errorMessage=${encodeURIComponent('API 통신 오류')}`);
   }
 
   if (userData.isNewUser) router.push('/login');
 
+  const isSuccessSelete = isSuccessUserData && isSuccessFootprintData;
+
   return (
     <DefaultLayout>
       {/* 프로필 */}
-      {!isSuccessUserData ? (
+      {!isSuccessSelete ? (
         <ProfileContainer>
           <ProfileBox>
             <ProfileWrapper>
               <ProfileContent className="hidden">
-                <span className="nickname">{userData?.nickname}</span>님, <br />
+                <span className="nickname"></span>님, <br />
                 코독하게 코딩해봅시다.
               </ProfileContent>
             </ProfileWrapper>

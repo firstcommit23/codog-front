@@ -19,6 +19,7 @@ const useInfiniteCommentsQuery = (
         created_at: pageParam.cursor_created_at,
       }),
     ...options,
+    retry: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.comments[lastPage.comments.length - 1]
         ? {

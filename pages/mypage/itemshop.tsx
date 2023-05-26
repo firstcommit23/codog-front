@@ -12,19 +12,31 @@ import { getRoomColor } from '@/utils/serviceUtils';
 import { modalState } from '@/components/states';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
 import { Canvas, DogCharacter, FoodItem, FurnitureItem } from '@/components/Canvas';
-import { skeletonGradient } from '@/styles/common';
+import { flexCenter, skeletonGradient } from '@/styles/common';
 
 const ItemShopPage = () => {
   const today = new Date();
   const [selectedItem, setSeletedItem] = useState<string[]>([]);
   const [, setModal] = useRecoilState(modalState);
 
-  const { data: userData, isSuccess: isSuccessUserData } = useUserProfileQuery();
-  const { data: itemsData, isSuccess: isSuccessItemsData } = useItemListQuery();
-  const { data: footprintData, isLoading: isFootprintLoading } = useUserFootprintQuery(
-    moment(today).format('YYYY'),
-    moment(today).format('MM')
-  );
+  const {
+    data: userData,
+    isSuccess: isSuccessUserData,
+    isLoading: isUserLoading,
+    isError: isUserError,
+  } = useUserProfileQuery();
+  const {
+    data: itemsData,
+    isSuccess: isSuccessItemsData,
+    isLoading: isItemLoading,
+    isError: isItemError,
+  } = useItemListQuery();
+  const {
+    data: footprintData,
+    isSuccess: isSuccessFootprintData,
+    isLoading: isFootprintLoading,
+    isError: isFootprintError,
+  } = useUserFootprintQuery(moment(today).format('YYYY'), moment(today).format('MM'));
   const { mutate, isLoading } = useMutation((itemCodes: string[]) => putProfileItem(itemCodes));
 
   useEffect(() => {
@@ -70,6 +82,10 @@ const ItemShopPage = () => {
   const selectedFurnitureItem =
     selectedItem?.filter((item: any) => item.includes('B')).join('') || '';
 
+  const isSelectError = isUserError || isItemError || isFootprintError;
+  const isSelectLoading = isUserLoading || isItemLoading || isFootprintLoading;
+  const isSelectSuccess = isSuccessUserData && isSuccessItemsData && isSuccessFootprintData;
+
   return (
     <DefaultLayout backgroundColor="#282828">
       <Canvas paddingTop="5rem" roomColor={getRoomColor(userData.characterCode)}>
@@ -87,38 +103,14 @@ const ItemShopPage = () => {
       </Canvas>
       <ItemContainer>
         <Title>코독 하우스 아이템</Title>
+        {isSelectError && !isSelectLoading && (
+          <FlexCenter>
+            😱 조회 중 오류가 발생하였습니다.
+            <br /> 잠시후 다시 시도해 주세요!
+          </FlexCenter>
+        )}
         <CodogItemList>
-          {!isFootprintLoading ? (
-            itemsData?.map((item: ItemType) => {
-              const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
-              const isSelectedItem = selectedItem?.includes(item.itemCode);
-              const itemClassName = isAvailableItem ? (isSelectedItem ? 'selected' : '') : 'locked';
-              const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
-              return (
-                <CodogItem
-                  color={itemColor}
-                  className={itemClassName}
-                  key={item.itemCode}
-                  onClick={() => {
-                    isAvailableItem && handleSelectItem(item.itemCode);
-                  }}>
-                  <ItemImage src={item.imageUrl || ''} />
-                  {!isAvailableItem && (
-                    <LockedItemDiv>
-                      <img src="/images/lock.svg"></img>
-                      <div>발자국이 더 필요해요!</div>
-                    </LockedItemDiv>
-                  )}
-                  <InfoWrapper>
-                    <RequisiteCount>
-                      <div>{item.questRequisite}</div>
-                    </RequisiteCount>
-                    <ItemTitle className={'title'}>{item.item}</ItemTitle>
-                  </InfoWrapper>
-                </CodogItem>
-              );
-            })
-          ) : (
+          {isSelectLoading && (
             <>
               {new Array(12).fill('').map((_, i) => (
                 <SkeletonCodogItem key={`skeletonItem${i}`}>
@@ -131,9 +123,46 @@ const ItemShopPage = () => {
               ))}
             </>
           )}
+          {isSelectSuccess && (
+            <>
+              {itemsData?.map((item: ItemType) => {
+                const isAvailableItem = (footprintData?.totalCount || 0) >= item.questRequisite;
+                const isSelectedItem = selectedItem?.includes(item.itemCode);
+                const itemClassName = isAvailableItem
+                  ? isSelectedItem
+                    ? 'selected'
+                    : ''
+                  : 'locked';
+                const itemColor = isAvailableItem ? getCategoryColor(item.categoryCode) : '#000000';
+                return (
+                  <CodogItem
+                    color={itemColor}
+                    className={itemClassName}
+                    key={item.itemCode}
+                    onClick={() => {
+                      isAvailableItem && handleSelectItem(item.itemCode);
+                    }}>
+                    <ItemImage src={item.imageUrl || ''} />
+                    {!isAvailableItem && (
+                      <LockedItemDiv>
+                        <img src="/images/lock.svg"></img>
+                        <div>발자국이 더 필요해요!</div>
+                      </LockedItemDiv>
+                    )}
+                    <InfoWrapper>
+                      <RequisiteCount>
+                        <div>{item.questRequisite}</div>
+                      </RequisiteCount>
+                      <ItemTitle className={'title'}>{item.item}</ItemTitle>
+                    </InfoWrapper>
+                  </CodogItem>
+                );
+              })}
+            </>
+          )}
         </CodogItemList>
       </ItemContainer>
-      <ButtonSubmit onClick={handleSubmit} disabled={isLoading}>
+      <ButtonSubmit onClick={handleSubmit} disabled={isLoading || isSelectLoading || isSelectError}>
         저장하기
       </ButtonSubmit>
     </DefaultLayout>
@@ -409,6 +438,16 @@ const SkeletonRequisiteCount = styled.div`
   height: 1.4rem;
   background-color: #3a3a3a;
   animation: ${skeletonGradient} 1.5s infinite ease-in-out;
+`;
+
+const FlexCenter = styled.div`
+  ${flexCenter};
+  height: 20rem;
+  font-size: 1.5rem;
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  line-height: 3.5rem;
 `;
 
 export default ItemShopPage;

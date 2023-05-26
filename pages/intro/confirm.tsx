@@ -18,7 +18,7 @@ const IntroConfirmPage = () => {
     if (saveIntro && JSON.stringify(saveIntro) !== '{}') {
       setUser({ ...user, nickname: saveIntro.nickname, character: saveIntro.character });
     } else {
-      router.push('/');
+      router.push('/login');
     }
   }, []);
 
