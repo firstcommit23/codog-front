@@ -148,7 +148,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
   } catch (error) {
     return {
       redirect: {
-        destination: `/error?errorMessage=${encodeURIComponent(error)}`,
+        destination: `/error?errorMessage=${encodeURIComponent('알 수 없는 오류 발생')}`,
         permanent: false,
       },
     };
