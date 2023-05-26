@@ -1,7 +1,7 @@
 import { putCheerCount } from '@/apis/api';
 import styled from '@emotion/styled';
 import { useMutation } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface CheerProps {
   cheer?: number;
@@ -11,13 +11,13 @@ interface CheerProps {
 
 const CheerButton = ({ cheer, disabled, githubId }: CheerProps) => {
   const [cheerCount, setCheerCount] = useState(cheer);
-  const { mutate } = useMutation((cheerCount: number) => putCheerCount(cheerCount, githubId));
+  const { mutate } = useMutation((cheerCount: number) => putCheerCount(cheerCount + 1, githubId));
 
   const handleIncrease = () => {
     mutate(cheerCount, {
       onSuccess: () => setCheerCount(cheerCount + 1),
       onError: (error: any) => {
-        const message = error?.response.data.error.message || '';
+        const message = error?.response.data.error.message || '알 수 없는 오류가 발생하였습니다.';
         alert(message);
       },
     });

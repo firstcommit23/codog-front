@@ -132,16 +132,12 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
         timeout: 3000,
       })
       .then((res) => res.data.response)
-      .catch(() => false);
-
-    if (!response) {
-      return {
-        redirect: {
-          destination: `/error?errorMessage=${encodeURIComponent('존재하지않는 유저입니다.')}`,
-          permanent: false,
-        },
-      };
-    }
+      .catch((error) => {
+        if (error.response.status === 400) {
+          throw new Error('존재하지않는 유저입니다.');
+        }
+        throw new Error('API 통신 오류');
+      });
 
     return {
       props: {
@@ -153,7 +149,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
   } catch (error) {
     return {
       redirect: {
-        destination: `/error?errorMessage=${encodeURIComponent('API 통신 오류')}`,
+        destination: `/error?errorMessage=${encodeURIComponent(error)}`,
         permanent: false,
       },
     };
