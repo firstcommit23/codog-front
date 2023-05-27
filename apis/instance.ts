@@ -3,7 +3,7 @@ import axiosRetry from 'axios-retry';
 
 const Instance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CODOG_BACK_URL,
-  timeout: 1000,
+  timeout: 2000,
 });
 
 // Rate Limiter

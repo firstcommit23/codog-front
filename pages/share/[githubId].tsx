@@ -128,7 +128,7 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
     // github Id 유효성 체크
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/share-house/${githubId}`, {
-        timeout: 500,
+        timeout: 2000,
       })
       .then((res) => res.data.response)
       .catch((error) => {
