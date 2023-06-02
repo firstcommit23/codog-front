@@ -40,7 +40,7 @@ const CenterContainer = styled.div`
   align-items: center;
   padding-top: 15%;
   min-height: 83vh;
-  width: 100%;
+  width: 294px;
 `;
 
 const Catchphrase = styled.div`
