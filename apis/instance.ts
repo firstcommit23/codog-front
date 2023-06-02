@@ -3,20 +3,20 @@ import axiosRetry from 'axios-retry';
 
 const Instance: AxiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_CODOG_BACK_URL,
-  timeout: 2000,
+  timeout: 3000,
 });
 
 // Rate Limiter
-axiosRetry(Instance, {
-  retries: 3,
-  retryDelay: (retry) => {
-    const delay = Math.pow(2, retry) * 100;
-    const jitter = delay * 0.1 * Math.random();
-    return delay + jitter;
-  },
-  retryCondition: (err) =>
-    axiosRetry.isNetworkOrIdempotentRequestError(err) || err.response?.status === 429,
-});
+// axiosRetry(Instance, {
+//   retries: 3,
+//   retryDelay: (retry) => {
+//     const delay = Math.pow(2, retry) * 100;
+//     const jitter = delay * 0.1 * Math.random();
+//     return delay + jitter;
+//   },
+//   retryCondition: (err) =>
+//     axiosRetry.isNetworkOrIdempotentRequestError(err) || err.response?.status === 429,
+// });
 
 Instance.interceptors.request.use(async (config) => {
   const token = localStorage.getItem('accessToken') || '';

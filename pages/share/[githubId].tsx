@@ -128,10 +128,11 @@ export const getServerSideProps: GetServerSideProps<SharePageProps> = async (con
     // github Id 유효성 체크
     const response = await axios
       .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/share-house/${githubId}`, {
-        timeout: 2000,
+        timeout: 2500,
       })
       .then((res) => res.data.response)
       .catch((error) => {
+        console.log(error);
         if (error.response.status === 400) {
           throw new Error('존재하지않는 유저입니다.');
         }
