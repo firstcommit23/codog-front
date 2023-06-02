@@ -23,7 +23,7 @@ const Callback: NextPage<{
     }
 
     if (!isNewUser) {
-      router.push('/');
+      router.push('/main');
     } else {
       router.push('/intro/character');
     }
