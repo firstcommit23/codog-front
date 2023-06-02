@@ -28,7 +28,7 @@ const IntroConfirmPage = () => {
       isShow: true,
       title: '환영합니다 🐣',
       content: '함께 코독하게 코딩해봅시다!',
-      onClick: () => router.push('/'),
+      onClick: () => router.push('/main'),
     });
   };
 

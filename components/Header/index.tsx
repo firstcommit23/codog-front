@@ -23,7 +23,11 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
           <LogoTitle>
             <div
               onClick={() => {
-                router.push('/');
+                if (isLogin) {
+                  router.push('/main');
+                } else {
+                  router.push('/login');
+                }
                 setIsOpen(false);
               }}>{`{Codog}`}</div>
           </LogoTitle>
@@ -51,7 +55,11 @@ const Header = ({ isShowMenu = true }: { isShowMenu?: boolean }) => {
               <MenuList isOpen={isOpen}>
                 <div
                   onClick={() => {
-                    router.push('/');
+                    if (isLogin) {
+                      router.push('/main');
+                    } else {
+                      router.push('/login');
+                    }
                     setIsOpen(false);
                   }}>
                   홈

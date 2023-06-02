@@ -20,7 +20,9 @@ const Instance: AxiosInstance = axios.create({
 
 Instance.interceptors.request.use(async (config) => {
   const token = localStorage.getItem('accessToken') || '';
-
+  if (!token) {
+    window.location.href = '/login';
+  }
   config.headers = {
     ...config.headers,
     Authorization: token ? `Bearer ${token}` : '',

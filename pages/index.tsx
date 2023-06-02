@@ -1,209 +1,93 @@
-import React, { useState, useEffect } from 'react';
-import { NextPage } from 'next';
-import moment from 'moment';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import DefaultLayout from '@/components/Layout/DefaultLayout';
-import useUserProfileQuery from '@/hooks/query/useUserProfileQuery';
-import useUserFootprintQuery from '@/hooks/query/useUserFootprintQuery';
-import {
-  Canvas,
-  SkeletonCanvas,
-  DogCharacter,
-  Balloon,
-  FoodItem,
-  FurnitureItem,
-  CheerButton,
-} from '@/components/Canvas';
-import { useRouter } from 'next/router';
-import { getRoomColor } from '@/utils/serviceUtils';
-import Comments from '@/components/Comments';
-import Calendars from '@/components/Calendars';
-import Achievements from '@/components/Achievements';
-import RoundButton from '@/components/Canvas/RoundButton';
-import ScrollToTopBtn from '@/components/ScrollButton/ScrollToTopBtn';
-import ShareButton from '@/components/ShareButton';
+import { Canvas, DogCharacter, Balloon } from '@/components/Canvas';
+import SyncLoader from 'react-spinners/ClipLoader';
 
-const Home: NextPage = () => {
-  const THINK_LIST = ['오늘 머먹지', '앗! 금지', '200!', '나는 코딩왕이 될테야'];
-  const [talk, setTalk] = useState('');
-  const [value, onChange] = useState(new Date());
-  const year = moment(value).format('YYYY');
-  const month = moment(value).format('MM');
-  const today = new Date();
+const LoadingPage = () => {
   const router = useRouter();
-  const { data: userData, isSuccess: isSuccessUserData, isError } = useUserProfileQuery();
-  const {
-    data: footprintData,
-    refetch,
-    isError: isFootprintError,
-    isSuccess: isSuccessFootprintData,
-  } = useUserFootprintQuery(year, month);
 
   useEffect(() => {
-    setTalk(THINK_LIST[Math.floor(Math.random() * (THINK_LIST.length - 1 + 1))]);
+    setTimeout(() => {
+      const token = localStorage.getItem('accessToken');
+      if (token && token !== 'undefined') {
+        router.push('/main');
+      } else {
+        router.push('/login');
+      }
+    }, 1000);
   }, []);
 
-  useEffect(() => {
-    isSuccessUserData && refetch();
-  }, [isSuccessUserData, year, month]);
-
-  const getDday = (today: Date, createdDate: Date) => {
-    const a = moment(today);
-    const b = moment(createdDate);
-    return isNaN(a.diff(b, 'days')) ? 0 : a.diff(b, 'days');
-  };
-
-  if (isError || isFootprintError) {
-    router.push(`/error?statusCode=500&errorMessage=${encodeURIComponent('API 통신 오류')}`);
-  }
-
-  if (userData.isNewUser) router.push('/login');
-
-  const isSuccessSelete = isSuccessUserData && isSuccessFootprintData;
-
   return (
-    <DefaultLayout>
-      {/* 프로필 */}
-      {!isSuccessSelete ? (
-        <ProfileContainer>
-          <ProfileBox>
-            <ProfileWrapper>
-              <ProfileContent className="hidden">
-                <span className="nickname"></span>님, <br />
-                코독하게 코딩해봅시다.
-              </ProfileContent>
-            </ProfileWrapper>
-          </ProfileBox>
-          <SkeletonCanvas />
-          {/* 개인 달성 지표 */}
-          <Achievements footprintData={footprintData} />
-        </ProfileContainer>
-      ) : (
-        <ProfileContainer>
-          {/* 닉네임, 공유 버튼 */}
-          <ProfileBox>
-            <ProfileWrapper>
-              <ProfileContent>
-                <span className="nickname">{userData?.nickname}</span>님, <br />
-                코독하게 코딩해봅시다.
-              </ProfileContent>
-              <ProfileButtonArea>
-                <RoundButton route={`/mypage/itemshop`} iconUrl={`home-edit`} />
-                <ShareButton nickname={userData?.nickname} githubId={footprintData?.githubId} />
-              </ProfileButtonArea>
-            </ProfileWrapper>
-          </ProfileBox>
-          {/* 코독 하우스 */}
-          <Canvas roomColor={getRoomColor(userData?.characterCode)}>
-            <DogCharacter character={userData?.characterCode} />
-            {talk && (
-              <Balloon type="Think" color="#282828" fontSize="1.4rem">
-                {talk}
-              </Balloon>
-            )}
-            <FoodItem food={userData?.foodItem} />
-            <FurnitureItem furniture={userData?.furnitureItem} />
-            <DdayBox>
-              <div className="pin"></div>
-              <span className="Dday">D+{getDday(today, userData?.createDate)}</span>
-            </DdayBox>
-            <CheerButton cheer={userData?.cheerCount} disabled={false} />
-          </Canvas>
-          {/* 개인 달성 지표 */}
-          <Achievements footprintData={footprintData} />
-        </ProfileContainer>
-      )}
-
-      {/* 달력 */}
-      <Calendars value={value} onChange={onChange} footprintData={footprintData} />
-
-      <HorizontalRule />
-      <Comments
-        title="코멘트 보기 💬"
-        isShowCommentInput={false}
-        footprintId={footprintData?.footprintId}
-        isOwner={true}
-      />
-      <ScrollToTopBtn />
+    <DefaultLayout isShowMenu={false} backgroundColor="#282828" height="100vh">
+      <CenterContainer>
+        <Canvas>
+          <DogCharacter character="A" left="5%" />
+          <Balloon type="Think">Loading...</Balloon>
+        </Canvas>
+        <Catchphrase>
+          <SyncLoader color="#82AAFF" />
+        </Catchphrase>
+      </CenterContainer>
     </DefaultLayout>
   );
 };
 
-const ProfileContainer = styled.div`
+const CenterContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding-top: 7rem;
-  background: linear-gradient(#282828 80%, #fff 10%);
-`;
-const ProfileBox = styled.div`
-  width: 100%;
-`;
-
-const ProfileWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 2rem 0 2.5rem;
+  padding-top: 15%;
+  min-height: 83vh;
+  width: 100%;
 `;
 
-const ProfileContent = styled.div`
-  font-weight: 400;
-  font-size: 1.8rem;
-  line-height: 3rem;
+const Catchphrase = styled.div`
+  align-self: center;
+  padding: 4rem 0;
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 3.5rem;
   color: #ffffff;
+  white-space: nowrap;
+  text-align: center;
 
-  &.hidden {
-    visibility: hidden;
+  em {
+    color: #99b9ff;
   }
-  .nickname {
-    font-size: 2rem;
-    font-weight: 600;
-  }
-  strong {
-    font-weight: 600;
+
+  h1 {
+    margin: 0;
+    color: transparent;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &:before {
+      content: 'Codog한 개발자...';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      color: #ffffff;
+      overflow: hidden;
+      border-right: 1px solid black;
+      animation: typing 3s steps(31) infinite;
+    }
+    @keyframes typing {
+      0% {
+        width: 0%;
+      }
+      50% {
+        width: 100%;
+      }
+      100% {
+        width: 0%;
+      }
+    }
   }
 `;
-const ProfileButtonArea = styled.div`
-  display: flex;
-  column-gap: 10px;
-`;
 
-const DdayBox = styled.div`
-  position: absolute;
-  right: 3rem;
-  top: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  .pin {
-    background: url('/images/Dday_pin.svg') no-repeat;
-    width: 1.4rem;
-    height: 2.2rem;
-  }
-  .Dday {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #efefef;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    font-size: 1.5rem;
-    line-height: 1.8rem;
-    color: #282828;
-    padding: 0.8rem 1.5rem;
-    max-width: 4rem;
-    margin-top: -0.2rem;
-  }
-`;
-const HorizontalRule = styled.hr`
-  height: 8px;
-  background: #f5f5f5;
-  border: none;
-  width: 100%;
-`;
-
-export default Home;
+export default LoadingPage;
