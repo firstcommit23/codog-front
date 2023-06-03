@@ -55,27 +55,28 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
             )
           )
             return null;
-          const day = moment(date).format('D');
-          const content = Object.values(footprintData?.dayStamp || [])[parseInt(day) - 1];
+          const jsonDate =
+            typeof footprintData.dayStamp == 'string' ? JSON.parse(footprintData.dayStamp) : {};
+          const stampCount = jsonDate[moment(date).format('D')] || 0;
           const html = [];
-          const object = Object.entries(footprintData?.dayStamp || {});
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 0)) {
+
+          if (stampCount == 0) {
             return null;
           }
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 1)) {
+          if (stampCount == 1) {
             html.push(<FootPrintMark1 key={`footprint${date}-${view}`}></FootPrintMark1>);
           }
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 2)) {
+          if (stampCount == 2) {
             html.push(<FootPrintMark2 key={`footprint${date}-${view}`}></FootPrintMark2>);
           }
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] === 3)) {
+          if (stampCount == 3) {
             html.push(<FootPrintMark3 key={`footprint${date}-${view}`}></FootPrintMark3>);
           }
-          if (object.find((x) => x[0] === moment(date).format('D') && x[1] >= 4)) {
+          if (stampCount >= 4) {
             html.push(<FootPrintMark4 key={`footprint${date}-${view}`}></FootPrintMark4>);
           }
           return (
-            <CustomTooltips title={content} arrow placement="top">
+            <CustomTooltips title={stampCount} arrow placement="top">
               <div key={`day${date}-${view}`}>{html}</div>
             </CustomTooltips>
           );

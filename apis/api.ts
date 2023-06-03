@@ -86,8 +86,8 @@ export const getToken = () => {
     .get(`${process.env.NEXT_PUBLIC_CODOG_BACK_URL}/users/token`, {
       headers: { Authorization: `Bearer ${refreshToken}` },
     })
-    .then((res) => res.data.response);
-  // .catch((error) => error.response);
+    .then((res) => res.data.response)
+    .catch((error) => error.response);
 };
 
 export const getComments = ({

@@ -27,18 +27,6 @@ interface SharePageProps {
 
 const SharePage: NextPage<SharePageProps> = ({ shareData, githubId, title }) => {
   const [value, onChange] = useState(new Date());
-  const [loginUserId, setLoginUserId] = useState(-1);
-
-  useEffect(() => {
-    // login한 경우, loginUserId 조회하기
-    const accessToken = localStorage.getItem('accessToken') || '';
-
-    if (accessToken && accessToken !== '') {
-      const userId = getUserId(accessToken);
-      setLoginUserId(userId);
-    }
-  }, []);
-
   const today = new Date();
 
   const getDday = (today: Date, createdDate: Date) => {

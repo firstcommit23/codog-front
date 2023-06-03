@@ -72,7 +72,11 @@ const ProfilePage = () => {
             <>
               <UserProfileTable>
                 <div className="nickname">{userData?.nickname}</div>
-                <div className="githubId">{userData?.github_id}</div>
+                <div
+                  className="githubId"
+                  onClick={() => window.open(`https://github.com/${userData?.githubId}`)}>
+                  {userData?.githubId}
+                </div>
                 {/* <div className="email">junandkang@gmail.com</div> */}
               </UserProfileTable>
               <BtnWrapper>
@@ -172,6 +176,7 @@ const UserProfileTable = styled.div`
     font-size: 1.6rem;
     margin-top: 1.5rem;
     color: #504f4f;
+    cursor: pointer;
   }
   .githubId::before {
     content: '';

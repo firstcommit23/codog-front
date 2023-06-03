@@ -27,7 +27,7 @@ export type ItemType = {
 export type UserProfileDetailType = {
   id: string | null;
   nickname: string;
-  github_id: string | null;
+  githubId: string | null;
   email: string | null;
   isNewUser: 0 | 1;
   characterCode: CHARACTER_CODES;
@@ -48,7 +48,7 @@ export type FootprintType = {
   continuousCount: number;
   year: string;
   month: string;
-  dayStamp: any[];
+  dayStamp: string;
   createdAt: string;
   today: number;
 };
