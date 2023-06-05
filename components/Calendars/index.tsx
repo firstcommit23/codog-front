@@ -55,8 +55,11 @@ const Calendars = ({ value, onChange, footprintData }: IProps) => {
             )
           )
             return null;
+
           const jsonDate =
-            typeof footprintData.dayStamp == 'string' ? JSON.parse(footprintData.dayStamp) : {};
+            typeof footprintData.dayStamp == 'string'
+              ? JSON.parse(footprintData.dayStamp)
+              : footprintData.dayStamp || {};
           const stampCount = jsonDate[moment(date).format('D')] || 0;
           const html = [];
 
