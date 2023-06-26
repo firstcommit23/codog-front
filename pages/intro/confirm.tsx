@@ -50,7 +50,7 @@ const IntroConfirmPage = () => {
         <br />
         <strong>개발자국 찍기</strong>를 시작합니다!
         <ul>
-          <li>Github에 커밋을 하면, 발자국이 찍혀요!</li>
+          <li>Github에 푸쉬하면 발자국이 찍혀요!</li>
           <li>발자국을 모으면 귀여운 아이템을 장착할 수 있어요.</li>
           <li>공유하기를 통해 친구에게 보여줄 수 있어요.</li>
         </ul>
