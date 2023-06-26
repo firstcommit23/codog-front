@@ -163,7 +163,7 @@ const CommentText = styled.div`
   font-size: 1.6rem;
   line-height: 1.8;
   text-align: start;
-  word-break: keep-all;
+  word-break: break-all;
   color: #333333;
 `;
 
