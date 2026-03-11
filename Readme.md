@@ -1,13 +1,6 @@
-# 🐶 CODOG (코독)
+# 🐶 CODOG (코독) 서비스 소개
 
 ⭐ GitHub push → 🐾 발자국 생성 → 🎁 아이템 수집 → 🏠 코독 하우스 꾸미기
-
-개발하면 개발자국이 찍히는, 개발자를 위한 셀프칭찬 서비스 **코독(CODOG)** 입니다.  
-코딩을 할 때마다 귀여운 발자국이 쌓이며, 개발자에게 작은 성취 경험과 재미를 제공합니다.
-
----
-
-## 🐶 서비스 소개
 
 개발을 하다 보면 성취감은 크지만, 그 과정을 기록하거나 서로 격려할 공간은 많지 않습니다.
 
@@ -52,9 +45,9 @@
 
 ## 👩‍💻 담당 역할 (Frontend)
 
-- React 기반 **컴포넌트 구조 설계**
-- 사용자 인터페이스(UI) 구현
-- API 연동을 통한 데이터 처리
+- React 기반 컴포넌트 구조 설계 및 재사용 가능한 UI 컴포넌트 개발
+- Recoil을 활용한 클라이언트 상태 관리
+- React Query를 이용한 서버 상태 관리 및 API 데이터 캐싱 처리
 - 사용자 인터랙션 기능 구현
 - 프로젝트 초기 **프론트엔드 구조 설정**
 
@@ -83,7 +76,7 @@ src
 <img width="1298" height="500" alt="회원가입1" src="https://github.com/user-attachments/assets/ef9f9371-3338-4418-93e0-8497ac72d8d2" />
 
 ### 메인
-<img width="214" height="700" alt="메인2" src="https://github.com/user-attachments/assets/135dce87-fe38-4098-872b-f31a4b058cce" />
+<img width="214" height="700" alt="메인3" src="https://github.com/user-attachments/assets/dcab5a48-d91c-409f-946e-eb199a47e69a" />
 
 ### 마이페이지 / 코독하우스 (*담당)
 <img width="501" height="500" alt="마이페이지" src="https://github.com/user-attachments/assets/0ae228f2-30cf-4947-816a-bd0f7bfd6b51" />
